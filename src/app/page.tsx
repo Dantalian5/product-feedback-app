@@ -1,8 +1,8 @@
 import React from "react";
 import Header from "@/components/layout/Header";
 //----------
-import Button from "@/components/common/Button";
-import CheckBox from "@/components/common/CheckBox";
+import Button from "@/components/common/Button/Button";
+import CheckBox from "@/components/common/CheckBox/CheckBox";
 
 const Home = () => {
   return (
