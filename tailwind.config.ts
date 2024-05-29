@@ -13,30 +13,37 @@ const config: Config = {
     // 	tight: '-.33em',
     // 	normal: '0',
     // },
-    extend: {
-      colors: {
-        blue: {
-          100: "#62bcfa",
-          200: "#4661E6",
-        },
-        dark: {
-          100: "#647196",
-          200: "#3A4374",
-          300: "#373F68",
-        },
-        gray: {
-          100: "#F2F4FE",
-          200: "#F7F8FD",
-          300: "#F2F4FF",
-          400: "#CDD2EE",
-        },
+    colors: {
+      blue: {
+        100: "#62bcfa",
+        200: "#4661E6",
+      },
+      dark: {
+        100: "#647196",
+        200: "#3A4374",
+        300: "#373F68",
+      },
+      gray: {
+        100: "#F2F4FE",
+        200: "#F7F8FD",
+        300: "#F2F4FF",
+        400: "#CDD2EE",
+        500: "#CFD7FF",
+      },
 
-        violet: "#AD1FEA",
-        orange: {
-          100: "#F49F85",
-          200: "#D73737",
-        },
-        white: "#FFFFFF",
+      violet: "#AD1FEA",
+      orange: {
+        100: "#F49F85",
+        200: "#D73737",
+      },
+      white: "#FFFFFF",
+    },
+    extend: {
+      fontSize: {
+        13: "0.8125rem",
+      },
+      borderRadius: {
+        10: "10px",
       },
       backgroundImage: {
         topgrad:
