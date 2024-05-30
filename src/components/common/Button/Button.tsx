@@ -49,7 +49,7 @@ const Button = (props: ButtonProps) => {
   const buttonColors = `${colors[color]} ${hoverUnderline ? "hover:underline" : `hover:${colors[color]}/75`} ${color === "none" ? "text-dark-100" : "text-gray-100"} underline-offset-1`;
 
   const buttonClass =
-    `${className || ""} ${buttonColors} ${buttonSize} rounded-[10px]  px-6  text-sm font-bold flex items-center justify-center gap-4 focus:outline focus:outline-2 focus:outline-blue-100`.trim();
+    `${className || ""} ${buttonColors} ${buttonSize} rounded-[10px]  px-6  text-sm font-bold flex items-center justify-center gap-4 custom-focus`.trim();
 
   return (
     <button className={buttonClass} {...rest}>

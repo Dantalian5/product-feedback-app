@@ -15,15 +15,15 @@ const upVoteIcon = (
     <path
       d="M1.33398 6L5.33398 2L9.33398 6"
       stroke="currentColor"
-      stroke-width="2"
+      strokeWidth="2"
     />
   </svg>
 );
 const UpVote = (prop: UpVoteProps) => {
-  const { value = 99, onClick, upvoted = true } = prop;
+  const { value = 99, onClick, upvoted = false } = prop;
   return (
     <button
-      className={`text-13 rounded-10 flex cursor-pointer flex-col items-center gap-y-2  px-3 pb-2 pt-[14px] font-bold hover:bg-gray-500 ${upvoted ? "bg-blue-200 text-white" : "bg-gray-100 text-dark-200"}`}
+      className={`text-13 rounded-10 flex cursor-pointer flex-col items-center gap-y-2  px-3 pb-2 pt-[14px] font-bold hover:bg-gray-500 ${upvoted ? "bg-blue-200 text-white" : "bg-gray-100 text-dark-200"} custom-focus`}
       aria-label="upvote this feedback"
     >
       <span className={upvoted ? "text-white" : "text-blue-200"}>

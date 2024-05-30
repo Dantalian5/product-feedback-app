@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.custom-focus {
+  @apply focus:outline focus:outline-2 focus:outline-blue-100;
+}

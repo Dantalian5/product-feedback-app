@@ -27,8 +27,6 @@ describe("Button component", () => {
     button.focus();
 
     expect(button).toHaveFocus();
-    expect(button).toHaveClass("focus:outline");
-    expect(button).toHaveClass("focus:outline-2");
-    expect(button).toHaveClass("focus:outline-blue-100");
+    expect(button).toHaveClass("custom-focus");
   });
 });
