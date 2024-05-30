@@ -4,6 +4,7 @@ import Header from "@/components/layout/Header";
 import Button from "@/components/common/Button/Button";
 import CheckBox from "@/components/common/CheckBox/CheckBox";
 import UpVote from "@/components/common/UpVote/UpVote";
+import SortBy from "@/components/common/SortBy/SortBy";
 
 const Home = () => {
   return (
@@ -13,6 +14,7 @@ const Home = () => {
         <Button color="blue">Button</Button>
         <CheckBox label="UX" />
         <UpVote />
+        <SortBy />
       </div>
     </div>
   );
