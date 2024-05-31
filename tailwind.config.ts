@@ -49,6 +49,9 @@ const config: Config = {
         topgrad:
           "radial-gradient(166.82% 166.82% at 103.9% -10.39%, #E84D70 0%, #A337F6 53.09%, #28A7ED 100%)",
       },
+      boxShadow: {
+        custom_1: "0px 10px 40px -7px rgba(55, 63, 104, 0.35)",
+      },
     },
   },
   plugins: [],
