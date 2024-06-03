@@ -40,7 +40,7 @@ const SortBy = () => {
     { label: "Least Comments", value: "4sblc" },
   ];
   const [selectedOption, setSelectedOption] = React.useState(options[0]);
-  const [isOpen, setIsOpen] = React.useState(true);
+  const [isOpen, setIsOpen] = React.useState(false);
   const componentId = React.useId();
 
   const handleOptionClick = (option: Option) => {
@@ -69,13 +69,13 @@ const SortBy = () => {
         </span>
       </button>
       {isOpen && (
-        <ul
+        <div
           role="listbox"
           aria-labelledby={componentId}
           className="rounded-10 shadow-custom_1 absolute top-[calc(100%+16px)] w-fit min-w-64 overflow-hidden bg-white"
         >
           {options.map((option) => (
-            <li
+            <button
               key={option.value}
               role="option"
               aria-selected={option.value === selectedOption.value}
@@ -84,9 +84,9 @@ const SortBy = () => {
             >
               {option.label}
               {option.value === selectedOption.value && svgCheck}
-            </li>
+            </button>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );
