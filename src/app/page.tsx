@@ -5,6 +5,8 @@ import Button from "@/components/common/Button/Button";
 import CheckBox from "@/components/common/CheckBox/CheckBox";
 import UpVote from "@/components/common/UpVote/UpVote";
 import SortBy from "@/components/common/SortBy/SortBy";
+import Input from "@/components/common/Input/Input";
+import DropDown from "@/components/common/DropDown/DropDown";
 
 const Home = () => {
   return (
@@ -15,6 +17,7 @@ const Home = () => {
         <CheckBox label="UX" />
         <UpVote />
         <SortBy />
+        <Input ID="test" placeholder="this is a test input" />
       </div>
     </div>
   );

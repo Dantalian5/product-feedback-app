@@ -5,3 +5,6 @@
 .custom-focus {
   @apply focus:outline focus:outline-2 focus:outline-blue-100;
 }
+.custom-form-focus {
+  @apply focus:outline focus:outline-1 focus:outline-blue-200;
+}

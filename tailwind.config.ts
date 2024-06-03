@@ -41,8 +41,10 @@ const config: Config = {
     extend: {
       fontSize: {
         13: "0.8125rem",
+        15: "0.9375rem",
       },
       borderRadius: {
+        5: "5px",
         10: "10px",
       },
       backgroundImage: {
