@@ -1,33 +1,19 @@
 import React from "react";
+import { svgUpArrow } from "@/utils/svg/svgIcons";
 
 interface UpVoteProps extends React.ComponentPropsWithRef<"button"> {
   value?: number;
   upvoted?: boolean;
 }
-const upVoteIcon = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="11"
-    height="7"
-    viewBox="0 0 11 7"
-    fill="none"
-  >
-    <path
-      d="M1.33398 6L5.33398 2L9.33398 6"
-      stroke="currentColor"
-      strokeWidth="2"
-    />
-  </svg>
-);
 const UpVote = (prop: UpVoteProps) => {
-  const { value = 99, onClick, upvoted = false } = prop;
+  const { value = 0, onClick, upvoted = false } = prop;
   return (
     <button
-      className={`text-13 rounded-10 flex cursor-pointer flex-col items-center gap-y-2  px-3 pb-2 pt-[14px] font-bold hover:bg-gray-500 ${upvoted ? "bg-blue-200 text-white" : "bg-gray-100 text-dark-200"} custom-focus`}
+      className={`text-13 rounded-10 flex cursor-pointer items-center gap-x-[10px] gap-y-2 px-3 py-2 font-bold hover:bg-gray-500 sm:flex-col ${upvoted ? "bg-blue-200 text-white" : "bg-gray-100 text-dark-200"} custom-focus`}
       aria-label="upvote this feedback"
     >
-      <span className={upvoted ? "text-white" : "text-blue-200"}>
-        {upVoteIcon}
+      <span className={`py-1.5 ${upvoted ? "text-white" : "text-blue-200"}`}>
+        {svgUpArrow}
       </span>
       {value}
     </button>
