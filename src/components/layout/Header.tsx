@@ -2,18 +2,7 @@
 import React from "react";
 import Hamburguer from "@/components/common/Hamburguer/Hamburguer";
 import CheckBox from "@/components/common/CheckBox/CheckBox";
-
-const svgCircle = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="8"
-    height="8"
-    viewBox="0 0 8 8"
-    fill="none"
-  >
-    <circle cx="4" cy="4" r="4" fill="currentColor" />
-  </svg>
-);
+import { svgCircle } from "@/utils/svg/svgIcons";
 
 const Header = () => {
   const filters = ["All", "UI", "UX", "Enhancement", "Bug", "Feature"];
@@ -51,17 +40,17 @@ const Header = () => {
           </div>
           <div className="flex w-full flex-col gap-y-2">
             <div className="flex w-full items-center justify-start gap-x-4">
-              <span className=" text-orange-100">{svgCircle}</span>
+              <span className=" text-8 text-orange-100">{svgCircle}</span>
               <p className="text-base font-normal text-dark-100">Planned</p>
               <p className="ml-auto text-base font-bold text-dark-100">2</p>
             </div>
             <div className="flex w-full items-center justify-start gap-x-4">
-              <span className=" text-violet">{svgCircle}</span>
+              <span className=" text-8 text-violet">{svgCircle}</span>
               <p className="text-base font-normal text-dark-100">In-Progress</p>
               <p className="ml-auto text-base font-bold text-dark-100">3</p>
             </div>
             <div className="flex w-full items-center justify-start gap-x-4">
-              <span className=" text-blue-100">{svgCircle}</span>
+              <span className=" text-8 text-blue-100">{svgCircle}</span>
               <p className="text-base font-normal text-dark-100">Live</p>
               <p className="ml-auto text-base font-bold text-dark-100">1</p>
             </div>
