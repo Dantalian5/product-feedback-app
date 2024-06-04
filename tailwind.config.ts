@@ -7,12 +7,12 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    // letterSpacing: {
-    // 	tightest: '-.2em',
-    // 	tighter: '-.25em',
-    // 	tight: '-.33em',
-    // 	normal: '0',
-    // },
+    letterSpacing: {
+      // 	tightest: '-.2em',
+      tighter: "-.25px",
+      // 	tight: '-.33em',
+      // 	normal: '0',
+    },
     colors: {
       blue: {
         100: "#62bcfa",
@@ -37,11 +37,13 @@ const config: Config = {
         200: "#D73737",
       },
       white: "#FFFFFF",
+      black: "#000000",
     },
     extend: {
       fontSize: {
         13: "0.8125rem",
         15: "0.9375rem",
+        18: "1.125rem",
       },
       borderRadius: {
         5: "5px",

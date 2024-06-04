@@ -18,7 +18,7 @@ const CheckBox = (props: CheckProps) => {
       />
       <label
         htmlFor={componentId}
-        className=" text-13 rounded-10 cursor-pointer bg-gray-300 px-4 py-[6px] font-semibold text-blue-200 hover:bg-gray-500 peer-checked:bg-blue-200 peer-checked:text-white peer-focus:outline peer-focus:outline-2 peer-focus:outline-blue-100"
+        className=" text-13 rounded-10 block cursor-pointer bg-gray-300 px-4 py-[6px] font-semibold text-blue-200 hover:bg-gray-500 peer-checked:bg-blue-200 peer-checked:text-white peer-focus:outline peer-focus:outline-2 peer-focus:outline-blue-100"
       >
         {label}
       </label>
