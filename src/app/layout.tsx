@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${jost.className} min-h-svh min-w-[320px] overflow-hidden bg-gray-200`}
+        className={`${jost.className} min-h-svh min-w-[320px] overflow-x-hidden bg-gray-200`}
       >
         {children}
       </body>
