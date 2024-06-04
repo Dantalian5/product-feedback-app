@@ -27,14 +27,14 @@ interface Option {
   label: string;
   value: string;
 }
-interface DropDownProps {
-  options: Option[];
-  selectedOption: Option;
-  setSelectedOption: (option: Option) => void;
-}
-
-const DropDown = (props: DropDownProps) => {
-  const { options, selectedOption, setSelectedOption } = props;
+const DropDown = () => {
+  const options: Option[] = [
+    { label: "Most Upvotes", value: "1sbmu" },
+    { label: "Least Upvotes", value: "2sblu" },
+    { label: "Most Comments", value: "3sbmc" },
+    { label: "Least Comments", value: "4sblc" },
+  ];
+  const [selectedOption, setSelectedOption] = React.useState(options[0]);
   const [isOpen, setIsOpen] = React.useState(true);
   const componentId = React.useId();
 
