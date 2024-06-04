@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import Hamburguer from "@/components/common/Hamburguer/Hamburguer";
-import CheckBox from "@/components/common/CheckBox/CheckBox";
+import Hamburguer from "@/components/common/Hamburguer";
+import CheckBox from "@/components/common/CheckBox";
 import { svgCircle } from "@/utils/svg/svgIcons";
 
 const Header = () => {

@@ -1,32 +1,7 @@
 "use client";
 import React from "react";
+import { svgDownArrow, svgCheck } from "@/utils/svg/svgIcons";
 
-const svgArrow = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="9"
-    height="7"
-    viewBox="0 0 9 7"
-    fill="none"
-  >
-    <path d="M1 6L5 2L9 6" stroke="currentColor" strokeWidth="2" />
-  </svg>
-);
-const svgCheck = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="13"
-    height="10"
-    viewBox="0 0 13 10"
-    fill="none"
-  >
-    <path
-      d="M0.96875 4.85894L4.50044 8.39062L12.0004 0.890625"
-      stroke="#AD1FEA"
-      strokeWidth="2"
-    />
-  </svg>
-);
 interface Option {
   label: string;
   value: string;
@@ -57,7 +32,7 @@ const SortBy = () => {
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`rounded-10 flex items-center justify-center gap-x-2 bg-dark-300 px-4 py-6 `}
+        className={`rounded-10 text-13 flex items-center justify-center gap-x-2 bg-dark-300 py-2 sm:text-sm`}
       >
         <span
           className={` text-sm font-normal text-gray-100 ${isOpen && "opacity-75"}`}
@@ -65,7 +40,7 @@ const SortBy = () => {
           Sort by : <span className="font-bold">{selectedOption.label}</span>
         </span>
         <span className={`text-white ${!isOpen && "rotate-180"}`}>
-          {svgArrow}
+          {svgDownArrow}
         </span>
       </button>
       {isOpen && (

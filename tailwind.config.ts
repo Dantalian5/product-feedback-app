@@ -41,7 +41,9 @@ const config: Config = {
     },
     extend: {
       fontSize: {
+        4: "0.25rem",
         8: "0.5rem",
+        10: "0.625rem",
         13: "0.8125rem",
         15: "0.9375rem",
         18: "1.125rem",
