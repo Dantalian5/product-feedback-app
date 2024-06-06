@@ -26,13 +26,46 @@ export async function fetchRequests(id?: number) {
   }
 }
 export async function fetchComments(id: number) {
-  const query = `SELECT *
-  FROM comments 
-  WHERE request_id = $1;`;
+  const query = `
+  SELECT 
+    comments.id,
+    comments.content,
+    comments.request_id,
+    comments.parent_comment_id,
+    comments.replying_to,
+    users.name AS user_name,
+    users.username AS user_username,
+    users.image AS user_image,
+    replying_users.name AS replying_user_name,
+    replying_users.username AS replying_user_username,
+    replying_users.image AS replying_user_image
+  FROM comments
+  JOIN users ON comments.user_id = users.id
+  LEFT JOIN users AS replying_users ON comments.replying_to = replying_users.id
+  WHERE comments.request_id = $1;
+  `;
 
   try {
     const result = await client.query(query, [id]);
-    return result.rows;
+    const data = result.rows.map((row) => ({
+      id: row.id,
+      content: row.content,
+      request_id: row.request_id,
+      parent_comment_id: row.parent_comment_id,
+      replying_to: row.replying_to
+        ? {
+            name: row.replying_user_name,
+            username: row.replying_user_username,
+            image: row.replying_user_image,
+          }
+        : null,
+      user: {
+        name: row.user_name,
+        username: row.user_username,
+        image: row.user_image,
+      },
+    }));
+    return data;
   } catch (error) {
     console.error(error);
   }
