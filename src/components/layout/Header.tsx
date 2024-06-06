@@ -2,10 +2,19 @@
 import React from "react";
 import Hamburguer from "@/components/common/Hamburguer";
 import CheckBox from "@/components/common/CheckBox";
-import { svgCircle } from "@/utils/svg/svgIcons";
+import { svgCircle } from "@/utils/svgIcons";
 import { categories } from "@/config/globalVars";
 
-const Header = () => {
+interface Roadmap {
+  planned: number;
+  in_progress: number;
+  live: number;
+}
+interface HeaderProps {
+  roadmap: Roadmap;
+}
+const Header = (props: HeaderProps) => {
+  const { roadmap } = props;
   const [isOpen, setIsOpen] = React.useState(false);
 
   const handleClick = () => {
@@ -49,17 +58,23 @@ const Header = () => {
             <div className="flex w-full items-center justify-start gap-x-4">
               <span className=" text-8 text-orange-100">{svgCircle}</span>
               <p className="text-base font-normal text-dark-100">Planned</p>
-              <p className="ml-auto text-base font-bold text-dark-100">2</p>
+              <p className="ml-auto text-base font-bold text-dark-100">
+                {roadmap.planned}
+              </p>
             </div>
             <div className="flex w-full items-center justify-start gap-x-4">
               <span className=" text-8 text-violet">{svgCircle}</span>
               <p className="text-base font-normal text-dark-100">In-Progress</p>
-              <p className="ml-auto text-base font-bold text-dark-100">3</p>
+              <p className="ml-auto text-base font-bold text-dark-100">
+                {roadmap.in_progress}
+              </p>
             </div>
             <div className="flex w-full items-center justify-start gap-x-4">
               <span className=" text-8 text-blue-100">{svgCircle}</span>
               <p className="text-base font-normal text-dark-100">Live</p>
-              <p className="ml-auto text-base font-bold text-dark-100">1</p>
+              <p className="ml-auto text-base font-bold text-dark-100">
+                {roadmap.live}
+              </p>
             </div>
           </div>
         </div>

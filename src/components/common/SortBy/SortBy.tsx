@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { svgDownArrow, svgCheck } from "@/utils/svg/svgIcons";
+import { svgDownArrow, svgCheck } from "@/utils/svgIcons";
 
 interface Option {
   label: string;
@@ -32,7 +32,7 @@ const SortBy = () => {
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`rounded-10 text-13 flex items-center justify-center gap-x-2 bg-dark-300 py-2 sm:text-sm`}
+        className={`flex items-center justify-center gap-x-2 rounded-10 bg-dark-300 py-2 text-13 sm:text-sm`}
       >
         <span
           className={` text-sm font-normal text-gray-100 ${isOpen && "opacity-75"}`}
@@ -47,7 +47,7 @@ const SortBy = () => {
         <div
           role="listbox"
           aria-labelledby={componentId}
-          className="rounded-10 shadow-custom_1 absolute top-[calc(100%+16px)] w-fit min-w-64 overflow-hidden bg-white"
+          className="absolute top-[calc(100%+16px)] w-fit min-w-64 overflow-hidden rounded-10 bg-white shadow-custom_1"
         >
           {options.map((option) => (
             <button

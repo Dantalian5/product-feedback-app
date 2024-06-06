@@ -1,7 +1,9 @@
 import React from "react";
+import Link from "next/link";
 import { svgBackArrow } from "@/utils/svgIcons";
-interface ButtonProps extends React.ComponentPropsWithRef<"button"> {
+interface LinkProps extends React.ComponentPropsWithRef<"a"> {
   children: React.ReactNode;
+  href: string;
   color?: "violet" | "blue" | "dark" | "orange";
   icon?: boolean;
   isStretched?: boolean;
@@ -17,14 +19,14 @@ const colors = {
   none: "bg-none",
 };
 
-const Button = (props: ButtonProps) => {
+const LinkBtn = (props: LinkProps) => {
   const {
     children,
+    href,
     color = "none",
     hoverUnderline,
     icon = false,
     isStretched = false,
-    ...rest
   } = props;
 
   const buttonSize = isStretched ? "py-0 px-2" : "py-2.5 px-4 sm:py-3 sm:px-6";
@@ -32,9 +34,9 @@ const Button = (props: ButtonProps) => {
   const buttonColors = `${colors[color]} ${hoverUnderline ? "hover:underline" : `hover:${colors[color]}/75`} ${color === "none" ? "text-dark-100" : "text-gray-100"} underline-offset-1`;
 
   return (
-    <button
+    <Link
+      href={href}
       className={`${buttonColors} ${buttonSize} custom-focus  min flex min-w-fit items-center justify-center gap-4 rounded-10 text-13 font-bold sm:text-sm`}
-      {...rest}
     >
       {icon && (
         <span
@@ -44,8 +46,8 @@ const Button = (props: ButtonProps) => {
         </span>
       )}
       {children}
-    </button>
+    </Link>
   );
 };
 
-export default Button;
+export default LinkBtn;

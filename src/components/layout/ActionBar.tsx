@@ -6,9 +6,7 @@ const ActionBar = () => {
   return (
     <div className="flex w-full items-center justify-between gap-x-4 bg-dark-300 px-6 py-2">
       <SortBy />
-      <Button color="violet" size="sm">
-        + Add Feedback
-      </Button>
+      <Button color="violet">+ Add Feedback</Button>
     </div>
   );
 };

@@ -8,12 +8,12 @@ export interface CommentType {
   content: string;
   user: UserType;
 }
-export interface FeedbackType {
+export interface RequestType {
   id: number;
   title: string;
   category: string;
   upvotes: number;
   status: string;
   description: string;
-  comments?: CommentType[];
+  comments_count?: number;
 }

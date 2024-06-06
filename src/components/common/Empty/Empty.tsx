@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Button from "@/components/common/Button";
 
-const EmptyFeedback = () => {
+const Empty = () => {
   return (
     <div className="mb-4 rounded-10 bg-white px-6 py-20">
       <Image
@@ -20,12 +20,10 @@ const EmptyFeedback = () => {
         about new ideas to improve our app.
       </p>
       <div className="mx-auto w-fit">
-        <Button color="violet" size="sm">
-          + Add Feedback
-        </Button>
+        <Button color="violet">+ Add Feedback</Button>
       </div>
     </div>
   );
 };
 
-export default EmptyFeedback;
+export default Empty;
