@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { nanoid } from "nanoid";
 import Hamburguer from "@/components/common/Hamburguer";
 import CheckBox from "@/components/common/CheckBox";
 import { svgCircle } from "@/utils/svgIcons";
@@ -42,7 +43,7 @@ const Header = (props: HeaderProps) => {
       >
         <div className="flex min-h-44 max-w-56 flex-wrap items-start justify-start gap-x-2 gap-y-4 rounded-10 bg-white p-6">
           {categories.map((item) => (
-            <CheckBox key={item} label={item} />
+            <CheckBox key={nanoid()} label={item} />
           ))}
         </div>
         <div className="min-h-44  max-w-56 rounded-10 bg-white p-6">

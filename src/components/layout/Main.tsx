@@ -1,6 +1,7 @@
 import React from "react";
 import Request from "@/components/common/Request";
 import Empty from "@/components/common/Empty";
+import { nanoid } from "nanoid";
 import type { RequestType } from "@/types/dataTypes";
 
 interface MainProps {
@@ -16,7 +17,7 @@ const Main = (props: MainProps) => {
       ) : (
         requests.map((request: RequestType) => (
           <Request
-            key={request.id}
+            key={nanoid()}
             id={request.id}
             title={request.title}
             description={request.description}

@@ -1,21 +1,27 @@
 "use client";
 import React from "react";
 
-interface InputProps extends React.ComponentPropsWithRef<"input"> {
-  ID: string;
+interface InputProps extends React.ComponentPropsWithRef<"textarea"> {
+  id: string;
   placeholder: string;
+  isError?: boolean;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 const Input = (props: InputProps) => {
-  const { ID, placeholder } = props;
+  const { id, placeholder, className, onChange, isError, value, ...rest } =
+    props;
   return (
-    <input
-      id={ID}
+    <textarea
+      id={id}
       placeholder={placeholder}
-      type="text"
-      className="custom-form-focus rounded-5 text-15 bg-gray-200 px-6 py-3 font-normal text-dark-200 placeholder:text-dark-200/60"
+      className={`custom-form-focus block w-full rounded-5 bg-gray-200 px-6 py-3 text-15 font-normal text-dark-200 placeholder:text-dark-200/60 ${
+        isError ? "border border-orange-200" : ""
+      }`}
+      value={value}
+      onChange={onChange}
+      {...rest}
     />
   );
 };
-
-export default Input;

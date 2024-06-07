@@ -44,7 +44,7 @@ const Button = (props: ButtonProps) => {
 
   return (
     <button
-      className={`${buttonColors} ${buttonSize} custom-focus  min flex min-w-fit items-center justify-center gap-4 rounded-10 text-13 font-bold sm:text-sm`}
+      className={`${buttonColors} ${buttonSize} custom-focus flex h-fit w-fit items-center justify-center gap-4 whitespace-nowrap rounded-10 text-13 font-bold sm:text-sm`}
       {...rest}
     >
       {icon && (

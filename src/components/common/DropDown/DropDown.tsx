@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { nanoid } from "nanoid";
 
 const svgArrow = (
   <svg
@@ -52,7 +53,7 @@ const DropDown = () => {
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`rounded-5 custom-form-focus flex items-center justify-center gap-x-4 bg-gray-200 px-6 py-3`}
+        className={`custom-form-focus flex items-center justify-center gap-x-4 rounded-5 bg-gray-200 px-6 py-3`}
       >
         <span className={` text-15 font-normal text-dark-200`}>
           {selectedOption.label}
@@ -65,11 +66,11 @@ const DropDown = () => {
         <div
           role="listbox"
           aria-labelledby={componentId}
-          className="rounded-10 shadow-custom_1 absolute top-[calc(100%+16px)] w-fit min-w-64 overflow-hidden bg-white"
+          className="absolute top-[calc(100%+16px)] w-fit min-w-64 overflow-hidden rounded-10 bg-white shadow-custom_1"
         >
           {options.map((option) => (
             <button
-              key={option.value}
+              key={nanoid()}
               role="option"
               aria-selected={option.value === selectedOption.value}
               className="flex w-full cursor-pointer items-center justify-between border-b border-b-dark-200/15 px-6 py-3 text-base font-normal text-dark-100 last:border-b-0 hover:text-violet"

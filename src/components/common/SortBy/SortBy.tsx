@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { svgDownArrow, svgCheck } from "@/utils/svgIcons";
+import { nanoid } from "nanoid";
 
 interface Option {
   label: string;
@@ -51,7 +52,7 @@ const SortBy = () => {
         >
           {options.map((option) => (
             <button
-              key={option.value}
+              key={nanoid()}
               role="option"
               aria-selected={option.value === selectedOption.value}
               className="flex w-full cursor-pointer items-center justify-between border-b border-b-dark-200/15 px-6 py-3 text-base font-normal text-dark-100 last:border-b-0 hover:text-violet"
