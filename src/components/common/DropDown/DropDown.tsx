@@ -24,28 +24,24 @@ const svgCheck = (
     <path d="M1 5.23287L4.52154 9L12 1" stroke="#AD1FEA" stroke-width="2" />
   </svg>
 );
-interface Option {
-  label: string;
+interface DropDownProps {
+  id: string;
+  options: string[];
   value: string;
+  onChange: (option: string) => void;
 }
-const DropDown = () => {
-  const options: Option[] = [
-    { label: "Most Upvotes", value: "1sbmu" },
-    { label: "Least Upvotes", value: "2sblu" },
-    { label: "Most Comments", value: "3sbmc" },
-    { label: "Least Comments", value: "4sblc" },
-  ];
-  const [selectedOption, setSelectedOption] = React.useState(options[0]);
-  const [isOpen, setIsOpen] = React.useState(true);
+const DropDown = (props: DropDownProps) => {
+  const { id, options, value, onChange } = props;
+  const [isOpen, setIsOpen] = React.useState(false);
   const componentId = React.useId();
 
-  const handleOptionClick = (option: Option) => {
-    setSelectedOption(option);
+  const handleClick = (option: string) => {
+    onChange(option);
     setIsOpen(false);
   };
 
   return (
-    <div className="relative w-fit">
+    <div id={id} className="relative w-full">
       <button
         id={componentId}
         type="button"
@@ -53,11 +49,9 @@ const DropDown = () => {
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`custom-form-focus flex items-center justify-center gap-x-4 rounded-5 bg-gray-200 px-6 py-3`}
+        className={`custom-form-focus flex w-full items-center justify-between gap-x-4 rounded-5 bg-gray-200 px-4 py-3.5`}
       >
-        <span className={` text-15 font-normal text-dark-200`}>
-          {selectedOption.label}
-        </span>
+        <span className={` text-15 font-normal text-dark-200`}>{value}</span>
         <span className={`text-blue-200 ${!isOpen && "rotate-180"}`}>
           {svgArrow}
         </span>
@@ -66,18 +60,18 @@ const DropDown = () => {
         <div
           role="listbox"
           aria-labelledby={componentId}
-          className="absolute top-[calc(100%+16px)] w-fit min-w-64 overflow-hidden rounded-10 bg-white shadow-custom_1"
+          className="absolute top-[calc(100%+16px)] w-full min-w-64 overflow-hidden rounded-10 bg-white shadow-custom_1"
         >
           {options.map((option) => (
             <button
               key={nanoid()}
               role="option"
-              aria-selected={option.value === selectedOption.value}
+              aria-selected={option === value}
               className="flex w-full cursor-pointer items-center justify-between border-b border-b-dark-200/15 px-6 py-3 text-base font-normal text-dark-100 last:border-b-0 hover:text-violet"
-              onClick={() => handleOptionClick(option)}
+              onClick={() => handleClick(option)}
             >
-              {option.label}
-              {option.value === selectedOption.value && svgCheck}
+              {option}
+              {option === value && svgCheck}
             </button>
           ))}
         </div>

@@ -7,6 +7,7 @@ interface ButtonProps extends React.ComponentPropsWithRef<"button"> {
   icon?: boolean;
   isStretched?: boolean;
   hoverUnderline?: boolean;
+  isFlex?: boolean;
 }
 
 const colors = {
@@ -30,6 +31,7 @@ const Button = (props: ButtonProps) => {
     hoverUnderline,
     icon = false,
     isStretched = false,
+    isFlex,
     ...rest
   } = props;
 
@@ -44,7 +46,7 @@ const Button = (props: ButtonProps) => {
 
   return (
     <button
-      className={`${buttonColors} ${buttonSize} custom-focus flex h-fit w-fit items-center justify-center gap-4 whitespace-nowrap rounded-10 text-13 font-bold sm:text-sm`}
+      className={`${buttonColors} ${buttonSize} ${isFlex ? "w-full" : "w-fit"} custom-focus flex h-fit items-center justify-center gap-4 whitespace-nowrap rounded-10 text-13 font-bold sm:text-sm`}
       {...rest}
     >
       {icon && (

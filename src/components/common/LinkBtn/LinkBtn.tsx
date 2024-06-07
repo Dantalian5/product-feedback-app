@@ -4,44 +4,49 @@ import { svgBackArrow } from "@/utils/svgIcons";
 interface LinkProps extends React.ComponentPropsWithRef<"a"> {
   children: React.ReactNode;
   href: string;
-  color?: "violet" | "blue" | "dark" | "orange";
-  icon?: boolean;
   isStretched?: boolean;
   hoverUnderline?: boolean;
   className?: string;
+  bgColor?: "violet" | "blue" | "dark" | "orange";
+  textColor?: "dark" | "gray" | "white";
+  iconColor?: "blue" | "gray" | "white";
 }
 
-const colors = {
+const bgColorsArr = {
   violet: "bg-violet",
   blue: "bg-blue-200",
   dark: "bg-dark-200",
   orange: "bg-orange-200",
-  none: "bg-none",
+};
+const textColorsArr = {
+  dark: "text-dark-100",
+  gray: "text-gray-100",
+  white: "text-white",
+};
+const iconColorsArr = {
+  blue: "text-blue-200",
+  gray: "text-gray-400",
+  white: "text-white",
 };
 
 const LinkBtn = (props: LinkProps) => {
   const {
     children,
     href,
-    color = "none",
     hoverUnderline,
-    icon = false,
     isStretched = false,
+    bgColor,
+    textColor,
+    iconColor,
   } = props;
-
-  const buttonSize = isStretched ? "py-0 px-2" : "py-2.5 px-4 sm:py-3 sm:px-6";
-
-  const buttonColors = `${colors[color]} ${hoverUnderline ? "hover:underline" : `hover:${colors[color]}/75`} ${color === "none" ? "text-dark-100" : "text-gray-100"} underline-offset-1`;
 
   return (
     <Link
       href={href}
-      className={`${buttonColors} ${buttonSize} custom-focus  min flex min-w-fit items-center justify-center gap-4 rounded-10 text-13 font-bold sm:text-sm`}
+      className={` custom-focus flex min-w-fit items-center justify-center gap-4 rounded-10 text-13 font-bold underline-offset-1 sm:text-sm ${isStretched ? "p-0" : "px-4 py-2.5 sm:px-6 sm:py-3"} ${bgColor ? bgColorsArr[bgColor] : "bg-none"} ${textColor ? textColorsArr[textColor] : "text-dark-100"} ${hoverUnderline ? "hover:underline" : `hover:${bgColor ? `${bgColorsArr[bgColor]}/75` : "bg-none"}`}`}
     >
-      {icon && (
-        <span
-          className={`${color === "none" ? "text-blue-200" : "text-gray-400"} text-10`}
-        >
+      {iconColor && (
+        <span className={`${iconColorsArr[iconColor]} text-10`}>
           {svgBackArrow}
         </span>
       )}

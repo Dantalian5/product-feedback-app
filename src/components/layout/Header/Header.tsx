@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { nanoid } from "nanoid";
+import Link from "next/link";
 import Hamburguer from "@/components/common/Hamburguer";
 import CheckBox from "@/components/common/CheckBox";
 import { svgCircle } from "@/utils/svgIcons";
@@ -51,9 +52,12 @@ const Header = (props: HeaderProps) => {
             <h2 className=" text-18 font-bold tracking-tighter text-dark-200">
               Roadmap
             </h2>
-            <button className="text-13 font-semibold text-blue-200 underline">
+            <Link
+              href={"/roadmap"}
+              className="text-13 font-semibold text-blue-200 underline"
+            >
               View
-            </button>
+            </Link>
           </div>
           <div className="flex w-full flex-col gap-y-2">
             <div className="flex w-full items-center justify-start gap-x-4">

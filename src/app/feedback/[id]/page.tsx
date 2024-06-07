@@ -1,6 +1,6 @@
 import React from "react";
 import { nanoid } from "nanoid";
-import Request from "@/components/common/Request";
+import Feedback from "@/components/common/Feedback";
 import Comment from "@/components/common/Comment";
 import Button from "@/components/common/Button";
 import LinkBtn from "@/components/common/LinkBtn";
@@ -25,15 +25,17 @@ const Details = async ({ params }: DetailsProps) => {
   );
 
   return (
-    <div className="p-6">
+    <>
       <div className="mb-6 flex w-full items-center justify-between">
-        <LinkBtn icon isStretched href="/">
+        <LinkBtn iconColor="blue" isStretched href="/">
           Go Backs
         </LinkBtn>
-        <Button color="blue">Edit Feedback</Button>
+        <LinkBtn href={`/feedback/${id}/edit`} bgColor="blue" textColor="white">
+          Edit Feedback
+        </LinkBtn>
       </div>
       {request && (
-        <Request
+        <Feedback
           id={request.id}
           title={request.title}
           description={request.description}
@@ -42,11 +44,11 @@ const Details = async ({ params }: DetailsProps) => {
           commentsNumber={request.comments_count ? request.comments_count : 0}
         />
       )}
-      <div className="flex flex-col items-start justify-start gap-y-6 rounded-10 bg-white p-6">
+      <div className="mb-6 flex flex-col items-start justify-start gap-y-6 rounded-10 bg-white p-6">
         <h2 className="text-18 font-bold tracking-tighter text-dark-200">
           {comments.length} Comments
         </h2>
-        {parentComments.map((comment) => (
+        {parentComments.map((comment, index) => (
           <div key={nanoid()} className="flex w-full flex-col gap-y-6">
             <Comment
               user={comment.user}
@@ -69,11 +71,14 @@ const Details = async ({ params }: DetailsProps) => {
                   />
                 </div>
               ))}
+            {index !== parentComments.length - 1 && (
+              <span className="h-[1px] w-full bg-dark-100/20"></span>
+            )}
           </div>
         ))}
       </div>
       <AddComment requestId={id} />
-    </div>
+    </>
   );
 };
 
