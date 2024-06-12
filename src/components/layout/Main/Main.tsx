@@ -11,7 +11,7 @@ const Main = (props: MainProps) => {
   const { requests } = props;
 
   return (
-    <main className="px-6 py-8 sm:px-0 sm:py-6">
+    <main className="flex flex-col gap-4 px-6 py-8 sm:px-0 sm:py-6 ">
       {requests.length === 0 ? (
         <Empty />
       ) : (

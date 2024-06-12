@@ -78,8 +78,8 @@ export const svgMessage = (
 export const svgAddIcon = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="40"
-    height="40"
+    width="1em"
+    height="1em"
     viewBox="0 0 40 40"
     fill="none"
   >
@@ -108,8 +108,8 @@ export const svgAddIcon = (
 export const svgEditIcon = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="40"
-    height="40"
+    width="1em"
+    height="1em"
     viewBox="0 0 40 40"
     fill="none"
   >

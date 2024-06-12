@@ -49,9 +49,13 @@ const DropDown = (props: DropDownProps) => {
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`custom-form-focus flex w-full items-center justify-between gap-x-4 rounded-5 bg-gray-200 px-4 py-3.5`}
+        className={`custom-form-focus flex w-full items-center justify-between gap-x-4 rounded-5 bg-gray-200 px-4 py-3.5 sm:px-6`}
       >
-        <span className={` text-15 font-normal text-dark-200`}>{value}</span>
+        <span
+          className={`text-13 font-normal capitalize text-dark-200 sm:text-15`}
+        >
+          {value}
+        </span>
         <span className={`text-blue-200 ${!isOpen && "rotate-180"}`}>
           {svgArrow}
         </span>
@@ -67,7 +71,7 @@ const DropDown = (props: DropDownProps) => {
               key={nanoid()}
               role="option"
               aria-selected={option === value}
-              className="flex w-full cursor-pointer items-center justify-between border-b border-b-dark-200/15 px-6 py-3 text-base font-normal text-dark-100 last:border-b-0 hover:text-violet"
+              className="flex w-full cursor-pointer items-center justify-between border-b border-b-dark-200/15 px-6 py-3 text-base font-normal capitalize text-dark-100 last:border-b-0 hover:text-violet"
               onClick={() => handleClick(option)}
             >
               {option}

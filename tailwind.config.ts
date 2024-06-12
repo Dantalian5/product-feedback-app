@@ -6,6 +6,7 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  safelist: ["before:bg-violet", "before:bg-orange-100", "before:bg-blue-100"],
   theme: {
     letterSpacing: {
       // 	tightest: '-.2em',
@@ -47,6 +48,8 @@ const config: Config = {
         13: "0.8125rem",
         15: "0.9375rem",
         18: "1.125rem",
+        40: "2.5rem",
+        56: "3.5rem",
       },
       borderRadius: {
         5: "5px",
