@@ -10,12 +10,12 @@ const Empty = () => {
         alt="Picture of the author"
         width={100}
         height={100}
-        className="mx-auto mb-10 w-[40%]"
+        className="mx-auto mb-10 w-[40%] sm:w-[25%]"
       />
-      <h3 className="mx-auto mb-4 text-center text-18 font-bold text-dark-200">
+      <h3 className="mx-auto mb-4 text-center text-18 font-bold text-dark-200 sm:text-2xl">
         There is no feedback yet.
       </h3>
-      <p className="mx-auto mb-6 text-center text-13 font-normal text-dark-100">
+      <p className="mx-auto mb-6 text-center text-13 font-normal text-dark-100 sm:text-base">
         Got a suggestion? Found a bug that needs to be squashed? We love hearing
         about new ideas to improve our app.
       </p>

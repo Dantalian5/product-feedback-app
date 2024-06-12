@@ -6,7 +6,7 @@ import type { RequestType } from "@/types/dataTypes";
 import { fetchRequests } from "@/services/api";
 
 const Home = async () => {
-  const productRequests = await fetchRequests();
+  const productRequests = (await fetchRequests()) || [];
 
   const roadmap = {
     planned: productRequests
@@ -25,11 +25,15 @@ const Home = async () => {
         ).length
       : 0,
   };
+  const suggestions = Object.values(roadmap).reduce(
+    (sum, value) => sum + value,
+    0,
+  );
 
   return (
     <div>
       <Header roadmap={roadmap} />
-      <ActionBar />
+      <ActionBar suggestions={suggestions} />
       <Main requests={productRequests ? productRequests : []} />
     </div>
   );

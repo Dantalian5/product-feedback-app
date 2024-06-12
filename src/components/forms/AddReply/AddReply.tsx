@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Button from "@/components/common/Button";
 
@@ -31,13 +32,13 @@ const AddReply = (props: any) => {
     <form
       id={formId}
       onSubmit={handleSubmit}
-      className=" mt-6 flex w-full flex-col items-start gap-x-4 rounded-10 bg-white sm:flex-row"
+      className="flex w-full flex-col items-start gap-x-4 rounded-10 bg-white sm:flex-row"
     >
       <div className="mb-4 w-full flex-grow">
         <textarea
           form={formId}
           id={inputId}
-          className={`block min-h-20 w-full resize-none rounded-5 bg-gray-200 p-4 text-13 font-normal text-dark-200 placeholder:text-dark-200/60 focus:outline-1 focus:outline-blue-200 ${
+          className={`block min-h-20 w-full resize-none rounded-5 bg-gray-200 p-4 text-13 font-normal text-dark-200 placeholder:text-dark-200/60 focus:outline-1 focus:outline-blue-200 sm:text-15 ${
             isError ? "border border-orange-200" : ""
           }`}
           value={content}
@@ -55,7 +56,7 @@ const AddReply = (props: any) => {
       </div>
       <div className="ml-auto w-fit">
         <Button type="submit" color="violet">
-          Post Comment
+          Post Reply
         </Button>
       </div>
     </form>

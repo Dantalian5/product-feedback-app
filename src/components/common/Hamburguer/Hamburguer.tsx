@@ -11,7 +11,7 @@ const Hamburguer = (props: HamburguerProps) => {
   return (
     <button
       aria-label="Open menu"
-      className={`z-50 flex cursor-pointer flex-col items-center justify-center gap-y-1 overflow-hidden p-1`}
+      className={`z-50 flex cursor-pointer flex-col items-center justify-center gap-y-1 overflow-hidden p-1 sm:hidden`}
       onClick={onClick}
     >
       <span

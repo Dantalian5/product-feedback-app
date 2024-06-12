@@ -33,9 +33,11 @@ export async function fetchComments(id: number) {
     comments.request_id,
     comments.parent_comment_id,
     comments.replying_to,
+    users.id AS user_id,
     users.name AS user_name,
     users.username AS user_username,
     users.image AS user_image,
+    replying_users.id AS replying_user_id,
     replying_users.name AS replying_user_name,
     replying_users.username AS replying_user_username,
     replying_users.image AS replying_user_image
@@ -54,12 +56,14 @@ export async function fetchComments(id: number) {
       parent_comment_id: row.parent_comment_id,
       replying_to: row.replying_to
         ? {
+            id: row.replying_user_id,
             name: row.replying_user_name,
             username: row.replying_user_username,
             image: row.replying_user_image,
           }
         : null,
       user: {
+        id: row.user_id,
         name: row.user_name,
         username: row.user_username,
         image: row.user_image,
