@@ -4,11 +4,12 @@ import FeedbackRM from "@/components/common/FeedbackRM";
 import type { RequestType } from "@/types/dataTypes";
 
 const RoadMap = ({ feedbacks }: { feedbacks: RequestType[] }) => {
-  const [isMobile, setIsMobile] = React.useState(window.innerWidth <= 640);
-  const handleResize = () => {
-    setIsMobile(window.innerWidth <= 640);
-  };
+  const [isMobile, setIsMobile] = React.useState<boolean>(true);
+
   React.useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 640);
+    };
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => {
@@ -44,18 +45,18 @@ const RoadMap = ({ feedbacks }: { feedbacks: RequestType[] }) => {
   ];
   const [activeTab, setActiveTab] = React.useState<string>(roadmap[0].status);
   const filteredRoadmap = isMobile
-    ? roadmap
-    : roadmap.filter((e) => e.status === activeTab.toLowerCase());
+    ? roadmap.filter((e) => e.status === activeTab.toLowerCase())
+    : roadmap;
 
   return (
     <>
       <div className="align-center flex border-b border-b-dark-100/20 sm:hidden">
-        {roadmap.map(({ status }) => (
+        {roadmap.map(({ status, color }) => (
           <button
             key={status}
             className={`w-full px-2 py-5 text-13 font-bold text-dark-200 ${
               status.toLowerCase() === activeTab.toLowerCase() &&
-              "border-b-4 border-b-violet"
+              `border-b-4 border-b-${color}`
             }`}
             onClick={() => setActiveTab(status)}
           >

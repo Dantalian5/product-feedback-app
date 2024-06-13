@@ -6,7 +6,14 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  safelist: ["before:bg-violet", "before:bg-orange-100", "before:bg-blue-100"],
+  safelist: [
+    "before:bg-violet",
+    "before:bg-orange-100",
+    "before:bg-blue-100",
+    "border-b-violet",
+    "border-b-orange-100",
+    "border-b-blue-100",
+  ],
   theme: {
     letterSpacing: {
       // 	tightest: '-.2em',
