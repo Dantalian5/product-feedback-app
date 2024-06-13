@@ -9,21 +9,15 @@ const Home = async () => {
   const productRequests = (await fetchRequests()) || [];
 
   const roadmap = {
-    planned: productRequests
-      ? productRequests.filter(
-          (request: RequestType) => request.status === "planned",
-        ).length
-      : 0,
-    in_progress: productRequests
-      ? productRequests.filter(
-          (request: RequestType) => request.status === "in-progress",
-        ).length
-      : 0,
-    live: productRequests
-      ? productRequests.filter(
-          (request: RequestType) => request.status === "live",
-        ).length
-      : 0,
+    planned: productRequests.filter(
+      (request: RequestType) => request.status === "planned",
+    ).length,
+    in_progress: productRequests.filter(
+      (request: RequestType) => request.status === "in-progress",
+    ).length,
+    live: productRequests.filter(
+      (request: RequestType) => request.status === "live",
+    ).length,
   };
   const suggestions = Object.values(roadmap).reduce(
     (sum, value) => sum + value,
@@ -31,10 +25,13 @@ const Home = async () => {
   );
 
   return (
-    <div>
-      <Header roadmap={roadmap} />
-      <ActionBar suggestions={suggestions} />
-      <Main requests={productRequests ? productRequests : []} />
+    <div className="flex flex-col gap-x-8 sm:gap-y-10 lg:flex-row">
+      <div className=" w-full lg:max-w-[255px]">
+        <Header roadmap={roadmap} />
+      </div>
+      <div className=" w-full flex-auto">
+        <Main feedbacks={productRequests} />
+      </div>
     </div>
   );
 };

@@ -1,31 +1,25 @@
 "use client";
 import React from "react";
+import type { TypeOption as Option } from "@/types/dataTypes";
 import { svgDownArrow, svgCheck } from "@/utils/svgIcons";
-import { nanoid } from "nanoid";
 
-interface Option {
-  label: string;
-  value: string;
+interface SortProps {
+  options: Option[];
+  selectedOption: Option;
+  handleChange: (arg0: Option) => void;
 }
-
-const SortBy = () => {
-  const options: Option[] = [
-    { label: "Most Upvotes", value: "1sbmu" },
-    { label: "Least Upvotes", value: "2sblu" },
-    { label: "Most Comments", value: "3sbmc" },
-    { label: "Least Comments", value: "4sblc" },
-  ];
-  const [selectedOption, setSelectedOption] = React.useState(options[0]);
+const SortBy = (props: SortProps) => {
+  const { options, selectedOption, handleChange } = props;
   const [isOpen, setIsOpen] = React.useState(false);
   const componentId = React.useId();
 
   const handleOptionClick = (option: Option) => {
-    setSelectedOption(option);
+    handleChange(option);
     setIsOpen(false);
   };
-
+  console.log(selectedOption);
   return (
-    <div className="relative w-fit">
+    <div className="relative z-50 w-fit">
       <button
         id={componentId}
         type="button"
@@ -52,7 +46,7 @@ const SortBy = () => {
         >
           {options.map((option) => (
             <button
-              key={nanoid()}
+              key={option.value}
               role="option"
               aria-selected={option.value === selectedOption.value}
               className="flex w-full cursor-pointer items-center justify-between border-b border-b-dark-200/15 px-6 py-3 text-base font-normal text-dark-100 last:border-b-0 hover:text-violet"

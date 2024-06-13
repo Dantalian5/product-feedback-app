@@ -28,9 +28,9 @@ const Header = (props: HeaderProps) => {
 
   return (
     <header
-      className={` relative z-20 w-full gap-x-2.5 sm:mb-10 sm:flex sm:items-stretch`}
+      className={`relative z-20 w-full gap-x-2.5 sm:flex sm:items-stretch lg:flex-col lg:gap-y-6`}
     >
-      <div className=" relative z-40 flex flex-auto items-center justify-between bg-topgrad px-6 py-4 sm:flex-grow sm:items-end sm:rounded-10">
+      <div className=" relative z-40 flex flex-[1_1_30%] items-center justify-between bg-topgrad px-6 py-4 sm:flex-grow sm:items-end sm:rounded-10 lg:min-h-36">
         <div>
           <h1 className="text-base font-bold text-white sm:text-xl">
             Frontend Mentor
@@ -45,17 +45,17 @@ const Header = (props: HeaderProps) => {
         className={`absolute left-0 top-0 z-20 h-screen w-screen bg-black/50 ${isOpen ? "block" : "hidden"} sm:hidden`}
       ></div>
       <div
-        className={`absolute right-0 top-full z-30 flex h-[calc(100vh-5rem)] flex-col gap-y-6 bg-gray-200 p-6 transition-transform ${isOpen ? " translate-x-0" : "translate-x-full"} gap-x-2.5 overflow-y-scroll sm:static sm:h-auto sm:flex-grow sm:translate-x-0 sm:flex-row sm:items-stretch sm:justify-stretch sm:bg-none sm:p-0`}
+        className={`${isOpen ? " translate-x-0" : "translate-x-full"} absolute right-0 top-full z-30 flex h-[calc(100vh-5rem)] max-w-[270px] flex-[1_1_64%] flex-col gap-x-2.5 gap-y-6 overflow-y-scroll bg-gray-200 p-6 transition-transform sm:static sm:h-auto sm:max-w-none sm:translate-x-0 sm:flex-row sm:items-stretch sm:justify-stretch sm:bg-none sm:p-0 lg:flex-col`}
       >
         {/* <div className="ml-auto sm:order-last">
           <UserBtn />
         </div> */}
-        <div className="flex min-h-44 w-full max-w-56 flex-wrap items-start justify-start gap-x-2 gap-y-4 rounded-10 bg-white p-6">
+        <div className="flex min-h-44 w-full  flex-wrap items-start justify-start gap-x-2 gap-y-4 rounded-10 bg-white p-6 lg:max-w-none">
           {categories.map((item) => (
             <CheckBox key={nanoid()} label={item} />
           ))}
         </div>
-        <div className="min-h-44  w-full max-w-56 rounded-10 bg-white p-6">
+        <div className="min-h-44 w-full  rounded-10 bg-white p-6 lg:max-w-none">
           <div className="mb-6 flex w-full items-center justify-between">
             <h2 className=" text-18 font-bold tracking-tighter text-dark-200">
               Roadmap
