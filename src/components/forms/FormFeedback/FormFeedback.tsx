@@ -100,15 +100,15 @@ const FormFeedback = (props: FormFeedbackProps) => {
         />
       </CustomLabel>
       <div className="flex flex-col gap-4 pt-4 sm:flex-row-reverse">
-        <Button color="violet" type="submit" isFlex>
+        <Button classe="violet" type="submit" isFlex>
           {request ? "Save Changes" : "Add Feedback"}
         </Button>
-        <Button color="dark" type="button" isFlex>
+        <Button classe="dark" type="button" isFlex>
           Cancel
         </Button>
         {request && (
           <div className="w-full">
-            <Button color="orange" type="button" isFlex>
+            <Button classe="orange" type="button" isFlex>
               Delete
             </Button>
           </div>

@@ -32,7 +32,7 @@ const Error = ({
         .
       </p>
       <div className="mx-auto w-fit">
-        <Button color="blue" textColor="gray" onClick={() => reset()}>
+        <Button classe="blue" onClick={() => reset()}>
           Try Again
         </Button>
       </div>

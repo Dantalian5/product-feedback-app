@@ -67,7 +67,7 @@ const AddComment = (props: AddCommentProps) => {
         <p className=" sm:text-md text-dark-600 text-xs font-normal">
           {remaining} Characters left
         </p>
-        <Button type="submit" color="violet">
+        <Button type="submit" classe="violet">
           Post Comment
         </Button>
       </div>

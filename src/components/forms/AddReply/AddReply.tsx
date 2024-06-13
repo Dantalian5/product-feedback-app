@@ -55,7 +55,7 @@ const AddReply = (props: any) => {
         )}
       </div>
       <div className="ml-auto w-fit">
-        <Button type="submit" color="violet">
+        <Button type="submit" classe="violet">
           Post Reply
         </Button>
       </div>
