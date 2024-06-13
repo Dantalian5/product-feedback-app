@@ -62,7 +62,7 @@ const Main = (props: MainProps) => {
             handleChange={setSortAlg}
           />
         </div>
-        <LinkBtn href="/feedback/new" bgColor="violet" textColor="white">
+        <LinkBtn href="/feedback/new" classe="violet">
           + Add Feedback
         </LinkBtn>
       </div>

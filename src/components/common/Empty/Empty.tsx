@@ -21,7 +21,7 @@ const Empty = () => {
         about new ideas to improve our app.
       </p>
       <div className="mx-auto w-fit">
-        <LinkBtn href="/feedback/new" bgColor="violet" textColor="white">
+        <LinkBtn href="/feedback/new" classe="violet">
           + Add Feedback
         </LinkBtn>
       </div>

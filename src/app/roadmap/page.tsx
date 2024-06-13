@@ -11,14 +11,14 @@ const RoadmapPage = async () => {
     <div>
       <div className="bg-dark-800 flex w-full items-center justify-between gap-x-4 p-6 sm:mb-8 sm:rounded-10 sm:px-8 sm:py-7">
         <div className="flex flex-col items-start">
-          <LinkBtn href="/" iconColor="white" textColor="white" isStretched>
+          <LinkBtn href="/" classe="noneWhite" icon>
             Go Back
           </LinkBtn>
           <h1 className="text-lg font-bold tracking-tighter text-white sm:text-2xl">
             Roadmap
           </h1>
         </div>
-        <LinkBtn href="/feedback/new" bgColor="violet" textColor="white">
+        <LinkBtn href="/feedback/new" classe="violet">
           + Add Feedback
         </LinkBtn>
       </div>

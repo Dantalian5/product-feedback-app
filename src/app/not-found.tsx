@@ -17,7 +17,7 @@ const NotFound = () => {
         .
       </p>
       <div className="mx-auto w-fit">
-        <LinkBtn href="/" bgColor="violet" textColor="white">
+        <LinkBtn href="/" classe="violet">
           Go Home
         </LinkBtn>
       </div>

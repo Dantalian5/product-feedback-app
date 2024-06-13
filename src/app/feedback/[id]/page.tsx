@@ -28,10 +28,10 @@ const Details = async ({ params }: DetailsProps) => {
   return (
     <div className="mx-auto flex w-full max-w-[730px] flex-col gap-y-6">
       <div className="flex w-full items-center justify-between">
-        <LinkBtn iconColor="blue" isStretched href="/">
+        <LinkBtn classe="noneDark" icon href="/">
           Go Backs
         </LinkBtn>
-        <LinkBtn href={`/feedback/${id}/edit`} bgColor="blue" textColor="white">
+        <LinkBtn href={`/feedback/${id}/edit`} classe="blue">
           Edit Feedback
         </LinkBtn>
       </div>
