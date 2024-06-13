@@ -52,7 +52,7 @@ const Main = (props: MainProps) => {
         <div className="flex items-center gap-x-10">
           <div className="hidden items-center gap-x-4 sm:flex">
             <span>{svgLightBulb}</span>
-            <p className="text-18 font-bold text-white">
+            <p className="text-lg font-bold text-white">
               {suggestions.length} Suggestions
             </p>
           </div>

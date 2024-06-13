@@ -1,15 +1,14 @@
 import React from "react";
 import { nanoid } from "nanoid";
 import Comment from "@/components/common/Comment";
-import type { CommentWithInfo } from "@/types/dataTypes";
+import type { TypeCommentWithInfo as TypeComment } from "@/types/dataTypes";
 
-const CommentsWrapper = ({ comments }: { comments: CommentWithInfo[] }) => {
+const CommentsWrapper = ({ comments }: { comments: TypeComment[] }) => {
   return (
-    <section className="mb-6 flex flex-col items-start justify-start gap-y-6 rounded-10 bg-white p-6 sm:pb-8">
-      <h2 className="text-18 font-bold tracking-tighter text-dark-200">
+    <section className="flex flex-col items-start justify-start gap-y-6 rounded-10 bg-white p-6 sm:gap-y-8 sm:px-8 sm:pb-10 lg:pb-12">
+      <h2 className="text-lg font-bold tracking-tighter text-dark-200">
         {comments.length} Comments
       </h2>
-      <div className="flex w-full flex-col gap-y-6"></div>
       {comments
         .filter((comment) => comment.parent_comment_id === null)
         .map((parentComment, index) => (
@@ -27,7 +26,7 @@ const CommentsWrapper = ({ comments }: { comments: CommentWithInfo[] }) => {
               .map((childComment) => (
                 <div
                   key={nanoid()}
-                  className="border-l border-l-dark-100/10 pl-6 "
+                  className="border-l border-l-dark-100/10 pl-6 sm:ml-5 "
                 >
                   <Comment
                     user={childComment.user}

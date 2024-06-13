@@ -3,7 +3,10 @@ import Feedback from "@/components/common/Feedback";
 import LinkBtn from "@/components/common/LinkBtn";
 import AddComment from "@/components/forms/AddComment";
 import CommentsWrapper from "@/components/layout/CommentsWrapper";
-import type { RequestType, CommentWithInfo } from "@/types/dataTypes";
+import type {
+  TypeFeedbackWithCmtsCnt as TypeFeedback,
+  TypeCommentWithInfo as TypeComment,
+} from "@/types/dataTypes";
 import { fetchRequests, fetchComments } from "@/services/api";
 
 interface DetailsProps {
@@ -13,8 +16,8 @@ interface DetailsProps {
 }
 const Details = async ({ params }: DetailsProps) => {
   const id = parseInt(params.id);
-  const request: RequestType = await fetchRequests(id);
-  const comments: CommentWithInfo[] = (await fetchComments(id)) || [];
+  const feedback: TypeFeedback = await fetchRequests(id);
+  const comments: TypeComment[] = (await fetchComments(id)) || [];
   const parentComments = comments.filter(
     (comment) => comment.parent_comment_id === null,
   );
@@ -23,8 +26,8 @@ const Details = async ({ params }: DetailsProps) => {
   );
 
   return (
-    <>
-      <div className="mb-6 flex w-full items-center justify-between">
+    <div className="mx-auto flex w-full max-w-[730px] flex-col gap-y-6">
+      <div className="flex w-full items-center justify-between">
         <LinkBtn iconColor="blue" isStretched href="/">
           Go Backs
         </LinkBtn>
@@ -34,17 +37,17 @@ const Details = async ({ params }: DetailsProps) => {
       </div>
       {
         <Feedback
-          id={request.id}
-          title={request.title}
-          description={request.description}
-          category={request.category}
-          upvotes={request.upvotes}
-          commentsNumber={request.comments_count ? request.comments_count : 0}
+          id={feedback.id}
+          title={feedback.title}
+          description={feedback.description}
+          category={feedback.category}
+          upvotes={feedback.upvotes}
+          commentsNumber={feedback.comments_count}
         />
       }
       <CommentsWrapper comments={comments} />
       <AddComment requestId={id} />
-    </>
+    </div>
   );
 };
 

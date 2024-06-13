@@ -38,7 +38,7 @@ const AddReply = (props: any) => {
         <textarea
           form={formId}
           id={inputId}
-          className={`block min-h-20 w-full resize-none rounded-5 bg-gray-200 p-4 text-13 font-normal text-dark-200 placeholder:text-dark-200/60 focus:outline-1 focus:outline-blue-200 sm:text-15 ${
+          className={`sm:text-md block min-h-20 w-full resize-none rounded-5 bg-gray-200 p-4 text-xs font-normal text-dark-200 placeholder:text-dark-200/60 focus:outline-1 focus:outline-blue-200 ${
             isError ? "border border-orange-200" : ""
           }`}
           value={content}

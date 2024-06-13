@@ -40,7 +40,7 @@ const AddComment = (props: AddCommentProps) => {
     >
       <label
         htmlFor={inputId}
-        className="mb-6 block text-18 font-bold tracking-tighter text-dark-200"
+        className="mb-6 block text-lg font-bold tracking-tighter text-dark-200"
       >
         Add Comment
       </label>
@@ -48,7 +48,7 @@ const AddComment = (props: AddCommentProps) => {
         <textarea
           form={formId}
           id={inputId}
-          className={`block min-h-20 w-full resize-none rounded-5 bg-gray-200 p-4 text-13 font-normal text-dark-200 placeholder:text-dark-200/60 focus:outline-1 focus:outline-blue-200 sm:px-6 sm:text-15 ${
+          className={`sm:text-md block min-h-20 w-full resize-none rounded-5 bg-gray-200 p-4 text-xs font-normal text-dark-200 placeholder:text-dark-200/60 focus:outline-1 focus:outline-blue-200 sm:px-6 ${
             isError ? "border border-orange-200" : ""
           }`}
           value={content}
@@ -64,7 +64,7 @@ const AddComment = (props: AddCommentProps) => {
         )}
       </div>
       <div className="flex w-full items-center justify-between">
-        <p className=" text-13 font-normal text-dark-100 sm:text-15">
+        <p className=" sm:text-md text-xs font-normal text-dark-100">
           {remaining} Characters left
         </p>
         <Button type="submit" color="violet">

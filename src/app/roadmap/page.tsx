@@ -2,21 +2,11 @@ import React from "react";
 import LinkBtn from "@/components/common/LinkBtn";
 import Main from "@/components/layout/Main";
 import RoadMap from "@/components/layout/RoadMap";
-import type { RequestType } from "@/types/dataTypes";
+import type { TypeFeedbackWithCmtsCnt as TypeFeedback } from "@/types/dataTypes";
 import { fetchRequests } from "@/services/api";
 
 const RoadmapPage = async () => {
-  const feedbacks = await fetchRequests();
-  const plannedFeedbacks = feedbacks.filter(
-    (request: RequestType) => request.status === "planned",
-  );
-  const inprogressFeedbacks = feedbacks.filter(
-    (request: RequestType) => request.status === "in-progress",
-  );
-  const liveFeedbacks = feedbacks.filter(
-    (request: RequestType) => request.status === "live",
-  );
-
+  const feedbacks: TypeFeedback[] = await fetchRequests();
   return (
     <div>
       <div className="flex w-full items-center justify-between gap-x-4 bg-dark-300 p-6 sm:mb-8 sm:rounded-10 sm:px-8 sm:py-7">
@@ -24,7 +14,7 @@ const RoadmapPage = async () => {
           <LinkBtn href="/" iconColor="white" textColor="white" isStretched>
             Go Back
           </LinkBtn>
-          <h1 className="text-18 font-bold tracking-tighter text-white sm:text-2xl">
+          <h1 className="text-lg font-bold tracking-tighter text-white sm:text-2xl">
             Roadmap
           </h1>
         </div>
@@ -32,7 +22,7 @@ const RoadmapPage = async () => {
           + Add Feedback
         </LinkBtn>
       </div>
-      <RoadMap feedbacks={feedbacks ? feedbacks : []} />
+      <RoadMap feedbacks={feedbacks} />
     </div>
   );
 };

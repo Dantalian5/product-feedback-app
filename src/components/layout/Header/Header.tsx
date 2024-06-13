@@ -35,7 +35,7 @@ const Header = (props: HeaderProps) => {
           <h1 className="text-base font-bold text-white sm:text-xl">
             Frontend Mentor
           </h1>
-          <span className="text-sm font-medium text-white/75 sm:text-15">
+          <span className="sm:text-md text-sm font-medium text-white/75">
             Feedback Board
           </span>
         </div>
@@ -57,12 +57,12 @@ const Header = (props: HeaderProps) => {
         </div>
         <div className="min-h-44 w-full  rounded-10 bg-white p-6 lg:max-w-none">
           <div className="mb-6 flex w-full items-center justify-between">
-            <h2 className=" text-18 font-bold tracking-tighter text-dark-200">
+            <h2 className=" text-lg font-bold tracking-tighter text-dark-200">
               Roadmap
             </h2>
             <Link
               href={"/roadmap"}
-              className="text-13 font-semibold text-blue-200 underline"
+              className="text-xs font-semibold text-blue-200 underline"
             >
               View
             </Link>

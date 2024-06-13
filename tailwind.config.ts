@@ -15,11 +15,22 @@ const config: Config = {
     "border-b-blue-100",
   ],
   theme: {
+    fontSize: {
+      4: "0.25rem",
+      8: "0.5rem",
+      10: "0.625rem",
+      xs: "0.8125rem", // 13 - xs
+      sm: "0.875rem", // 14 - sm
+      md: "0.9375rem", // 15 - md
+      base: "1rem",
+      lg: "1.125rem", // 18 - lg
+      xl: "1.25rem", // 20 - xl
+      "2xl": "1.5rem", // 24 - 2xl
+      "3xl": "2.5rem", // 40 - 3xl
+      "4xl": "3.5rem", // 56 - 4xl
+    },
     letterSpacing: {
-      // 	tightest: '-.2em',
       tighter: "-.25px",
-      // 	tight: '-.33em',
-      // 	normal: '0',
     },
     colors: {
       blue: {
@@ -48,16 +59,6 @@ const config: Config = {
       black: "#000000",
     },
     extend: {
-      fontSize: {
-        4: "0.25rem",
-        8: "0.5rem",
-        10: "0.625rem",
-        13: "0.8125rem",
-        15: "0.9375rem",
-        18: "1.125rem",
-        40: "2.5rem",
-        56: "3.5rem",
-      },
       borderRadius: {
         5: "5px",
         10: "10px",

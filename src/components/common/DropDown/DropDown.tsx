@@ -52,7 +52,7 @@ const DropDown = (props: DropDownProps) => {
         className={`custom-form-focus flex w-full items-center justify-between gap-x-4 rounded-5 bg-gray-200 px-4 py-3.5 sm:px-6`}
       >
         <span
-          className={`text-13 font-normal capitalize text-dark-200 sm:text-15`}
+          className={`sm:text-md text-xs font-normal capitalize text-dark-200`}
         >
           {value}
         </span>

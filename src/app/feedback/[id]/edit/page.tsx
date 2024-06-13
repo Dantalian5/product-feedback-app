@@ -2,7 +2,7 @@ import React from "react";
 import LinkBtn from "@/components/common/LinkBtn";
 import FormFeedback from "@/components/forms/FormFeedback";
 import { fetchRequests } from "@/services/api";
-import type { RequestType } from "@/types/dataTypes";
+import type { TypeFeedback } from "@/types/dataTypes";
 
 interface EditFeedbackProps {
   params: {
@@ -12,7 +12,7 @@ interface EditFeedbackProps {
 
 const EditFeedback = async (props: EditFeedbackProps) => {
   const id = parseInt(props.params.id);
-  const request: RequestType = await fetchRequests(id);
+  const feedback: TypeFeedback = await fetchRequests(id);
 
   return (
     <div className=" mx-auto max-w-[33.75rem] pb-14">
@@ -21,7 +21,7 @@ const EditFeedback = async (props: EditFeedbackProps) => {
           Go Backs
         </LinkBtn>
       </div>
-      <FormFeedback request={request} />
+      <FormFeedback request={feedback} />
     </div>
   );
 };

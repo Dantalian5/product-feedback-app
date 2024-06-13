@@ -2,12 +2,12 @@
 import React from "react";
 import Image from "next/image";
 import AddReply from "@/components/forms/AddReply";
-import type { UserType } from "@/types/dataTypes";
+import type { TypeUser } from "@/types/dataTypes";
 
 interface CommentProps {
-  user: UserType;
+  user: TypeUser;
   content: string;
-  replying_to: UserType | null;
+  replying_to: TypeUser | null;
 }
 const Comment = (props: CommentProps) => {
   const { user, content, replying_to } = props;
@@ -24,29 +24,29 @@ const Comment = (props: CommentProps) => {
           className=" col-start-1 row-start-1 w-fit rounded-full"
         />
         <div className="col-start-2 row-start-1 flex w-full flex-col">
-          <p className="text-13 font-bold text-dark-200 sm:text-sm">
+          <p className="text-xs font-bold text-dark-200 sm:text-sm">
             {user.name}
           </p>
-          <p className="text-13 font-normal text-dark-100 sm:text-sm">
+          <p className="text-xs font-normal text-dark-100 sm:text-sm">
             @{user.username}
           </p>
         </div>
         <button
-          className="col-start-3 row-start-1 w-fit text-13 font-semibold text-violet"
+          className="col-start-3 row-start-1 w-fit text-xs font-semibold text-blue-200"
           onClick={() => setReply((prev) => !prev)}
         >
           Reply
         </button>
-        <p className="col-span-3 col-start-1 row-start-2 text-13 font-normal text-dark-100 sm:col-start-2 sm:text-15">
+        <p className="sm:text-md col-span-3 col-start-1 row-start-2 text-xs font-normal text-dark-100 sm:col-span-2 sm:col-start-2">
           {replying_to && (
-            <span className="text-13 text-violet">
+            <span className="text-xs text-violet">
               @{replying_to?.username}{" "}
             </span>
           )}
           {content}
         </p>
         {reply && (
-          <div className="col-span-3 col-start-1 row-start-3 pt-2 sm:col-start-2">
+          <div className="col-span-3 col-start-1 row-start-3 pt-2 sm:col-span-2 sm:col-start-2">
             <AddReply />
           </div>
         )}

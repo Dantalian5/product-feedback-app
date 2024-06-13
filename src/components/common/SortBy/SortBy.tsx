@@ -27,7 +27,7 @@ const SortBy = (props: SortProps) => {
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`flex items-center justify-center gap-x-2 rounded-10 bg-dark-300 py-2 text-13 sm:text-sm`}
+        className={`flex items-center justify-center gap-x-2 rounded-10 bg-dark-300 py-2 text-xs sm:text-sm`}
       >
         <span
           className={` text-sm font-normal text-gray-100 ${isOpen && "opacity-75"}`}
