@@ -18,7 +18,7 @@ const AddReply = (props: any) => {
       request_id: requestId,
     };
     if (content.trim() !== "") {
-      console.log("submit form with data:", comment);
+      console.log("submit reply");
       setContent("");
     } else {
       setIsError(true);
@@ -38,7 +38,7 @@ const AddReply = (props: any) => {
         <textarea
           form={formId}
           id={inputId}
-          className={`sm:text-md block min-h-20 w-full resize-none rounded-5 bg-gray-200 p-4 text-xs font-normal text-dark-200 placeholder:text-dark-200/60 focus:outline-1 focus:outline-blue-200 ${
+          className={`sm:text-md text-dark-700 placeholder:text-dark-700/60 block min-h-20 w-full resize-none rounded-5 bg-dark-200 p-4 text-xs font-normal focus:outline-1 focus:outline-blue-200 ${
             isError ? "border border-orange-200" : ""
           }`}
           value={content}

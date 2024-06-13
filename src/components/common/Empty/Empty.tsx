@@ -13,10 +13,10 @@ const Empty = () => {
         height={100}
         className="mx-auto mb-10 w-[40%] max-w-[130px] sm:mb-14"
       />
-      <h3 className="mx-auto mb-4 text-center text-lg font-bold text-dark-200 sm:text-2xl">
+      <h3 className="text-dark-700 mx-auto mb-4 text-center text-lg font-bold sm:text-2xl">
         There is no feedback yet.
       </h3>
-      <p className="mx-auto mb-6 max-w-[450px] text-center text-xs font-normal text-dark-100 sm:mb-12 sm:text-base">
+      <p className="text-dark-600 mx-auto mb-6 max-w-[450px] text-center text-xs font-normal sm:mb-12 sm:text-base">
         Got a suggestion? Found a bug that needs to be squashed? We love hearing
         about new ideas to improve our app.
       </p>

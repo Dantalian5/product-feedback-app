@@ -48,9 +48,9 @@ const Main = (props: MainProps) => {
 
   return (
     <div>
-      <div className="flex w-full items-center justify-between gap-x-4 bg-dark-300 px-6 py-2 sm:rounded-10 sm:py-[14px]">
+      <div className="bg-dark-800 flex w-full items-center justify-between gap-x-4 px-6 py-2 sm:rounded-10 sm:py-[14px]">
         <div className="flex items-center gap-x-10">
-          <div className="hidden items-center gap-x-4 sm:flex">
+          <div className="hidden items-center gap-x-4 xl:flex ">
             <span>{svgLightBulb}</span>
             <p className="text-lg font-bold text-white">
               {suggestions.length} Suggestions

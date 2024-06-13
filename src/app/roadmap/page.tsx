@@ -9,7 +9,7 @@ const RoadmapPage = async () => {
   const feedbacks: TypeFeedback[] = await fetchRequests();
   return (
     <div>
-      <div className="flex w-full items-center justify-between gap-x-4 bg-dark-300 p-6 sm:mb-8 sm:rounded-10 sm:px-8 sm:py-7">
+      <div className="bg-dark-800 flex w-full items-center justify-between gap-x-4 p-6 sm:mb-8 sm:rounded-10 sm:px-8 sm:py-7">
         <div className="flex flex-col items-start">
           <LinkBtn href="/" iconColor="white" textColor="white" isStretched>
             Go Back

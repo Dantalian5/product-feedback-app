@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { nanoid } from "nanoid";
 import Link from "next/link";
 import Hamburguer from "@/components/common/Hamburguer";
 import CheckBox from "@/components/common/CheckBox";
@@ -45,19 +44,19 @@ const Header = (props: HeaderProps) => {
         className={`absolute left-0 top-0 z-20 h-screen w-screen bg-black/50 ${isOpen ? "block" : "hidden"} sm:hidden`}
       ></div>
       <div
-        className={`${isOpen ? " translate-x-0" : "translate-x-full"} absolute right-0 top-full z-30 flex h-[calc(100vh-5rem)] max-w-[270px] flex-[1_1_64%] flex-col gap-x-2.5 gap-y-6 overflow-y-scroll bg-gray-200 p-6 transition-transform sm:static sm:h-auto sm:max-w-none sm:translate-x-0 sm:flex-row sm:items-stretch sm:justify-stretch sm:bg-none sm:p-0 lg:flex-col`}
+        className={`${isOpen ? " translate-x-0" : "translate-x-full"} absolute right-0 top-full z-50 flex h-[calc(100vh-5rem)] max-w-[270px] flex-[1_1_64%] flex-col gap-x-2.5 gap-y-6 overflow-y-scroll bg-dark-200 p-6 transition-transform sm:static sm:h-auto sm:max-w-none sm:translate-x-0 sm:flex-row sm:items-stretch sm:justify-stretch sm:bg-none sm:p-0 lg:flex-col`}
       >
         {/* <div className="ml-auto sm:order-last">
           <UserBtn />
         </div> */}
         <div className="flex min-h-44 w-full  flex-wrap items-start justify-start gap-x-2 gap-y-4 rounded-10 bg-white p-6 lg:max-w-none">
-          {categories.map((item) => (
-            <CheckBox key={nanoid()} label={item} />
+          {categories.map((value) => (
+            <CheckBox key={value} label={value} />
           ))}
         </div>
         <div className="min-h-44 w-full  rounded-10 bg-white p-6 lg:max-w-none">
           <div className="mb-6 flex w-full items-center justify-between">
-            <h2 className=" text-lg font-bold tracking-tighter text-dark-200">
+            <h2 className=" text-dark-700 text-lg font-bold tracking-tighter">
               Roadmap
             </h2>
             <Link
@@ -70,22 +69,22 @@ const Header = (props: HeaderProps) => {
           <div className="flex w-full flex-col gap-y-2">
             <div className="flex w-full items-center justify-start gap-x-4">
               <span className=" text-8 text-orange-100">{svgCircle}</span>
-              <p className="text-base font-normal text-dark-100">Planned</p>
-              <p className="ml-auto text-base font-bold text-dark-100">
+              <p className="text-dark-600 text-base font-normal">Planned</p>
+              <p className="text-dark-600 ml-auto text-base font-bold">
                 {roadmap.planned}
               </p>
             </div>
             <div className="flex w-full items-center justify-start gap-x-4">
-              <span className=" text-8 text-violet">{svgCircle}</span>
-              <p className="text-base font-normal text-dark-100">In-Progress</p>
-              <p className="ml-auto text-base font-bold text-dark-100">
+              <span className=" text-violet-200 text-8">{svgCircle}</span>
+              <p className="text-dark-600 text-base font-normal">In-Progress</p>
+              <p className="text-dark-600 ml-auto text-base font-bold">
                 {roadmap.in_progress}
               </p>
             </div>
             <div className="flex w-full items-center justify-start gap-x-4">
               <span className=" text-8 text-blue-100">{svgCircle}</span>
-              <p className="text-base font-normal text-dark-100">Live</p>
-              <p className="ml-auto text-base font-bold text-dark-100">
+              <p className="text-dark-600 text-base font-normal">Live</p>
+              <p className="text-dark-600 ml-auto text-base font-bold">
                 {roadmap.live}
               </p>
             </div>

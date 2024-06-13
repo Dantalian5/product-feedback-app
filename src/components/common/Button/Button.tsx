@@ -11,16 +11,16 @@ interface ButtonProps extends React.ComponentPropsWithRef<"button"> {
 }
 
 const colors = {
-  violet: "bg-violet",
+  violet: "bg-violet-200",
   blue: "bg-blue-200",
-  dark: "bg-dark-200",
+  dark: "bg-dark-700",
   orange: "bg-orange-200",
   none: "bg-none",
 };
 const text_colors = {
-  dark: "text-dark-100",
+  dark: "text-dark-600",
   blue: "text-blue-200",
-  gray: "text-gray-100",
+  gray: "text-dark-100",
 };
 
 const Button = (props: ButtonProps) => {
@@ -51,7 +51,7 @@ const Button = (props: ButtonProps) => {
     >
       {icon && (
         <span
-          className={`${color === "none" ? "text-blue-200" : "text-gray-400"} text-10`}
+          className={`${color === "none" ? "text-blue-200" : "text-dark-400"} text-10`}
         >
           {svgBackArrow}
         </span>

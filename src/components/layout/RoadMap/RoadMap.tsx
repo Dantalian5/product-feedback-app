@@ -32,7 +32,7 @@ const RoadMap = ({ feedbacks }: { feedbacks: TypeFeedback[] }) => {
         (request: TypeFeedback) => request.status === "in-progress",
       ),
       description: "Currently being developed",
-      color: "violet",
+      color: "violet-200",
     },
     {
       status: "live",
@@ -50,11 +50,11 @@ const RoadMap = ({ feedbacks }: { feedbacks: TypeFeedback[] }) => {
 
   return (
     <>
-      <div className="align-center flex border-b border-b-dark-100/20 sm:hidden">
+      <div className="align-center border-b-dark-600/20 flex border-b sm:hidden">
         {roadmap.map(({ status, color }) => (
           <button
             key={status}
-            className={`w-full px-2 py-5 text-xs font-bold text-dark-200 ${
+            className={`text-dark-700 w-full px-2 py-5 text-xs font-bold ${
               status.toLowerCase() === activeTab.toLowerCase() &&
               `border-b-4 border-b-${color}`
             }`}
@@ -78,10 +78,10 @@ const RoadMap = ({ feedbacks }: { feedbacks: TypeFeedback[] }) => {
             <div
               className={`mb-2 col-start-${i + 1} col-span-1 row-span-1 row-start-1`}
             >
-              <h3 className="mb-1 text-lg font-bold capitalize tracking-[-0.181px] text-dark-200">
+              <h3 className="text-dark-700 mb-1 text-lg font-bold capitalize tracking-[-0.181px]">
                 {status} ({feedbacks.length})
               </h3>
-              <p className="text-xs font-normal text-dark-100">{description}</p>
+              <p className="text-dark-600 text-xs font-normal">{description}</p>
             </div>
             {feedbacks.map((feedback, j) => (
               <FeedbackRM

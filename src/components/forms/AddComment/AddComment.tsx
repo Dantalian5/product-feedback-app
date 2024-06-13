@@ -21,7 +21,7 @@ const AddComment = (props: AddCommentProps) => {
       request_id: requestId,
     };
     if (content.trim() !== "") {
-      console.log("submit form with data:", comment);
+      console.log("submit comment");
       setContent("");
     } else {
       setIsError(true);
@@ -40,7 +40,7 @@ const AddComment = (props: AddCommentProps) => {
     >
       <label
         htmlFor={inputId}
-        className="mb-6 block text-lg font-bold tracking-tighter text-dark-200"
+        className="text-dark-700 mb-6 block text-lg font-bold tracking-tighter"
       >
         Add Comment
       </label>
@@ -48,7 +48,7 @@ const AddComment = (props: AddCommentProps) => {
         <textarea
           form={formId}
           id={inputId}
-          className={`sm:text-md block min-h-20 w-full resize-none rounded-5 bg-gray-200 p-4 text-xs font-normal text-dark-200 placeholder:text-dark-200/60 focus:outline-1 focus:outline-blue-200 sm:px-6 ${
+          className={`sm:text-md text-dark-700 placeholder:text-dark-700/60 block min-h-20 w-full resize-none rounded-5 bg-dark-200 p-4 text-xs font-normal focus:outline-1 focus:outline-blue-200 sm:px-6 ${
             isError ? "border border-orange-200" : ""
           }`}
           value={content}
@@ -63,8 +63,8 @@ const AddComment = (props: AddCommentProps) => {
           </p>
         )}
       </div>
-      <div className="flex w-full items-center justify-between">
-        <p className=" sm:text-md text-xs font-normal text-dark-100">
+      <div className="flex w-full items-center justify-between gap-4">
+        <p className=" sm:text-md text-dark-600 text-xs font-normal">
           {remaining} Characters left
         </p>
         <Button type="submit" color="violet">

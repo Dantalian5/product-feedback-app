@@ -19,8 +19,8 @@ export default function RootLayout({
   return (
     <SessionWrapper>
       <html lang="en">
-        <body className={`${jost.className} bg-gray-200`}>
-          <div className="mx-auto min-h-svh min-w-[320px] max-w-[1440px] overflow-x-hidden sm:px-10 sm:py-14 lg:px-[165px] lg:pb-[130px] lg:pt-[94px]">
+        <body className={`${jost.className} bg-dark-200`}>
+          <div className="lg:px-lmp mx-auto min-h-svh min-w-[320px] max-w-[1440px] overflow-x-hidden sm:px-[5.2%] sm:py-14 lg:pb-[130px] lg:pt-[94px]">
             {children}
           </div>
         </body>

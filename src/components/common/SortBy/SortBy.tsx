@@ -17,9 +17,8 @@ const SortBy = (props: SortProps) => {
     handleChange(option);
     setIsOpen(false);
   };
-  console.log(selectedOption);
   return (
-    <div className="relative z-50 w-fit">
+    <div className="relative z-10 w-fit">
       <button
         id={componentId}
         type="button"
@@ -27,10 +26,10 @@ const SortBy = (props: SortProps) => {
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`flex items-center justify-center gap-x-2 rounded-10 bg-dark-300 py-2 text-xs sm:text-sm`}
+        className={`bg-dark-800 flex items-center justify-center gap-x-2 rounded-10 py-2 text-xs sm:text-sm`}
       >
         <span
-          className={` text-sm font-normal text-gray-100 ${isOpen && "opacity-75"}`}
+          className={` text-sm font-normal text-dark-100 ${isOpen && "opacity-75"}`}
         >
           Sort by : <span className="font-bold">{selectedOption.label}</span>
         </span>
@@ -49,7 +48,7 @@ const SortBy = (props: SortProps) => {
               key={option.value}
               role="option"
               aria-selected={option.value === selectedOption.value}
-              className="flex w-full cursor-pointer items-center justify-between border-b border-b-dark-200/15 px-6 py-3 text-base font-normal text-dark-100 last:border-b-0 hover:text-violet"
+              className="hover:text-violet-200 text-dark-600 border-b-dark-700/15 flex w-full cursor-pointer items-center justify-between border-b px-6 py-3 text-base font-normal last:border-b-0"
               onClick={() => handleOptionClick(option)}
             >
               {option.label}

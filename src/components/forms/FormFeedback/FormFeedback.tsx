@@ -32,7 +32,7 @@ const FormFeedback = (props: FormFeedbackProps) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(title, category, details);
+    console.log("submit feedback");
   };
 
   return (
@@ -44,7 +44,7 @@ const FormFeedback = (props: FormFeedbackProps) => {
       <span className=" absolute left-6 top-0 -translate-y-1/2 text-3xl sm:left-[42px] sm:text-4xl">
         {request ? svgEditIcon : svgAddIcon}
       </span>
-      <p className="mb-10 text-lg font-bold tracking-tighter text-dark-200 sm:text-2xl ">
+      <p className="text-dark-700 mb-10 text-lg font-bold tracking-tighter sm:text-2xl ">
         {request ? `Editing ‘${request.title}’` : "Create New Feedback"}
       </p>
       <CustomLabel
@@ -55,7 +55,7 @@ const FormFeedback = (props: FormFeedbackProps) => {
         <input
           type="text"
           id={titleId}
-          className="custom-form-focus sm:text-md block w-full rounded-5 bg-gray-200 px-4 py-3.5 text-xs font-normal text-dark-200 placeholder:text-dark-200/60 sm:px-6"
+          className="custom-form-focus sm:text-md text-dark-700 placeholder:text-dark-700/60 block w-full rounded-5 bg-dark-200 px-4 py-3.5 text-xs font-normal sm:px-6"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
@@ -93,7 +93,7 @@ const FormFeedback = (props: FormFeedbackProps) => {
       >
         <textarea
           id={detailsId}
-          className="custom-form-focus sm:text-md block w-full rounded-5 bg-gray-200 p-4 text-xs font-normal text-dark-200 placeholder:text-dark-200/60 sm:px-6"
+          className="custom-form-focus sm:text-md text-dark-700 placeholder:text-dark-700/60 block w-full rounded-5 bg-dark-200 p-4 text-xs font-normal sm:px-6"
           value={details}
           onChange={(e) => setDetails(e.target.value)}
           rows={5}
