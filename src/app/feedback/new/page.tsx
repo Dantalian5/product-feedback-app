@@ -6,7 +6,7 @@ const NewFeedback = () => {
   return (
     <div className=" mx-auto max-w-[33.75rem] pb-14">
       <div className=" mb-14 flex w-full items-center justify-between">
-        <LinkBtn href="/" classe="noneDark">
+        <LinkBtn href="/" classe="noneDark" icon>
           Go Backs
         </LinkBtn>
       </div>

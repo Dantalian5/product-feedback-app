@@ -34,6 +34,12 @@ const FormFeedback = (props: FormFeedbackProps) => {
     e.preventDefault();
     console.log("submit feedback");
   };
+  const handleCancel = () => {
+    setTitle(request?.title || "");
+    setCategory(request?.category || categories[0]);
+    setStatus(request?.status || statusArray[0]);
+    setDetails(request?.description || "");
+  };
 
   return (
     <form
@@ -103,7 +109,7 @@ const FormFeedback = (props: FormFeedbackProps) => {
         <Button classe="violet" type="submit" isFlex>
           {request ? "Save Changes" : "Add Feedback"}
         </Button>
-        <Button classe="dark" type="button" isFlex>
+        <Button onClick={handleCancel} classe="dark" type="button" isFlex>
           Cancel
         </Button>
         {request && (
