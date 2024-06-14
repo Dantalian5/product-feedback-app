@@ -38,17 +38,19 @@ const Header = (props: HeaderProps) => {
             Feedback Board
           </span>
         </div>
-        <Hamburguer isOpen={isOpen} onClick={handleClick} />
+        <div className="flex items-center justify-center gap-4">
+          <div className="ml-auto sm:order-last">
+            <UserBtn />
+          </div>
+          <Hamburguer isOpen={isOpen} onClick={handleClick} />
+        </div>
       </div>
       <div
         className={`absolute left-0 top-0 z-20 h-screen w-screen bg-black/50 ${isOpen ? "block" : "hidden"} sm:hidden`}
       ></div>
       <div
-        className={`${isOpen ? " translate-x-0" : "translate-x-full"} absolute right-0 top-full z-50 flex h-[calc(100vh-5rem)] max-w-[270px] flex-[1_1_64%] flex-col gap-x-2.5 gap-y-6 overflow-y-scroll bg-dark-200 p-6 transition-transform sm:static sm:h-auto sm:max-w-none sm:translate-x-0 sm:flex-row sm:items-stretch sm:justify-stretch sm:bg-none sm:p-0 lg:flex-col`}
+        className={`${isOpen ? " translate-x-0" : "translate-x-full"} absolute right-0 top-full z-30 flex h-[calc(100vh-5rem)] max-w-[270px] flex-[1_1_64%] flex-col gap-x-2.5 gap-y-6 overflow-y-scroll bg-dark-200 p-6 transition-transform sm:static sm:h-auto sm:max-w-none sm:translate-x-0 sm:flex-row sm:items-stretch sm:justify-stretch sm:bg-none sm:p-0 lg:flex-col`}
       >
-        {/* <div className="ml-auto sm:order-last">
-          <UserBtn />
-        </div> */}
         <div className="flex min-h-44 w-full  flex-wrap items-start justify-start gap-x-2 gap-y-4 rounded-10 bg-white p-6 lg:max-w-none">
           {categories.map((value) => (
             <CheckBox key={value} label={value} />
