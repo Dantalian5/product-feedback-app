@@ -1,49 +1,56 @@
 "use client";
 import React from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { authenticate } from "@/lib/actions";
+import { logIn } from "@/lib/actions";
 import Button from "@/components/common/Button";
 
 const SignIn = () => {
-  const [errorMessage, dispatch] = useFormState(authenticate, undefined);
-  const { pending } = useFormStatus();
-
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
   const formData = {
     email: "test",
     password: "test",
   };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const res = await signIn("credentials", {
+      redirect: false,
+      email: formData.email,
+      password: formData.password,
+      redirectTo: callbackUrl,
+    });
+    router.push(callbackUrl);
+  };
+  console.log(callbackUrl);
   return (
     <section className="flex h-full w-full items-center justify-center">
       <form
-        action={() => {
-          signIn("credentials", formData);
-        }}
+        onSubmit={handleSubmit}
         className="relative mx-auto flex w-full max-w-[500px] flex-col items-center justify-center gap-6 rounded-10 bg-white p-6 sm:p-10"
       >
-        <label className="text-dark-700 flex w-full flex-col gap-2 text-base font-bold">
+        <label className="flex w-full flex-col gap-2 text-base font-bold text-dark-700">
           Email
           <input
             type="text"
             name="email"
             placeholder="example@email.com"
             required
-            className="custom-form-focus sm:text-md text-dark-700 placeholder:text-dark-700/60 block w-full rounded-5 bg-dark-200 px-4 py-3.5 text-xs font-normal sm:px-6"
+            className="custom-form-focus block w-full rounded-5 bg-dark-200 px-4 py-3.5 text-xs font-normal text-dark-700 placeholder:text-dark-700/60 sm:px-6 sm:text-md"
           />
         </label>
-        <label className="text-dark-700 flex w-full flex-col gap-2 text-base font-bold">
+        <label className="flex w-full flex-col gap-2 text-base font-bold text-dark-700">
           Password
           <input
             type="password"
             name="password"
             placeholder="Password"
             required
-            className="custom-form-focus sm:text-md text-dark-700 placeholder:text-dark-700/60 block w-full rounded-5 bg-dark-200 px-4 py-3.5 text-xs font-normal sm:px-6"
+            className="custom-form-focus block w-full rounded-5 bg-dark-200 px-4 py-3.5 text-xs font-normal text-dark-700 placeholder:text-dark-700/60 sm:px-6 sm:text-md"
           />
         </label>
-
-        <div>{errorMessage && <p>{errorMessage}</p>}</div>
-        <Button aria-disabled={pending} type="submit" classe="blue">
+        <Button type="submit" classe="blue">
           Login
         </Button>
       </form>

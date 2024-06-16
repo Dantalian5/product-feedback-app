@@ -1,18 +1,14 @@
 "use server";
-import { signIn } from "@/auth";
+import { signIn, signOut } from "@/auth";
 
-export async function authenticate(_currentState: unknown, formData: FormData) {
+export const logIn = async (formData: any) => {
   try {
     await signIn("credentials", formData);
   } catch (error) {
-    if (error) {
-      switch (error) {
-        case "NotFound":
-          return "Invalid credentials.";
-        default:
-          return "Something went wrong.";
-      }
-    }
-    throw error;
+    console.error(error);
   }
-}
+};
+export const logOut = async () => {
+  console.log("Log Out");
+  await signOut();
+};
