@@ -5,6 +5,8 @@ import Empty from "@/components/common/Empty";
 import LinkBtn from "@/components/common/LinkBtn";
 import SortBy from "@/components/common/SortBy";
 import { svgLightBulb } from "@/utils/svgIcons";
+import { useSession } from "next-auth/react";
+import toast from "react-hot-toast";
 import type {
   TypeFeedbackWithCmtsCnt as TypeFeedback,
   TypeOption as Option,
@@ -46,9 +48,17 @@ const Main = (props: MainProps) => {
     .filter((e) => e.status === "suggestion")
     .sort(sortFn);
 
+  const { data } = useSession();
+  const handleLink = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!data) {
+      e.preventDefault();
+      toast.error("Please Login to Add Feedback");
+    }
+  };
+
   return (
     <div>
-      <div className="bg-dark-800 flex w-full items-center justify-between gap-x-4 px-6 py-2 sm:rounded-10 sm:py-[14px]">
+      <div className="flex w-full items-center justify-between gap-x-4 bg-dark-800 px-6 py-2 sm:rounded-10 sm:py-[14px]">
         <div className="flex items-center gap-x-10">
           <div className="hidden items-center gap-x-4 xl:flex ">
             <span>{svgLightBulb}</span>
@@ -62,7 +72,7 @@ const Main = (props: MainProps) => {
             handleChange={setSortAlg}
           />
         </div>
-        <LinkBtn href="/feedback/new" classe="violet">
+        <LinkBtn href="/feedback/new" classe="violet" onClick={handleLink}>
           + Add Feedback
         </LinkBtn>
       </div>

@@ -53,10 +53,8 @@ export const {
     authorized({ auth, request: { nextUrl } }) {
       console.log("auth callback");
       const isLoggedIn = !!auth?.user;
-      const paths = ["/roadmap"];
-      const isProtected = paths.some((path) =>
-        nextUrl.pathname.startsWith(path),
-      );
+      const paths = ["/protected", "/new"];
+      const isProtected = paths.some((path) => nextUrl.pathname.includes(path));
       console.log(isProtected, isLoggedIn);
 
       if (isProtected && !isLoggedIn) {
@@ -66,6 +64,5 @@ export const {
       }
       return true;
     },
-    // Other code below
   },
 });

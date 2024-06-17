@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { svgBackArrow } from "@/utils/svgIcons";
+
 interface LinkProps extends React.ComponentPropsWithRef<"a"> {
   children: React.ReactNode;
   href: string;
@@ -9,7 +10,7 @@ interface LinkProps extends React.ComponentPropsWithRef<"a"> {
 }
 
 const LinkBtn = (props: LinkProps) => {
-  const { children, href, classe, icon = false } = props;
+  const { children, href, classe, icon = false, ...rest } = props;
 
   const commonColoredClasse = "justify-center px-4 py-2.5 sm:px-6 sm:py-3";
   const commonTransparentClasse = "justify-start p-0 bg-none hover:underline ";
@@ -25,6 +26,7 @@ const LinkBtn = (props: LinkProps) => {
   return (
     <Link
       href={href}
+      {...rest}
       className={`${classeArr[classe]} custom-focus flex min-w-fit items-center gap-4 rounded-10 text-xs font-bold underline-offset-1 sm:text-sm`}
     >
       {icon && <span className={`block w-fit text-10`}>{svgBackArrow}</span>}
