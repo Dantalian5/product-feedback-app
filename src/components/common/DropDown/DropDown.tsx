@@ -1,28 +1,7 @@
 "use client";
 import React from "react";
+import { svgCheck, svgDownArrow as svgArrow } from "@/utils/svgIcons";
 
-const svgArrow = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="9"
-    height="7"
-    viewBox="0 0 9 7"
-    fill="none"
-  >
-    <path d="M1 6L5 2L9 6" stroke="currentColor" strokeWidth="2" />
-  </svg>
-);
-const svgCheck = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="13"
-    height="11"
-    viewBox="0 0 13 11"
-    fill="none"
-  >
-    <path d="M1 5.23287L4.52154 9L12 1" stroke="#AD1FEA" stroke-width="2" />
-  </svg>
-);
 interface DropDownProps {
   id: string;
   options: string[];
@@ -51,7 +30,7 @@ const DropDown = (props: DropDownProps) => {
         className={`custom-form-focus flex w-full items-center justify-between gap-x-4 rounded-5 bg-dark-200 px-4 py-3.5 sm:px-6`}
       >
         <span
-          className={`sm:text-md text-dark-700 text-xs font-normal capitalize`}
+          className={`text-xs font-normal capitalize text-dark-700 sm:text-md`}
         >
           {value}
         </span>
@@ -70,7 +49,7 @@ const DropDown = (props: DropDownProps) => {
               key={option}
               role="option"
               aria-selected={option === value}
-              className="hover:text-violet-200 text-dark-600 border-b-dark-700/15 flex w-full cursor-pointer items-center justify-between border-b px-6 py-3 text-base font-normal capitalize last:border-b-0"
+              className="flex w-full cursor-pointer items-center justify-between border-b border-b-dark-700/15 px-6 py-3 text-base font-normal capitalize text-dark-600 last:border-b-0 hover:text-violet-200"
               onClick={() => handleClick(option)}
             >
               {option}

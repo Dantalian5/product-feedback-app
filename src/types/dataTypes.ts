@@ -11,6 +11,7 @@ export interface TypeFeedback {
   upvotes: number;
   status: string;
   description: string;
+  user_id: number;
 }
 export interface TypeFeedbackWithCmtsCnt extends TypeFeedback {
   comments_count: number;
@@ -18,7 +19,7 @@ export interface TypeFeedbackWithCmtsCnt extends TypeFeedback {
 export interface TypeComment {
   id: number;
   content: string;
-  request_id: number;
+  feedback_id: number;
   parent_comment_id?: number;
 }
 export interface TypeCommentWithId extends TypeComment {

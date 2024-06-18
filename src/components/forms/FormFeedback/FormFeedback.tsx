@@ -7,51 +7,58 @@ import { svgAddIcon, svgEditIcon } from "@/utils/svgIcons";
 import type { TypeFeedback } from "@/types/dataTypes";
 
 interface FormFeedbackProps {
-  request?: TypeFeedback;
+  oldFeedback?: TypeFeedback;
+  user_id: number;
 }
 const FormFeedback = (props: FormFeedbackProps) => {
-  const { request } = props;
-  const formId = React.useId();
-  const titleId = React.useId();
-  const categoryId = React.useId();
-  const statusId = React.useId();
-  const detailsId = React.useId();
+  const { oldFeedback, user_id } = props;
   const categories = ["Feature", "UI", "UX", "Enhancement", "Bug"];
   const statusArray = ["suggestion", "planned", "in-progress", "live"];
 
-  const [title, setTitle] = React.useState<string>(request?.title || "");
+  const [formData, setFormData] = React.useState(
+    oldFeedback || {
+      title: "",
+      category: categories[0],
+      status: statusArray[0],
+      description: "",
+    },
+  );
+
   const [category, setCategory] = React.useState<string>(
-    request?.category || categories[0],
+    oldFeedback?.category || categories[0],
   );
   const [status, setStatus] = React.useState<string>(
-    request?.status || statusArray[0],
-  );
-  const [details, setDetails] = React.useState<string>(
-    request?.description || "",
+    oldFeedback?.status || statusArray[0],
   );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("submit feedback");
+    console.log(formData);
   };
   const handleCancel = () => {
-    setTitle(request?.title || "");
-    setCategory(request?.category || categories[0]);
-    setStatus(request?.status || statusArray[0]);
-    setDetails(request?.description || "");
+    setCategory(oldFeedback?.category || categories[0]);
+    setStatus(oldFeedback?.status || statusArray[0]);
+    setFormData(
+      oldFeedback || {
+        title: "",
+        category: categories[0],
+        status: statusArray[0],
+        description: "",
+      },
+    );
   };
 
   return (
     <form
-      id={formId}
+      id="newFeedback"
       onSubmit={handleSubmit}
       className="relative rounded-10 bg-white px-6 pb-6 pt-11 sm:px-10 sm:pb-10 sm:pt-[52px]"
     >
       <span className=" absolute left-6 top-0 -translate-y-1/2 text-3xl sm:left-[42px] sm:text-4xl">
-        {request ? svgEditIcon : svgAddIcon}
+        {oldFeedback ? svgEditIcon : svgAddIcon}
       </span>
       <p className="mb-10 text-lg font-bold tracking-tighter text-dark-700 sm:text-2xl ">
-        {request ? `Editing ‘${request.title}’` : "Create New Feedback"}
+        {oldFeedback ? `Editing ‘${oldFeedback.title}’` : "Create New Feedback"}
       </p>
       <div className="mb-8 flex flex-col gap-y-6">
         <CustomLabel
@@ -60,10 +67,12 @@ const FormFeedback = (props: FormFeedbackProps) => {
         >
           <input
             type="text"
-            id={titleId}
+            id="inputTitle"
             className="custom-form-focus block w-full rounded-5 bg-dark-200 px-4 py-3.5 text-xs font-normal text-dark-700 placeholder:text-dark-700/60 sm:px-6 sm:text-md"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={formData.title}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, title: e.target.value }))
+            }
           />
         </CustomLabel>
         <CustomLabel
@@ -71,16 +80,16 @@ const FormFeedback = (props: FormFeedbackProps) => {
           description="Choose a category for your feedback"
         >
           <DropDown
-            id={categoryId}
+            id="inputCategory"
             options={categories}
             value={category}
             onChange={setCategory}
           />
         </CustomLabel>
-        {request && (
+        {oldFeedback && (
           <CustomLabel label="Update Status" description="Change feature state">
             <DropDown
-              id={statusId}
+              id="inputStatus"
               options={statusArray}
               value={status}
               onChange={setStatus}
@@ -92,22 +101,24 @@ const FormFeedback = (props: FormFeedbackProps) => {
           description="Include any specific comments on what should be improved, added, etc."
         >
           <textarea
-            id={detailsId}
+            id="inputDetails"
             className="custom-form-focus block w-full rounded-5 bg-dark-200 p-4 text-xs font-normal text-dark-700 placeholder:text-dark-700/60 sm:px-6 sm:text-md"
-            value={details}
-            onChange={(e) => setDetails(e.target.value)}
+            value={formData.description}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, description: e.target.value }))
+            }
             rows={5}
           />
         </CustomLabel>
       </div>
       <div className="flex flex-col gap-4 sm:flex-row-reverse">
         <Button classe="violet" type="submit" isFlex>
-          {request ? "Save Changes" : "Add Feedback"}
+          {oldFeedback ? "Save Changes" : "Add Feedback"}
         </Button>
         <Button onClick={handleCancel} classe="dark" type="button" isFlex>
           Cancel
         </Button>
-        {request && (
+        {oldFeedback && (
           <div className="w-full">
             <Button classe="orange" type="button" isFlex>
               Delete

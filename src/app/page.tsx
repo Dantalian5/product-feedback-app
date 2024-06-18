@@ -3,10 +3,10 @@ import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import Header from "@/components/layout/Header";
 import Main from "@/components/layout/Main";
 import type { TypeFeedbackWithCmtsCnt as TypeFeedback } from "@/types/dataTypes";
-import { fetchRequests } from "@/services/api";
+import { getFeedbacks } from "@/services/api";
 
 const Home = async () => {
-  const productFeedbacks = (await fetchRequests()) || [];
+  const productFeedbacks = (await getFeedbacks()) || [];
 
   const roadmap = {
     planned: productFeedbacks.filter(

@@ -6,7 +6,7 @@ import type { Provider } from "next-auth/providers";
 async function getUser(email: string): Promise<any> {
   return {
     id: 1,
-    image: "./assets/user-images/image-zena.jpg",
+    image: "/assets/user-images/image-zena.jpg",
     name: "Zena Kelley",
     username: "velvetround",
     email: "test",
@@ -22,15 +22,18 @@ const providers: Provider[] = [
       password: { label: "password", type: "password" },
     },
     authorize: async (credentials: any) => {
-      console.log("auth Fn");
       let user = null;
       const { email, password } = credentials;
       user = await getUser(email);
-      console.log(user);
       if (!user || user.password !== password) {
         return null;
       }
-      return user;
+      return {
+        id: user.id,
+        image: user.image,
+        name: user.name,
+        username: user.username,
+      };
     },
   }),
 ];
@@ -48,6 +51,7 @@ export const {
   signOut,
   auth,
 } = NextAuth({
+  session: { strategy: "jwt" },
   providers,
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
@@ -63,6 +67,22 @@ export const {
         return Response.redirect(redirectUrl);
       }
       return true;
+    },
+    jwt({ token, user }: any) {
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.username = user.username;
+        token.image = user.image;
+      }
+      return token;
+    },
+    session({ session, token }: any) {
+      session.user.id = token.id;
+      session.user.name = token.name;
+      session.user.username = token.username;
+      session.user.image = token.image;
+      return session;
     },
   },
 });

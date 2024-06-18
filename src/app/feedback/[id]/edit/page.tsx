@@ -1,8 +1,11 @@
 import React from "react";
+import { auth } from "@/auth";
+import toast from "react-hot-toast";
 import LinkBtn from "@/components/common/LinkBtn";
 import FormFeedback from "@/components/forms/FormFeedback";
-import { fetchRequests } from "@/services/api";
+import { getFeedbacks } from "@/services/api";
 import type { TypeFeedback } from "@/types/dataTypes";
+import { redirect } from "next/navigation";
 
 interface EditFeedbackProps {
   params: {
@@ -12,7 +15,13 @@ interface EditFeedbackProps {
 
 const EditFeedback = async (props: EditFeedbackProps) => {
   const id = parseInt(props.params.id);
-  const feedback: TypeFeedback = await fetchRequests(id);
+  const feedback: TypeFeedback = await getFeedbacks(id);
+  const session = await auth();
+  const user = session?.user;
+  if (!user || !(feedback.user_id === Number(user.id))) {
+    redirect("/");
+    toast.error("You can't edit this feedback");
+  }
 
   return (
     <div className=" mx-auto max-w-[33.75rem] pb-14">

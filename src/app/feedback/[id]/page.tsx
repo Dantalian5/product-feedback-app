@@ -1,4 +1,5 @@
 import React from "react";
+import { auth } from "@/auth";
 import Feedback from "@/components/common/Feedback";
 import LinkBtn from "@/components/common/LinkBtn";
 import AddComment from "@/components/forms/AddComment";
@@ -6,8 +7,9 @@ import CommentsWrapper from "@/components/layout/CommentsWrapper";
 import type {
   TypeFeedbackWithCmtsCnt as TypeFeedback,
   TypeCommentWithInfo as TypeComment,
+  TypeUser,
 } from "@/types/dataTypes";
-import { fetchRequests, fetchComments } from "@/services/api";
+import { getFeedbacks, getComments } from "@/services/api";
 
 interface DetailsProps {
   params: {
@@ -16,14 +18,11 @@ interface DetailsProps {
 }
 const Details = async ({ params }: DetailsProps) => {
   const id = parseInt(params.id);
-  const feedback: TypeFeedback = await fetchRequests(id);
-  const comments: TypeComment[] = (await fetchComments(id)) || [];
-  const parentComments = comments.filter(
-    (comment) => comment.parent_comment_id === null,
-  );
-  const childComments = comments.filter(
-    (comment) => comment.parent_comment_id !== null,
-  );
+  const feedback: TypeFeedback = await getFeedbacks(id);
+  const comments: TypeComment[] = (await getComments(id)) || [];
+  const session = await auth();
+  const user = session?.user;
+  const isPropietaryUser = user && feedback.user_id === Number(user.id);
 
   return (
     <div className="mx-auto flex w-full max-w-[730px] flex-col gap-y-6">
@@ -31,9 +30,11 @@ const Details = async ({ params }: DetailsProps) => {
         <LinkBtn classe="noneDark" icon href="/">
           Go Backs
         </LinkBtn>
-        <LinkBtn href={`/feedback/${id}/edit`} classe="blue">
-          Edit Feedback
-        </LinkBtn>
+        {isPropietaryUser && (
+          <LinkBtn href={`/feedback/${id}/edit`} classe="blue">
+            Edit Feedback
+          </LinkBtn>
+        )}
       </div>
       {
         <Feedback

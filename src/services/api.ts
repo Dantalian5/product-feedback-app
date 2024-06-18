@@ -3,18 +3,19 @@ import client from "@/lib/db";
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-export async function fetchRequests(id?: number) {
+export async function getFeedbacks(id?: number) {
   const query = `SELECT 
-  requests.id,
-  title, 
-  category, 
-  upvotes, 
-  status, 
-  description,
+  feedbacks.id,
+  feedbacks.title, 
+  feedbacks.category, 
+  feedbacks.upvotes, 
+  feedbacks.status, 
+  feedbacks.description,
+  feedbacks.user_id,
   CAST(COUNT(comments.id) AS INTEGER) AS comments_count
-  FROM requests 
-  LEFT JOIN comments ON requests.id = comments.request_id
-  GROUP BY requests.id`;
+  FROM feedbacks 
+  LEFT JOIN comments ON feedbacks.id = comments.feedback_id
+  GROUP BY feedbacks.id`;
 
   try {
     const result = await client.query(query);
@@ -25,12 +26,12 @@ export async function fetchRequests(id?: number) {
     console.error(error);
   }
 }
-export async function fetchComments(id: number) {
+export async function getComments(id: number) {
   const query = `
   SELECT 
     comments.id,
     comments.content,
-    comments.request_id,
+    comments.feedback_id,
     comments.parent_comment_id,
     comments.replying_to,
     users.id AS user_id,
@@ -44,7 +45,7 @@ export async function fetchComments(id: number) {
   FROM comments
   JOIN users ON comments.user_id = users.id
   LEFT JOIN users AS replying_users ON comments.replying_to = replying_users.id
-  WHERE comments.request_id = $1;
+  WHERE comments.feedback_id = $1;
   `;
 
   try {
@@ -52,7 +53,7 @@ export async function fetchComments(id: number) {
     const data = result.rows.map((row) => ({
       id: row.id,
       content: row.content,
-      request_id: row.request_id,
+      feedback_id: row.request_id,
       parent_comment_id: row.parent_comment_id,
       replying_to: row.replying_to
         ? {
