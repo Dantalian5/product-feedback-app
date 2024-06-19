@@ -1,14 +1,14 @@
 export interface TypeUser {
-  id: number;
+  id?: number;
   image: string;
   name: string;
   username: string;
 }
 export interface TypeFeedback {
-  id: number;
+  id?: number;
   title: string;
   category: string;
-  upvotes: number;
+  upvotes?: number;
   status: string;
   description: string;
   user_id: number;
@@ -17,7 +17,7 @@ export interface TypeFeedbackWithCmtsCnt extends TypeFeedback {
   comments_count: number;
 }
 export interface TypeComment {
-  id: number;
+  id?: number;
   content: string;
   feedback_id: number;
   parent_comment_id?: number;

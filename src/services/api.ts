@@ -1,3 +1,4 @@
+"use server";
 import client from "@/lib/db";
 import type { TypeFeedback } from "@/types/dataTypes";
 
@@ -74,5 +75,69 @@ export async function getComments(id: number) {
     return data;
   } catch (error) {
     console.error(error);
+  }
+}
+
+export async function addFeedback(feedback: TypeFeedback) {
+  const query = `
+    INSERT INTO feedbacks (title, category, upvotes, status, description, user_id)
+    VALUES ($1, $2, $3, $4, $5, $6)
+    RETURNING *;
+  `;
+
+  const values = [
+    feedback.title,
+    feedback.category,
+    feedback.upvotes || 0,
+    feedback.status || "suggestion",
+    feedback.description,
+    feedback.user_id,
+  ];
+
+  try {
+    const result = await client.query(query, values);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error inserting feedback:", error);
+    throw new Error("Error inserting feedback");
+  }
+}
+
+export async function editFeedback(feedback: TypeFeedback) {
+  const query = `
+    UPDATE feedbacks
+    SET title = $1, category = $2, upvotes = $3, status = $4, description = $5
+    WHERE id = $6
+    RETURNING *;
+  `;
+  const values = [
+    feedback.title,
+    feedback.category,
+    feedback.upvotes || 0,
+    feedback.status || "pending",
+    feedback.description,
+    feedback.id,
+  ];
+  try {
+    const result = await client.query(query, values);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error updating feedback:", error);
+    throw new Error("Error updating feedback");
+  }
+}
+
+export async function deleteFeedback(id: number) {
+  const query = `
+    DELETE FROM feedbacks
+    WHERE id = $1
+    RETURNING *;
+  `;
+  try {
+    const result = await client.query(query, [id]);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error deleting feedback:", error);
+    throw new Error("Error deleting feedback");
   }
 }

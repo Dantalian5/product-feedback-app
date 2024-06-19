@@ -17,7 +17,7 @@ const EditFeedback = async (props: EditFeedbackProps) => {
   const id = parseInt(props.params.id);
   const feedback: TypeFeedback = await getFeedbacks(id);
   const session = await auth();
-  const user = session?.user;
+  const user: any = session?.user;
   if (!user || !(feedback.user_id === Number(user.id))) {
     redirect("/");
     toast.error("You can't edit this feedback");
@@ -30,7 +30,7 @@ const EditFeedback = async (props: EditFeedbackProps) => {
           Go Backs
         </LinkBtn>
       </div>
-      <FormFeedback request={feedback} />
+      <FormFeedback oldFeedback={feedback} user={user} />
     </div>
   );
 };

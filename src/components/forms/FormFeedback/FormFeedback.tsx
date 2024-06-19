@@ -1,5 +1,7 @@
 "use client";
 import React from "react";
+import { useRouter } from "next/navigation";
+import { addFeedback, editFeedback, deleteFeedback } from "@/services/api";
 import DropDown from "@/components/common/DropDown";
 import CustomLabel from "@/components/common/CustomLabel";
 import Button from "@/components/common/Button";
@@ -11,6 +13,7 @@ interface FormFeedbackProps {
   user: TypeUser | null;
 }
 const FormFeedback = (props: FormFeedbackProps) => {
+  const router = useRouter();
   const { oldFeedback, user } = props;
   const categories = ["Feature", "UI", "UX", "Enhancement", "Bug"];
   const statusArray = ["suggestion", "planned", "in-progress", "live"];
@@ -27,6 +30,26 @@ const FormFeedback = (props: FormFeedbackProps) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(formData);
+    try {
+      if (!oldFeedback) {
+        const result = await addFeedback({ ...formData, user_id: user?.id });
+        console.log("Feedback submitted successfully:", result);
+      } else {
+        const result = await editFeedback({ ...formData });
+        console.log("Feedback edited successfully:", result);
+        router.refresh();
+      }
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+    }
+  };
+  const handleDelete = async () => {
+    try {
+      const result = await deleteFeedback(oldFeedback?.id);
+      console.log("Feedback deleted successfully:", result);
+    } catch (error) {
+      console.error("Error deleting feedback:", error);
+    }
   };
   const handleCancel = () => {
     setFormData(
@@ -125,7 +148,7 @@ const FormFeedback = (props: FormFeedbackProps) => {
         </Button>
         {oldFeedback && (
           <div className="w-full">
-            <Button classe="orange" type="button" isFlex>
+            <Button classe="orange" type="button" isFlex onClick={handleDelete}>
               Delete
             </Button>
           </div>
