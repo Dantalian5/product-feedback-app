@@ -15,6 +15,8 @@ const LoginForm = () => {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/";
   const router = useRouter();
+  const inputMailId = React.useId();
+  const inputPasswordId = React.useId();
 
   const {
     register,
@@ -50,8 +52,9 @@ const LoginForm = () => {
       onSubmit={handleSubmit(onSubmit)}
       className="relative mx-auto flex w-full flex-col items-center justify-center gap-6 rounded-10 bg-white p-6 sm:p-10"
     >
-      <CustomLabel label="Email">
+      <CustomLabel label="Email" htmlFor={inputMailId}>
         <input
+          id={inputMailId}
           type="text"
           {...register("email")}
           placeholder="example@email.com"
@@ -59,8 +62,9 @@ const LoginForm = () => {
           className="custom-form-focus block w-full rounded-5 bg-dark-200 px-4 py-3.5 text-xs font-normal text-dark-700 placeholder:text-dark-700/60 sm:px-6 sm:text-md"
         />
       </CustomLabel>
-      <CustomLabel label="Password">
+      <CustomLabel label="Password" htmlFor={inputPasswordId}>
         <input
+          id={inputPasswordId}
           type="password"
           {...register("password")}
           placeholder="Password"

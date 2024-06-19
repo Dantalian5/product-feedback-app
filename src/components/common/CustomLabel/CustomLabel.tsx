@@ -4,20 +4,21 @@ interface CustomLabelProps {
   children: React.ReactNode;
   label: string;
   description?: string;
+  htmlFor: string;
 }
 const CustomLabel = (props: CustomLabelProps) => {
-  const { children, label, description } = props;
+  const { children, label, description, htmlFor } = props;
   return (
-    <label
-      className="flex w-full flex-col text-sm font-bold text-dark-700"
-      onClick={(e) => {
-        e.preventDefault();
-      }}
-    >
-      {label}
-      {description && <span className="font-normal">{description}</span>}
-      <div className="mt-4 w-full">{children}</div>
-    </label>
+    <div className="w-full">
+      <label
+        className="text-dark-700, mb-4 flex w-full flex-col text-sm font-bold"
+        htmlFor={htmlFor}
+      >
+        {label}
+        {description && <span className="font-normal">{description}</span>}
+      </label>
+      <div className="w-full">{children}</div>
+    </div>
   );
 };
 

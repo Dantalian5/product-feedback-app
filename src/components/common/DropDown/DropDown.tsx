@@ -55,7 +55,7 @@ const DropDown = (props: DropDownProps) => {
               key={option}
               id={option}
               role="option"
-              aria-selected={option === value}
+              aria-selected={option.toLowerCase() === value.toLowerCase()}
               className="flex w-full cursor-pointer items-center justify-between border-b border-b-dark-700/15 px-6 py-3 text-base font-normal capitalize text-dark-600 last:border-b-0 hover:text-violet-200"
               onClick={() => handleOptionClick(option)}
             >

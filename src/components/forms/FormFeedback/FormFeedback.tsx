@@ -24,7 +24,7 @@ const FormFeedback = (props: FormFeedbackProps) => {
     },
   );
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(formData);
   };
@@ -55,6 +55,7 @@ const FormFeedback = (props: FormFeedbackProps) => {
         <CustomLabel
           label="Feedback Title"
           description="Add a short, descriptive headline"
+          htmlFor="inputTitle"
         >
           <input
             type="text"
@@ -69,6 +70,7 @@ const FormFeedback = (props: FormFeedbackProps) => {
         <CustomLabel
           label="Category"
           description="Choose a category for your feedback"
+          htmlFor="inputCategory"
         >
           <DropDown
             id="inputCategory"
@@ -83,7 +85,11 @@ const FormFeedback = (props: FormFeedbackProps) => {
           />
         </CustomLabel>
         {oldFeedback && (
-          <CustomLabel label="Update Status" description="Change feature state">
+          <CustomLabel
+            label="Update Status"
+            description="Change feature state"
+            htmlFor="inputStatus"
+          >
             <DropDown
               id="inputStatus"
               options={statusArray}
@@ -97,6 +103,7 @@ const FormFeedback = (props: FormFeedbackProps) => {
         <CustomLabel
           label="Feedback Detail"
           description="Include any specific comments on what should be improved, added, etc."
+          htmlFor="inputDetails"
         >
           <textarea
             id="inputDetails"
