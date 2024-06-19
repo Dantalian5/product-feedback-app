@@ -6,16 +6,22 @@ interface DropDownProps {
   id: string;
   options: string[];
   value: string;
-  onChange: (option: string) => void;
+  onChange: (event: { target: { value: string } }) => void;
 }
 const DropDown = (props: DropDownProps) => {
   const { id, options, value, onChange } = props;
   const [isOpen, setIsOpen] = React.useState(false);
   const componentId = React.useId();
 
-  const handleClick = (option: string) => {
-    onChange(option);
+  const handleOptionClick = (option: string) => {
     setIsOpen(false);
+    const event = {
+      target: { value: option },
+    };
+    onChange(event);
+  };
+  const handleButtonClick = () => {
+    setIsOpen((prev) => !prev);
   };
 
   return (
@@ -26,7 +32,7 @@ const DropDown = (props: DropDownProps) => {
         aria-label="Select an option"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={handleButtonClick}
         className={`custom-form-focus flex w-full items-center justify-between gap-x-4 rounded-5 bg-dark-200 px-4 py-3.5 sm:px-6`}
       >
         <span
@@ -47,10 +53,11 @@ const DropDown = (props: DropDownProps) => {
           {options.map((option) => (
             <button
               key={option}
+              id={option}
               role="option"
               aria-selected={option === value}
               className="flex w-full cursor-pointer items-center justify-between border-b border-b-dark-700/15 px-6 py-3 text-base font-normal capitalize text-dark-600 last:border-b-0 hover:text-violet-200"
-              onClick={() => handleClick(option)}
+              onClick={() => handleOptionClick(option)}
             >
               {option}
               {option === value && svgCheck}

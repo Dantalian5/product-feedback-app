@@ -4,14 +4,14 @@ import DropDown from "@/components/common/DropDown";
 import CustomLabel from "@/components/common/CustomLabel";
 import Button from "@/components/common/Button";
 import { svgAddIcon, svgEditIcon } from "@/utils/svgIcons";
-import type { TypeFeedback } from "@/types/dataTypes";
+import type { TypeFeedback, TypeUser } from "@/types/dataTypes";
 
 interface FormFeedbackProps {
   oldFeedback?: TypeFeedback;
-  user_id: number;
+  user: TypeUser | null;
 }
 const FormFeedback = (props: FormFeedbackProps) => {
-  const { oldFeedback, user_id } = props;
+  const { oldFeedback, user } = props;
   const categories = ["Feature", "UI", "UX", "Enhancement", "Bug"];
   const statusArray = ["suggestion", "planned", "in-progress", "live"];
 
@@ -24,20 +24,11 @@ const FormFeedback = (props: FormFeedbackProps) => {
     },
   );
 
-  const [category, setCategory] = React.useState<string>(
-    oldFeedback?.category || categories[0],
-  );
-  const [status, setStatus] = React.useState<string>(
-    oldFeedback?.status || statusArray[0],
-  );
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(formData);
   };
   const handleCancel = () => {
-    setCategory(oldFeedback?.category || categories[0]);
-    setStatus(oldFeedback?.status || statusArray[0]);
     setFormData(
       oldFeedback || {
         title: "",
@@ -82,8 +73,13 @@ const FormFeedback = (props: FormFeedbackProps) => {
           <DropDown
             id="inputCategory"
             options={categories}
-            value={category}
-            onChange={setCategory}
+            value={formData.category}
+            onChange={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                category: e.target.value,
+              }))
+            }
           />
         </CustomLabel>
         {oldFeedback && (
@@ -91,8 +87,10 @@ const FormFeedback = (props: FormFeedbackProps) => {
             <DropDown
               id="inputStatus"
               options={statusArray}
-              value={status}
-              onChange={setStatus}
+              value={formData.status}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, status: e.target.value }))
+              }
             />
           </CustomLabel>
         )}
