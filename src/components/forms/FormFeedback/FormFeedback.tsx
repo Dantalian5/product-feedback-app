@@ -1,16 +1,21 @@
 "use client";
 import React from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import { addFeedback, editFeedback, deleteFeedback } from "@/services/api";
 import DropDown from "@/components/common/DropDown";
 import CustomLabel from "@/components/common/CustomLabel";
 import Button from "@/components/common/Button";
 import { svgAddIcon, svgEditIcon } from "@/utils/svgIcons";
-import type { TypeFeedback, TypeUser } from "@/types/dataTypes";
+import type {
+  TypeFeedback,
+  TypeFeedbackBase,
+  TypeUser,
+} from "@/types/dataTypes";
 
 interface FormFeedbackProps {
   oldFeedback?: TypeFeedback;
-  user: TypeUser | null;
+  user: TypeUser;
 }
 const FormFeedback = (props: FormFeedbackProps) => {
   const router = useRouter();
@@ -18,37 +23,43 @@ const FormFeedback = (props: FormFeedbackProps) => {
   const categories = ["Feature", "UI", "UX", "Enhancement", "Bug"];
   const statusArray = ["suggestion", "planned", "in-progress", "live"];
 
-  const [formData, setFormData] = React.useState(
+  const [formData, setFormData] = React.useState<
+    TypeFeedback | TypeFeedbackBase
+  >(
     oldFeedback || {
       title: "",
       category: categories[0],
       status: statusArray[0],
       description: "",
+      user_id: user.id,
     },
   );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formData);
     try {
       if (!oldFeedback) {
-        const result = await addFeedback({ ...formData, user_id: user?.id });
-        console.log("Feedback submitted successfully:", result);
+        const result = await addFeedback(formData);
+        toast.success(`Feedback added successfully`);
       } else {
-        const result = await editFeedback({ ...formData });
-        console.log("Feedback edited successfully:", result);
-        router.refresh();
+        const result = await editFeedback(formData as TypeFeedback);
+        toast.success(`Feedback edited successfully`);
       }
+      router.refresh();
     } catch (error) {
       console.error("Error submitting feedback:", error);
+      toast.error("Ups, something whent wrong. Try again later");
     }
   };
   const handleDelete = async () => {
+    if (!oldFeedback) return toast.error("Feedback not found");
     try {
-      const result = await deleteFeedback(oldFeedback?.id);
-      console.log("Feedback deleted successfully:", result);
+      const result = await deleteFeedback(oldFeedback.id);
+      toast.success(`Feedback deleted successfully`);
+      router.push("/");
     } catch (error) {
       console.error("Error deleting feedback:", error);
+      toast.error("Ups, something whent wrong. Try again later");
     }
   };
   const handleCancel = () => {
@@ -58,6 +69,7 @@ const FormFeedback = (props: FormFeedbackProps) => {
         category: categories[0],
         status: statusArray[0],
         description: "",
+        user_id: user?.id,
       },
     );
   };

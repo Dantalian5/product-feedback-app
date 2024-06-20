@@ -21,7 +21,7 @@ const Details = async ({ params }: DetailsProps) => {
   const feedback: TypeFeedback = await getFeedbacks(id);
   const comments: TypeComment[] = (await getComments(id)) || [];
   const session = await auth();
-  const user = session?.user;
+  const user = session?.user || null;
   const isPropietaryUser = user && feedback.user_id === Number(user.id);
 
   return (
@@ -42,12 +42,12 @@ const Details = async ({ params }: DetailsProps) => {
           title={feedback.title}
           description={feedback.description}
           category={feedback.category}
-          upvotes={feedback.upvotes}
+          upvotes={feedback.upvotes || 0}
           commentsNumber={feedback.comments_count}
         />
       }
       <CommentsWrapper comments={comments} />
-      <AddComment requestId={id} />
+      <AddComment feedbackId={id} user={user as TypeUser | null} />
     </div>
   );
 };

@@ -26,10 +26,14 @@ const Feedback = (props: FeedbackProps) => {
           className="block w-full"
           aria-label="Go to Feedback details"
         >
-          <h3 className={`text-dark-700 mb-2 text-xs font-bold sm:text-lg`}>
+          <h3
+            className={`mb-2 text-xs font-bold text-dark-700 sm:mb-1 sm:text-lg`}
+          >
             {title}
           </h3>
-          <p className={`text-dark-600 mb-2 text-xs font-normal sm:text-base`}>
+          <p
+            className={`mb-2 text-xs font-normal text-dark-600 sm:mb-3 sm:text-base`}
+          >
             {description}
           </p>
           <span className=" block w-fit cursor-pointer rounded-10 bg-dark-300 px-4 py-1.5 text-xs font-semibold capitalize text-blue-200">
@@ -40,7 +44,7 @@ const Feedback = (props: FeedbackProps) => {
           <UpVote value={upvotes} />
         </div>
         <div className="ml-2 flex w-fit items-center justify-between gap-x-4">
-          <span className="text-dark-700 flex items-center gap-x-2 text-xs font-bold sm:text-base">
+          <span className="flex items-center gap-x-2 text-xs font-bold text-dark-700 sm:text-base">
             {svgMessage}
             {commentsNumber}
           </span>

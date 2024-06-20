@@ -33,7 +33,6 @@ const LoginForm = () => {
         password: data.password,
         redirectTo: callbackUrl,
       });
-      console.log(res);
       if (!res?.error) {
         toast.success("successfully logged in");
         router.push(callbackUrl);

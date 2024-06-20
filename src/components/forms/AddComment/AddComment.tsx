@@ -1,28 +1,41 @@
 "use client";
 import React from "react";
 import Button from "@/components/common/Button";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { addComment } from "@/services/api";
+import { TypeCommentWithId, type TypeUser } from "@/types/dataTypes";
 
-export type AddCommentProps = {
-  requestId: number;
-};
+interface AddCommentProps {
+  feedbackId: number;
+  user: TypeUser | null;
+}
 const AddComment = (props: AddCommentProps) => {
-  const { requestId } = props;
+  const router = useRouter();
+  const { feedbackId, user } = props;
   const formId = React.useId();
   const inputId = React.useId();
-  const [content, setContent] = React.useState<string>("");
   const [isError, setIsError] = React.useState<boolean>(false);
+  const [content, setContent] = React.useState("");
 
   const remaining = 250 - content.length;
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const comment = {
-      content: content,
-      request_id: requestId,
-    };
     if (content.trim() !== "") {
-      console.log("submit comment");
-      setContent("");
+      try {
+        const result = await addComment({
+          id: 0,
+          feedback_id: feedbackId,
+          content: content,
+          user_id: user?.id as number,
+        });
+        toast.success(`Feedback deleted successfully`);
+        router.refresh();
+      } catch (error) {
+        console.error("Error adding comment:", error);
+        toast.error("Ups, something whent wrong. Try again later");
+      }
     } else {
       setIsError(true);
     }
@@ -36,11 +49,16 @@ const AddComment = (props: AddCommentProps) => {
     <form
       id={formId}
       onSubmit={handleSubmit}
-      className=" w-full rounded-10 bg-white p-6 sm:px-8 sm:pb-8"
+      className={`w-full rounded-10 bg-white p-6 sm:px-8 sm:pb-8 ${!user && " *:opacity-70"}`}
     >
+      {!user && (
+        <span className="mb-4 block text-sm font-normal text-orange-200">
+          You must be logged in to comment
+        </span>
+      )}
       <label
         htmlFor={inputId}
-        className="text-dark-700 mb-6 block text-lg font-bold tracking-tighter"
+        className="mb-6 block text-lg font-bold tracking-tighter text-dark-700"
       >
         Add Comment
       </label>
@@ -48,7 +66,7 @@ const AddComment = (props: AddCommentProps) => {
         <textarea
           form={formId}
           id={inputId}
-          className={`sm:text-md text-dark-700 placeholder:text-dark-700/60 block min-h-20 w-full resize-none rounded-5 bg-dark-200 p-4 text-xs font-normal focus:outline-1 focus:outline-blue-200 sm:px-6 ${
+          className={`block min-h-20 w-full resize-none rounded-5 bg-dark-200 p-4 text-xs font-normal text-dark-700 placeholder:text-dark-700/60 focus:outline-1 focus:outline-blue-200 sm:px-6 sm:text-md ${
             isError ? "border border-orange-200" : ""
           }`}
           value={content}
@@ -56,6 +74,7 @@ const AddComment = (props: AddCommentProps) => {
           onChange={handleInput}
           placeholder="Type your comment here"
           maxLength={250}
+          disabled={!user}
         />
         {isError && (
           <p className="mt-1 text-sm font-normal text-orange-200">
@@ -64,10 +83,10 @@ const AddComment = (props: AddCommentProps) => {
         )}
       </div>
       <div className="flex w-full items-center justify-between gap-4">
-        <p className=" sm:text-md text-dark-600 text-xs font-normal">
+        <p className=" text-xs font-normal text-dark-600 sm:text-md">
           {remaining} Characters left
         </p>
-        <Button type="submit" classe="violet">
+        <Button type="submit" classe="violet" disabled={!user}>
           Post Comment
         </Button>
       </div>

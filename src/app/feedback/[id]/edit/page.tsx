@@ -19,8 +19,8 @@ const EditFeedback = async (props: EditFeedbackProps) => {
   const session = await auth();
   const user: any = session?.user;
   if (!user || !(feedback.user_id === Number(user.id))) {
-    redirect("/");
     toast.error("You can't edit this feedback");
+    redirect("/");
   }
 
   return (

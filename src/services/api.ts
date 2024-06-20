@@ -1,9 +1,46 @@
 "use server";
 import client from "@/lib/db";
-import type { TypeFeedback } from "@/types/dataTypes";
+import { auth } from "@/auth";
+import type {
+  TypeComment,
+  TypeCommentWithId,
+  TypeFeedback,
+  TypeFeedbackBase,
+} from "@/types/dataTypes";
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function validateOwner(tableName: string, id: number) {
+  // This function check if the current user is the owner of the object
+  // is a secure validation function for better security
+  const session = await auth(); // fetch session
+  const user: any = session?.user; // fetch user from session
+  // no user -> error
+  if (!user) {
+    throw new Error("Error auth user");
+  }
+  const query = `
+    SELECT user_id
+    FROM ${tableName}
+    WHERE id = $1
+  `;
+  try {
+    const result = await client.query(query, [id]); // fetch object from database
+    // no object -> error
+    if (result.rows.length === 0) {
+      throw new Error(`${tableName} not found`);
+    }
+    const ownerId = result.rows[0].user_id; // take the user_id
+    // check if user is the owner
+    if (Number(ownerId) !== Number(user.id)) {
+      throw new Error("Error auth user");
+    }
+  } catch (error) {
+    console.error("Error validating owner:", error);
+    throw new Error("Error validating owner");
+  }
 }
 export async function getFeedbacks(id?: number) {
   const query = `SELECT 
@@ -78,7 +115,7 @@ export async function getComments(id: number) {
   }
 }
 
-export async function addFeedback(feedback: TypeFeedback) {
+export async function addFeedback(feedback: TypeFeedbackBase) {
   const query = `
     INSERT INTO feedbacks (title, category, upvotes, status, description, user_id)
     VALUES ($1, $2, $3, $4, $5, $6)
@@ -98,7 +135,6 @@ export async function addFeedback(feedback: TypeFeedback) {
     const result = await client.query(query, values);
     return result.rows[0];
   } catch (error) {
-    console.error("Error inserting feedback:", error);
     throw new Error("Error inserting feedback");
   }
 }
@@ -119,10 +155,11 @@ export async function editFeedback(feedback: TypeFeedback) {
     feedback.id,
   ];
   try {
+    // await validateOwner(feedback.user_id);
+    await validateOwner("feedbacks", feedback.id);
     const result = await client.query(query, values);
     return result.rows[0];
   } catch (error) {
-    console.error("Error updating feedback:", error);
     throw new Error("Error updating feedback");
   }
 }
@@ -134,10 +171,32 @@ export async function deleteFeedback(id: number) {
     RETURNING *;
   `;
   try {
+    await validateOwner("feedbacks", id);
     const result = await client.query(query, [id]);
     return result.rows[0];
   } catch (error) {
-    console.error("Error deleting feedback:", error);
     throw new Error("Error deleting feedback");
+  }
+}
+export async function addComment(comment: TypeCommentWithId) {
+  const query = `
+    INSERT INTO comments (content, feedback_id, parent_comment_id, user_id, replying_to)
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING *;
+  `;
+
+  const values = [
+    comment.content,
+    comment.feedback_id,
+    comment.parent_comment_id,
+    comment.user_id,
+    comment.replying_to_id,
+  ];
+
+  try {
+    const result = await client.query(query, values);
+    return result.rows[0];
+  } catch (error) {
+    throw new Error("Error inserting comment");
   }
 }
