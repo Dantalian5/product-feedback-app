@@ -1,6 +1,7 @@
 import React from "react";
 import Comment from "@/components/common/Comment";
 import type { TypeComment, TypeUser } from "@/types/dataTypes";
+import { Span } from "next/dist/trace";
 
 const recursiveCommentsOrderer = (list: TypeComment[]) => {
   const orderedList: TypeComment[] = [];
@@ -29,9 +30,11 @@ const CommentsWrapper = ({ comments }: { comments: TypeComment[] }) => {
             <span className="h-[1px] w-full bg-dark-600/20 first:hidden"></span>
           )}
           <div
-            className={`${comment.replying_to && "border-l border-l-dark-600/10 pl-6 sm:ml-5"}`}
+            className={`${comment.replying_to && "relative pl-6 after:absolute after:left-5 after:top-0 after:h-full after:w-0 after:border-l after:border-l-dark-600/10 after:content-[''] sm:pl-11"} w-full`}
           >
             <Comment
+              id={comment.id}
+              feedbackId={comment.feedback_id}
               user={comment.user as TypeUser}
               content={comment.content}
               replying_to={

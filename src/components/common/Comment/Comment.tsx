@@ -5,13 +5,16 @@ import AddReply from "@/components/forms/AddReply";
 import type { TypeUser } from "@/types/dataTypes";
 
 interface CommentProps {
+  id: number;
+  feedbackId: number;
   user: TypeUser;
   content: string;
   replying_to: TypeUser | null;
 }
 const Comment = (props: CommentProps) => {
-  const { user, content, replying_to } = props;
+  const { id, feedbackId, user, content, replying_to } = props;
   const [reply, setReply] = React.useState<boolean>(false);
+  console.log(props);
 
   return (
     <div className="grid w-full grid-cols-[auto_1fr_auto] items-center gap-4 sm:gap-x-8">
@@ -23,10 +26,10 @@ const Comment = (props: CommentProps) => {
         className=" col-start-1 row-start-1 w-fit rounded-full"
       />
       <div className="col-start-2 row-start-1 flex w-full flex-col">
-        <p className="text-dark-700 text-xs font-bold sm:text-sm">
+        <p className="text-xs font-bold text-dark-700 sm:text-sm">
           {user.name}
         </p>
-        <p className="text-dark-600 text-xs font-normal sm:text-sm">
+        <p className="text-xs font-normal text-dark-600 sm:text-sm">
           @{user.username}
         </p>
       </div>
@@ -36,9 +39,9 @@ const Comment = (props: CommentProps) => {
       >
         Reply
       </button>
-      <p className="sm:text-md text-dark-600 col-span-3 col-start-1 row-start-2 text-xs font-normal sm:col-span-2 sm:col-start-2">
+      <p className="col-span-3 col-start-1 row-start-2 text-xs font-normal text-dark-600 sm:col-span-2 sm:col-start-2 sm:text-md">
         {replying_to && (
-          <span className="text-violet-200 text-xs">
+          <span className="text-xs text-violet-200">
             @{replying_to?.username}{" "}
           </span>
         )}
@@ -46,7 +49,7 @@ const Comment = (props: CommentProps) => {
       </p>
       {reply && (
         <div className="col-span-3 col-start-1 row-start-3 pt-2 sm:col-span-2 sm:col-start-2">
-          <AddReply />
+          <AddReply feedbackId={feedbackId} user={user} commentId={id} />
         </div>
       )}
     </div>

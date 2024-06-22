@@ -85,7 +85,7 @@ export async function getComments(id: number) {
     const data = result.rows.map((row) => ({
       id: row.id,
       content: row.content,
-      feedback_id: row.request_id,
+      feedback_id: row.feedback_id,
       replying_to: row.replying_to,
       user: {
         id: row.user_id,
@@ -165,13 +165,18 @@ export async function deleteFeedback(id: number) {
 }
 export async function addComment(comment: TypeComment) {
   const query = `
-    INSERT INTO comments (user_id, feedback_id, replying_to, content,)
+    INSERT INTO comments (user_id, feedback_id, replying_to, content)
     VALUES ($1, $2, $3, $4)
     RETURNING *;
   `;
+  const session = await auth();
+  const user = session?.user;
+  if (!user) {
+    throw new Error("Error auth user");
+  }
 
   const values = [
-    comment.user,
+    user.id,
     comment.feedback_id,
     comment.replying_to,
     comment.content,

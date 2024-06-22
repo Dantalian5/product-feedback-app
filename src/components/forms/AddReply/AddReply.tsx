@@ -1,25 +1,43 @@
 "use client";
 import React from "react";
 import Button from "@/components/common/Button";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { addComment } from "@/services/api";
+import type { TypeUser } from "@/types/dataTypes";
 
-const AddReply = (props: any) => {
-  const { requestId } = props;
+interface AddReplyProps {
+  feedbackId: number;
+  user: TypeUser | null;
+  commentId: number;
+}
+const AddReply = (props: AddReplyProps) => {
+  const router = useRouter();
+  const { feedbackId, user, commentId } = props;
   const formId = React.useId();
   const inputId = React.useId();
   const [content, setContent] = React.useState<string>("");
   const [isError, setIsError] = React.useState<boolean>(false);
 
-  const remaining = 250 - content.length;
+  console.log(props);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const comment = {
-      content: content,
-      request_id: requestId,
-    };
     if (content.trim() !== "") {
-      console.log("submit reply");
-      setContent("");
+      try {
+        const result = await addComment({
+          id: 0,
+          feedback_id: feedbackId,
+          content: content,
+          user: user?.id as number,
+          replying_to: commentId,
+        });
+        toast.success(`Reply added successfully`);
+        router.refresh();
+      } catch (error) {
+        console.error("Error adding comment:", error);
+        toast.error("Ups, something whent wrong. Try again later");
+      }
     } else {
       setIsError(true);
     }
@@ -38,7 +56,7 @@ const AddReply = (props: any) => {
         <textarea
           form={formId}
           id={inputId}
-          className={`sm:text-md text-dark-700 placeholder:text-dark-700/60 block min-h-20 w-full resize-none rounded-5 bg-dark-200 p-4 text-xs font-normal focus:outline-1 focus:outline-blue-200 ${
+          className={`block min-h-20 w-full resize-none rounded-5 bg-dark-200 p-4 text-xs font-normal text-dark-700 placeholder:text-dark-700/60 focus:outline-1 focus:outline-blue-200 sm:text-md ${
             isError ? "border border-orange-200" : ""
           }`}
           value={content}

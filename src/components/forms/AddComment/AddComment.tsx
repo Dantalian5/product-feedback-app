@@ -31,7 +31,7 @@ const AddComment = (props: AddCommentProps) => {
           user: user?.id as number,
           replying_to: null,
         });
-        toast.success(`Feedback deleted successfully`);
+        toast.success(`Comment added successfully`);
         router.refresh();
       } catch (error) {
         console.error("Error adding comment:", error);
