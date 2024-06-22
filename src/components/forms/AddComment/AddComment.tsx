@@ -4,7 +4,7 @@ import Button from "@/components/common/Button";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { addComment } from "@/services/api";
-import { TypeCommentWithId, type TypeUser } from "@/types/dataTypes";
+import { TypeComment, type TypeUser } from "@/types/dataTypes";
 
 interface AddCommentProps {
   feedbackId: number;
@@ -28,7 +28,8 @@ const AddComment = (props: AddCommentProps) => {
           id: 0,
           feedback_id: feedbackId,
           content: content,
-          user_id: user?.id as number,
+          user: user?.id as number,
+          replying_to: null,
         });
         toast.success(`Feedback deleted successfully`);
         router.refresh();

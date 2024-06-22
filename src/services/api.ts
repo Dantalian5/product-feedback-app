@@ -3,7 +3,6 @@ import client from "@/lib/db";
 import { auth } from "@/auth";
 import type {
   TypeComment,
-  TypeCommentWithId,
   TypeFeedback,
   TypeFeedbackBase,
 } from "@/types/dataTypes";
@@ -71,19 +70,13 @@ export async function getComments(id: number) {
     comments.id,
     comments.content,
     comments.feedback_id,
-    comments.parent_comment_id,
     comments.replying_to,
     users.id AS user_id,
     users.name AS user_name,
     users.username AS user_username,
-    users.image AS user_image,
-    replying_users.id AS replying_user_id,
-    replying_users.name AS replying_user_name,
-    replying_users.username AS replying_user_username,
-    replying_users.image AS replying_user_image
+    users.image AS user_image
   FROM comments
   JOIN users ON comments.user_id = users.id
-  LEFT JOIN users AS replying_users ON comments.replying_to = replying_users.id
   WHERE comments.feedback_id = $1;
   `;
 
@@ -93,15 +86,7 @@ export async function getComments(id: number) {
       id: row.id,
       content: row.content,
       feedback_id: row.request_id,
-      parent_comment_id: row.parent_comment_id,
-      replying_to: row.replying_to
-        ? {
-            id: row.replying_user_id,
-            name: row.replying_user_name,
-            username: row.replying_user_username,
-            image: row.replying_user_image,
-          }
-        : null,
+      replying_to: row.replying_to,
       user: {
         id: row.user_id,
         name: row.user_name,
@@ -178,19 +163,18 @@ export async function deleteFeedback(id: number) {
     throw new Error("Error deleting feedback");
   }
 }
-export async function addComment(comment: TypeCommentWithId) {
+export async function addComment(comment: TypeComment) {
   const query = `
-    INSERT INTO comments (content, feedback_id, parent_comment_id, user_id, replying_to)
-    VALUES ($1, $2, $3, $4, $5)
+    INSERT INTO comments (user_id, feedback_id, replying_to, content,)
+    VALUES ($1, $2, $3, $4)
     RETURNING *;
   `;
 
   const values = [
-    comment.content,
+    comment.user,
     comment.feedback_id,
-    comment.parent_comment_id,
-    comment.user_id,
-    comment.replying_to_id,
+    comment.replying_to,
+    comment.content,
   ];
 
   try {

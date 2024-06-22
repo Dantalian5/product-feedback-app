@@ -21,17 +21,10 @@ export interface TypeFeedbackWithCmtsCnt extends TypeFeedback {
 }
 export interface TypeComment {
   id: number;
-  content: string;
+  user: number | TypeUser;
   feedback_id: number;
-  parent_comment_id?: number;
-}
-export interface TypeCommentWithId extends TypeComment {
-  user_id: number;
-  replying_to_id?: number;
-}
-export interface TypeCommentWithInfo extends TypeComment {
-  user: TypeUser;
-  replying_to: TypeUser | null;
+  replying_to: number | null;
+  content: string;
 }
 export interface TypeOption {
   label: string;

@@ -6,7 +6,7 @@ import AddComment from "@/components/forms/AddComment";
 import CommentsWrapper from "@/components/layout/CommentsWrapper";
 import type {
   TypeFeedbackWithCmtsCnt as TypeFeedback,
-  TypeCommentWithInfo as TypeComment,
+  TypeComment,
   TypeUser,
 } from "@/types/dataTypes";
 import { getFeedbacks, getComments } from "@/services/api";
