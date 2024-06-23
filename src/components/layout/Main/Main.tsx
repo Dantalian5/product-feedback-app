@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Header from "@/components/layout/Header";
 import Feedback from "@/components/common/Feedback";
 import Empty from "@/components/common/Empty";
 import LinkBtn from "@/components/common/LinkBtn";
@@ -25,6 +26,18 @@ const sortOptions: Option[] = [
 const Main = (props: MainProps) => {
   const { feedbacks } = props;
   const [sortAlg, setSortAlg] = React.useState<Option>(sortOptions[0]);
+  const [filters, setFilters] = React.useState<string[]>(["All"]);
+
+  const roadmap = {
+    planned: feedbacks.filter(
+      (request: TypeFeedback) => request.status === "planned",
+    ).length,
+    in_progress: feedbacks.filter(
+      (request: TypeFeedback) => request.status === "in-progress",
+    ).length,
+    live: feedbacks.filter((request: TypeFeedback) => request.status === "live")
+      .length,
+  };
 
   const sortFn = (a: TypeFeedback, b: TypeFeedback) => {
     switch (sortAlg.value) {
@@ -46,7 +59,15 @@ const Main = (props: MainProps) => {
   };
 
   const suggestions = feedbacks
-    .filter((e) => e.status === "suggestion")
+    .filter(
+      (e) =>
+        e.status === "suggestion" &&
+        filters.some(
+          (filter) =>
+            filter.toLowerCase() === e.category.toLowerCase() ||
+            filter.toLowerCase() === "all",
+        ),
+    )
     .sort(sortFn);
 
   const { data } = useSession();
@@ -58,43 +79,48 @@ const Main = (props: MainProps) => {
   };
 
   return (
-    <div>
-      <div className="flex w-full items-center justify-between gap-x-4 bg-dark-800 px-6 py-2 sm:rounded-10 sm:py-[14px]">
-        <div className="flex items-center gap-x-10">
-          <div className="hidden items-center gap-x-4 xl:flex ">
-            <span>{svgLightBulb}</span>
-            <p className="text-lg font-bold text-white">
-              {suggestions.length} Suggestions
-            </p>
-          </div>
-          <SortBy
-            options={sortOptions}
-            selectedOption={sortAlg}
-            handleChange={setSortAlg}
-          />
-        </div>
-        <LinkBtn href="/feedback/new" classe="violet" onClick={handleLink}>
-          + Add Feedback
-        </LinkBtn>
+    <>
+      <div className=" w-full lg:max-w-[255px]">
+        <Header roadmap={roadmap} filters={filters} setFilters={setFilters} />
       </div>
-      <main className="flex flex-col gap-4 px-6 py-8 sm:px-0 sm:py-6 ">
-        {suggestions.length === 0 ? (
-          <Empty />
-        ) : (
-          suggestions.map((feedback: TypeFeedback) => (
-            <Feedback
-              key={feedback.id}
-              id={feedback.id}
-              title={feedback.title}
-              description={feedback.description}
-              category={feedback.category}
-              upvotes={feedback.upvotes}
-              commentsNumber={feedback.comments_count}
+      <div className="w-full flex-auto">
+        <div className="flex w-full items-center justify-between gap-x-4 bg-dark-800 px-6 py-2 sm:rounded-10 sm:py-[14px]">
+          <div className="flex items-center gap-x-10">
+            <div className="hidden items-center gap-x-4 xl:flex ">
+              <span>{svgLightBulb}</span>
+              <p className="text-lg font-bold text-white">
+                {suggestions.length} Suggestions
+              </p>
+            </div>
+            <SortBy
+              options={sortOptions}
+              selectedOption={sortAlg}
+              handleChange={setSortAlg}
             />
-          ))
-        )}
-      </main>
-    </div>
+          </div>
+          <LinkBtn href="/feedback/new" classe="violet" onClick={handleLink}>
+            + Add Feedback
+          </LinkBtn>
+        </div>
+        <main className="flex flex-col gap-4 px-6 py-8 sm:px-0 sm:py-6 ">
+          {suggestions.length === 0 ? (
+            <Empty />
+          ) : (
+            suggestions.map((feedback: TypeFeedback) => (
+              <Feedback
+                key={feedback.id}
+                id={feedback.id}
+                title={feedback.title}
+                description={feedback.description}
+                category={feedback.category}
+                upvotes={feedback.upvotes}
+                commentsNumber={feedback.comments_count}
+              />
+            ))
+          )}
+        </main>
+      </div>
+    </>
   );
 };
 

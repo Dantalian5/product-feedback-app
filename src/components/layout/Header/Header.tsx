@@ -13,9 +13,11 @@ interface Roadmap {
 }
 interface HeaderProps {
   roadmap: Roadmap;
+  filters: string[];
+  setFilters: (filters: (prev: string[]) => string[]) => void;
 }
 const Header = (props: HeaderProps) => {
-  const { roadmap } = props;
+  const { roadmap, setFilters, filters } = props;
   const [isOpen, setIsOpen] = React.useState(false);
   const categories = ["All", "UI", "UX", "Enhancement", "Bug", "Feature"];
 
@@ -55,7 +57,12 @@ const Header = (props: HeaderProps) => {
       >
         <div className="flex min-h-44 w-full  flex-wrap items-start justify-start gap-x-2 gap-y-4 rounded-10 bg-white p-6 lg:max-w-none">
           {categories.map((value) => (
-            <CheckBox key={value} label={value} />
+            <CheckBox
+              key={value}
+              label={value}
+              filters={filters}
+              setFilters={setFilters}
+            />
           ))}
         </div>
         <div className="min-h-44 w-full  rounded-10 bg-white p-6 lg:max-w-none">
