@@ -14,7 +14,6 @@ interface CommentProps {
 const Comment = (props: CommentProps) => {
   const { id, feedbackId, user, content, replying_to } = props;
   const [reply, setReply] = React.useState<boolean>(false);
-  console.log(props);
 
   return (
     <div className="grid w-full grid-cols-[auto_1fr_auto] items-center gap-4 sm:gap-x-8">

@@ -33,7 +33,7 @@ const DropDown = (props: DropDownProps) => {
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         onClick={handleButtonClick}
-        className={`custom-form-focus flex w-full items-center justify-between gap-x-4 rounded-5 bg-dark-200 px-4 py-3.5 sm:px-6`}
+        className={`${isOpen && "custom-form-focus outline outline-1 outline-blue-200"} custom-form-focus flex w-full items-center justify-between gap-x-4 rounded-5 bg-dark-200 px-4 py-3.5 sm:px-6`}
       >
         <span
           className={`text-xs font-normal capitalize text-dark-700 sm:text-md`}

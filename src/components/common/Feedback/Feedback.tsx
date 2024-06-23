@@ -41,7 +41,7 @@ const Feedback = (props: FeedbackProps) => {
           </span>
         </Link>
         <div className={`mr-6 w-fit self-start sm:order-first`}>
-          <UpVote value={upvotes} />
+          <UpVote value={upvotes} feedbackId={id} />
         </div>
         <div className="ml-2 flex w-fit items-center justify-between gap-x-4">
           <span className="flex items-center gap-x-2 text-xs font-bold text-dark-700 sm:text-base">

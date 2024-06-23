@@ -11,6 +11,7 @@ import type {
   TypeFeedbackWithCmtsCnt as TypeFeedback,
   TypeOption as Option,
 } from "@/types/dataTypes";
+import { getSessionUser } from "@/services/userAuth";
 
 interface MainProps {
   feedbacks: TypeFeedback[];

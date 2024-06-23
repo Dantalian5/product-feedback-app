@@ -15,10 +15,10 @@ const LinkBtn = (props: LinkProps) => {
   const commonColoredClasse = "justify-center px-4 py-2.5 sm:px-6 sm:py-3";
   const commonTransparentClasse = "justify-start p-0 bg-none hover:underline ";
   const classeArr = {
-    violet: `${commonColoredClasse} bg-violet-200 text-dark-100 hover:bg-violet-200/80`,
-    blue: `${commonColoredClasse} bg-blue-200 text-dark-100 hover:bg-blue-200/80`,
-    dark: `${commonColoredClasse} bg-dark-700 text-dark-100 hover:bg-dark-700/80`,
-    orange: `${commonColoredClasse} bg-orange-200 text-dark-100 hover:bg-orange-200/80`,
+    violet: `${commonColoredClasse} bg-violet-200 text-dark-100 hover:bg-violet-100`,
+    blue: `${commonColoredClasse} bg-blue-200 text-dark-100 hover:bg-blue-300`,
+    dark: `${commonColoredClasse} bg-dark-700 text-dark-100 hover:bg-dark-600`,
+    orange: `${commonColoredClasse} bg-orange-200 text-dark-100 hover:bg-orange-100`,
     noneWhite: `${commonTransparentClasse} text-white *:text-dark-400`,
     noneDark: `${commonTransparentClasse} text-dark-600 *:text-blue-200`,
   };

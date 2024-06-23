@@ -5,16 +5,14 @@ export interface TypeUser {
   username: string;
 }
 
-export interface TypeFeedbackBase {
+export interface TypeFeedback {
+  id: number;
   title: string;
   category: string;
-  upvotes?: number;
+  upvotes: number;
   status: string;
   description: string;
   user_id: number;
-}
-export interface TypeFeedback extends TypeFeedbackBase {
-  id: number;
 }
 export interface TypeFeedbackWithCmtsCnt extends TypeFeedback {
   comments_count: number;

@@ -5,7 +5,11 @@ import Button from "./Button";
 describe("Button component", () => {
   test("calls onClick handler when clicked", () => {
     const handleClick = jest.fn();
-    render(<Button onClick={handleClick}>TestButton</Button>);
+    render(
+      <Button onClick={handleClick} classe="blue">
+        TestButton
+      </Button>,
+    );
 
     const button = screen.getByRole("button", { name: /testbutton/i });
     fireEvent.click(button);
@@ -14,14 +18,14 @@ describe("Button component", () => {
   });
 
   test("renders children correctly", () => {
-    render(<Button>TestButton</Button>);
+    render(<Button classe="blue">TestButton</Button>);
 
     const button = screen.getByRole("button", { name: /testbutton/i });
     expect(button).toBeInTheDocument();
   });
 
   test("applies focus styles correctly", () => {
-    render(<Button>TestButton</Button>);
+    render(<Button classe="blue">TestButton</Button>);
 
     const button = screen.getByRole("button", { name: /testbutton/i });
     button.focus();

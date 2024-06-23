@@ -1,5 +1,4 @@
 import React from "react";
-import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import Header from "@/components/layout/Header";
 import Main from "@/components/layout/Main";
 import type { TypeFeedbackWithCmtsCnt as TypeFeedback } from "@/types/dataTypes";

@@ -55,11 +55,9 @@ export const {
   providers,
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
-      console.log("auth callback");
       const isLoggedIn = !!auth?.user;
-      const paths = ["/protected", "/new"];
-      const isProtected = paths.some((path) => nextUrl.pathname.includes(path));
-      console.log(isProtected, isLoggedIn);
+      const paths = ["/protected", "/new", "/edit"];
+      const isProtected = paths.some((path) => nextUrl.pathname.endsWith(path));
 
       if (isProtected && !isLoggedIn) {
         const redirectUrl = new URL("/login", nextUrl.origin);

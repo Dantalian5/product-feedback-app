@@ -4,46 +4,61 @@ import Button from "@/components/common/Button";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { addComment } from "@/services/api";
+import TextArea from "@/components/common/TextArea";
 import { TypeComment, type TypeUser } from "@/types/dataTypes";
+import { z } from "zod";
 
 interface AddCommentProps {
   feedbackId: number;
   user: TypeUser | null;
 }
+const commentSchema = z.object({
+  content: z
+    .string()
+    .min(1, { message: "Can't be empty" })
+    .max(250, { message: "Content must be at most 250 characters long" }),
+});
 const AddComment = (props: AddCommentProps) => {
   const router = useRouter();
   const { feedbackId, user } = props;
   const formId = React.useId();
   const inputId = React.useId();
-  const [isError, setIsError] = React.useState<boolean>(false);
   const [content, setContent] = React.useState("");
+  const [errors, setErrors] = React.useState<{ [key: string]: string }>({});
 
   const remaining = 250 - content.length;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (content.trim() !== "") {
-      try {
-        const result = await addComment({
-          id: 0,
-          feedback_id: feedbackId,
-          content: content,
-          user: user?.id as number,
-          replying_to: null,
+    try {
+      commentSchema.parse({ content });
+      const result = await addComment({
+        id: 0,
+        feedback_id: feedbackId,
+        content: content,
+        user: user?.id as number,
+        replying_to: null,
+      });
+      toast.success(`Comment added successfully`);
+      router.refresh();
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const fieldErrors: { [key: string]: string } = {};
+        error.errors.forEach((err) => {
+          if (err.path.length > 0) {
+            fieldErrors[err.path[0] as string] = err.message;
+          }
         });
-        toast.success(`Comment added successfully`);
-        router.refresh();
-      } catch (error) {
+        setErrors(fieldErrors);
+      } else {
         console.error("Error adding comment:", error);
         toast.error("Ups, something whent wrong. Try again later");
       }
-    } else {
-      setIsError(true);
     }
   };
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
-    isError && setIsError(false);
+    errors.content && setErrors({});
   };
 
   return (
@@ -64,24 +79,16 @@ const AddComment = (props: AddCommentProps) => {
         Add Comment
       </label>
       <div className="mb-4 w-full">
-        <textarea
-          form={formId}
+        <TextArea
           id={inputId}
-          className={`block min-h-20 w-full resize-none rounded-5 bg-dark-200 p-4 text-xs font-normal text-dark-700 placeholder:text-dark-700/60 focus:outline-1 focus:outline-blue-200 sm:px-6 sm:text-md ${
-            isError ? "border border-orange-200" : ""
-          }`}
           value={content}
-          rows={2}
           onChange={handleInput}
-          placeholder="Type your comment here"
+          error={errors.content}
+          rows={2}
           maxLength={250}
           disabled={!user}
+          placeholder="Type your comment here"
         />
-        {isError && (
-          <p className="mt-1 text-sm font-normal text-orange-200">
-            Can’t be empty
-          </p>
-        )}
       </div>
       <div className="flex w-full items-center justify-between gap-4">
         <p className=" text-xs font-normal text-dark-600 sm:text-md">

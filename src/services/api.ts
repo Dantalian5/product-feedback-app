@@ -1,46 +1,13 @@
 "use server";
 import client from "@/lib/db";
 import { auth } from "@/auth";
-import type {
-  TypeComment,
-  TypeFeedback,
-  TypeFeedbackBase,
-} from "@/types/dataTypes";
+import { getSessionUser, validateOwner } from "@/services/userAuth";
+import type { TypeComment, TypeFeedback } from "@/types/dataTypes";
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function validateOwner(tableName: string, id: number) {
-  // This function check if the current user is the owner of the object
-  // is a secure validation function for better security
-  const session = await auth(); // fetch session
-  const user: any = session?.user; // fetch user from session
-  // no user -> error
-  if (!user) {
-    throw new Error("Error auth user");
-  }
-  const query = `
-    SELECT user_id
-    FROM ${tableName}
-    WHERE id = $1
-  `;
-  try {
-    const result = await client.query(query, [id]); // fetch object from database
-    // no object -> error
-    if (result.rows.length === 0) {
-      throw new Error(`${tableName} not found`);
-    }
-    const ownerId = result.rows[0].user_id; // take the user_id
-    // check if user is the owner
-    if (Number(ownerId) !== Number(user.id)) {
-      throw new Error("Error auth user");
-    }
-  } catch (error) {
-    console.error("Error validating owner:", error);
-    throw new Error("Error validating owner");
-  }
-}
 export async function getFeedbacks(id?: number) {
   const query = `SELECT 
   feedbacks.id,
@@ -100,7 +67,8 @@ export async function getComments(id: number) {
   }
 }
 
-export async function addFeedback(feedback: TypeFeedbackBase) {
+export async function addFeedback(feedback: TypeFeedback) {
+  const user = await getSessionUser();
   const query = `
     INSERT INTO feedbacks (title, category, upvotes, status, description, user_id)
     VALUES ($1, $2, $3, $4, $5, $6)
@@ -113,7 +81,7 @@ export async function addFeedback(feedback: TypeFeedbackBase) {
     feedback.upvotes || 0,
     feedback.status || "suggestion",
     feedback.description,
-    feedback.user_id,
+    user.id,
   ];
 
   try {
@@ -125,6 +93,10 @@ export async function addFeedback(feedback: TypeFeedbackBase) {
 }
 
 export async function editFeedback(feedback: TypeFeedback) {
+  const user = await getSessionUser();
+  if (feedback.user_id !== Number(user.id)) {
+    throw new Error("Error updating feedback");
+  }
   const query = `
     UPDATE feedbacks
     SET title = $1, category = $2, upvotes = $3, status = $4, description = $5
@@ -140,7 +112,6 @@ export async function editFeedback(feedback: TypeFeedback) {
     feedback.id,
   ];
   try {
-    // await validateOwner(feedback.user_id);
     await validateOwner("feedbacks", feedback.id);
     const result = await client.query(query, values);
     return result.rows[0];
@@ -149,31 +120,44 @@ export async function editFeedback(feedback: TypeFeedback) {
   }
 }
 
-export async function deleteFeedback(id: number) {
+export async function deleteFeedback(feedbackId: number) {
+  const user = await getSessionUser();
   const query = `
     DELETE FROM feedbacks
     WHERE id = $1
     RETURNING *;
   `;
   try {
-    await validateOwner("feedbacks", id);
-    const result = await client.query(query, [id]);
+    await validateOwner("feedbacks", feedbackId);
+    const result = await client.query(query, [feedbackId]);
     return result.rows[0];
   } catch (error) {
     throw new Error("Error deleting feedback");
   }
 }
+export async function upVoteFeedback(feedbackId: number) {
+  const user = await getSessionUser();
+  const query = `
+    UPDATE feedbacks
+    SET upvotes = upvotes + 1
+    WHERE id = $1
+    RETURNING *;
+  `;
+  try {
+    const result = await client.query(query, [feedbackId]);
+    return result.rows[0];
+  } catch (error) {
+    throw new Error("Error handling feedback");
+  }
+}
+// Add comment (POST API FUNCTION)
 export async function addComment(comment: TypeComment) {
+  const user = await getSessionUser();
   const query = `
     INSERT INTO comments (user_id, feedback_id, replying_to, content)
     VALUES ($1, $2, $3, $4)
     RETURNING *;
   `;
-  const session = await auth();
-  const user = session?.user;
-  if (!user) {
-    throw new Error("Error auth user");
-  }
 
   const values = [
     user.id,

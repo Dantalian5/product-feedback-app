@@ -11,10 +11,10 @@ const Button = (props: ButtonProps) => {
 
   const commonColoredClasse = "justify-center px-4 py-2.5 sm:px-6 sm:py-3";
   const classeArr = {
-    violet: `${commonColoredClasse} bg-violet-200 text-dark-100 hover:bg-violet-200/75`,
-    blue: `${commonColoredClasse} bg-blue-200 text-dark-100 hover:bg-blue-200/75`,
-    dark: `${commonColoredClasse} bg-dark-700 text-dark-100 hover:bg-dark-700/75`,
-    orange: `${commonColoredClasse} bg-orange-200 text-dark-100 hover:bg-orange-200/75`,
+    violet: `${commonColoredClasse} bg-violet-200 text-dark-100 hover:bg-violet-100`,
+    blue: `${commonColoredClasse} bg-blue-200 text-dark-100 hover:bg-blue-300`,
+    dark: `${commonColoredClasse} bg-dark-700 text-dark-100 hover:bg-dark-600`,
+    orange: `${commonColoredClasse} bg-orange-200 text-dark-100 hover:bg-orange-100`,
   };
 
   return (

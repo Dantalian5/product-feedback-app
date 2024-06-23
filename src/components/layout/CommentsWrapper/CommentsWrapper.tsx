@@ -17,7 +17,6 @@ const recursiveCommentsOrderer = (list: TypeComment[]) => {
 
 const CommentsWrapper = ({ comments }: { comments: TypeComment[] }) => {
   const orderedComments = recursiveCommentsOrderer(comments);
-  console.log(orderedComments);
 
   return (
     <section className="flex flex-col items-start justify-start gap-y-6 rounded-10 bg-white p-6 sm:gap-y-8 sm:px-8 sm:pb-10 lg:pb-12">

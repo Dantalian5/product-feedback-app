@@ -47,6 +47,7 @@ const config: Config = {
       },
       blue: {
         100: "#62bcfa",
+        300: "#7C91F9",
         200: "#4661E6",
       },
       violet: {

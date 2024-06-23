@@ -4,7 +4,6 @@ import Link from "next/link";
 import Hamburguer from "@/components/common/Hamburguer";
 import CheckBox from "@/components/common/CheckBox";
 import { svgCircle } from "@/utils/svgIcons";
-import { categories } from "@/config/globalVars";
 import UserBtn from "@/components/common/UserBtn";
 
 interface Roadmap {
@@ -18,12 +17,15 @@ interface HeaderProps {
 const Header = (props: HeaderProps) => {
   const { roadmap } = props;
   const [isOpen, setIsOpen] = React.useState(false);
+  const categories = ["All", "UI", "UX", "Enhancement", "Bug", "Feature"];
 
   const handleClick = () => {
     document.body.style.overflowY = isOpen ? "auto" : "hidden";
 
     setIsOpen((prev) => !prev);
   };
+
+  const total = roadmap.planned + roadmap.in_progress + roadmap.live;
 
   return (
     <header
@@ -34,7 +36,7 @@ const Header = (props: HeaderProps) => {
           <h1 className="text-base font-bold text-white sm:text-xl">
             Frontend Mentor
           </h1>
-          <span className="sm:text-md text-sm font-medium text-white/75">
+          <span className="text-sm font-medium text-white/75 sm:text-md">
             Feedback Board
           </span>
         </div>
@@ -58,12 +60,12 @@ const Header = (props: HeaderProps) => {
         </div>
         <div className="min-h-44 w-full  rounded-10 bg-white p-6 lg:max-w-none">
           <div className="mb-6 flex w-full items-center justify-between">
-            <h2 className=" text-dark-700 text-lg font-bold tracking-tighter">
+            <h2 className=" text-lg font-bold tracking-tighter text-dark-700">
               Roadmap
             </h2>
             <Link
               href={"/roadmap"}
-              className="text-xs font-semibold text-blue-200 underline"
+              className={`${total === 0 && "opacity-25"} text-xs font-semibold text-blue-200 underline hover:text-blue-100`}
             >
               View
             </Link>
@@ -71,22 +73,22 @@ const Header = (props: HeaderProps) => {
           <div className="flex w-full flex-col gap-y-2">
             <div className="flex w-full items-center justify-start gap-x-4">
               <span className=" text-8 text-orange-100">{svgCircle}</span>
-              <p className="text-dark-600 text-base font-normal">Planned</p>
-              <p className="text-dark-600 ml-auto text-base font-bold">
+              <p className="text-base font-normal text-dark-600">Planned</p>
+              <p className="ml-auto text-base font-bold text-dark-600">
                 {roadmap.planned}
               </p>
             </div>
             <div className="flex w-full items-center justify-start gap-x-4">
-              <span className=" text-violet-200 text-8">{svgCircle}</span>
-              <p className="text-dark-600 text-base font-normal">In-Progress</p>
-              <p className="text-dark-600 ml-auto text-base font-bold">
+              <span className=" text-8 text-violet-200">{svgCircle}</span>
+              <p className="text-base font-normal text-dark-600">In-Progress</p>
+              <p className="ml-auto text-base font-bold text-dark-600">
                 {roadmap.in_progress}
               </p>
             </div>
             <div className="flex w-full items-center justify-start gap-x-4">
               <span className=" text-8 text-blue-100">{svgCircle}</span>
-              <p className="text-dark-600 text-base font-normal">Live</p>
-              <p className="text-dark-600 ml-auto text-base font-bold">
+              <p className="text-base font-normal text-dark-600">Live</p>
+              <p className="ml-auto text-base font-bold text-dark-600">
                 {roadmap.live}
               </p>
             </div>

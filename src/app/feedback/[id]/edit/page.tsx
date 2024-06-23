@@ -1,23 +1,20 @@
 import React from "react";
-import { auth } from "@/auth";
 import toast from "react-hot-toast";
 import LinkBtn from "@/components/common/LinkBtn";
 import FormFeedback from "@/components/forms/FormFeedback";
 import { getFeedbacks } from "@/services/api";
+import { getSessionUser } from "@/services/userAuth";
 import type { TypeFeedback } from "@/types/dataTypes";
 import { redirect } from "next/navigation";
-
 interface EditFeedbackProps {
   params: {
     id: string;
   };
 }
-
 const EditFeedback = async (props: EditFeedbackProps) => {
   const id = parseInt(props.params.id);
   const feedback: TypeFeedback = await getFeedbacks(id);
-  const session = await auth();
-  const user: any = session?.user;
+  const user = await getSessionUser();
   if (!user || !(feedback.user_id === Number(user.id))) {
     toast.error("You can't edit this feedback");
     redirect("/");
@@ -30,7 +27,7 @@ const EditFeedback = async (props: EditFeedbackProps) => {
           Go Backs
         </LinkBtn>
       </div>
-      <FormFeedback oldFeedback={feedback} user={user} />
+      <FormFeedback oldFeedback={feedback} />
     </div>
   );
 };

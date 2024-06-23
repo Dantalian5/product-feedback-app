@@ -1,6 +1,5 @@
 import React from "react";
 import LinkBtn from "@/components/common/LinkBtn";
-import Main from "@/components/layout/Main";
 import RoadMap from "@/components/layout/RoadMap";
 import type { TypeFeedbackWithCmtsCnt as TypeFeedback } from "@/types/dataTypes";
 import { getFeedbacks } from "@/services/api";

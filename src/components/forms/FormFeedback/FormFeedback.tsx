@@ -2,59 +2,72 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { z } from "zod";
 import { addFeedback, editFeedback, deleteFeedback } from "@/services/api";
 import DropDown from "@/components/common/DropDown";
 import CustomLabel from "@/components/common/CustomLabel";
 import Button from "@/components/common/Button";
+import TextArea from "@/components/common/TextArea";
+import Input from "@/components/common/Input";
 import { svgAddIcon, svgEditIcon } from "@/utils/svgIcons";
-import type {
-  TypeFeedback,
-  TypeFeedbackBase,
-  TypeUser,
-} from "@/types/dataTypes";
+import type { TypeFeedback } from "@/types/dataTypes";
 
 interface FormFeedbackProps {
   oldFeedback?: TypeFeedback;
-  user: TypeUser;
 }
+const feedbackSchema = z.object({
+  title: z.string().min(1, { message: "Can't be empty" }),
+  category: z.enum(["Feature", "UI", "UX", "Enhancement", "Bug"]),
+  status: z.enum(["suggestion", "planned", "in-progress", "live"]).optional(),
+  description: z.string().min(1, { message: "Can't be empty" }),
+});
 const FormFeedback = (props: FormFeedbackProps) => {
   const router = useRouter();
-  const { oldFeedback, user } = props;
+  const { oldFeedback } = props;
   const categories = ["Feature", "UI", "UX", "Enhancement", "Bug"];
   const statusArray = ["suggestion", "planned", "in-progress", "live"];
 
-  const [formData, setFormData] = React.useState<
-    TypeFeedback | TypeFeedbackBase
-  >(
+  const [formData, setFormData] = React.useState(
     oldFeedback || {
       title: "",
       category: categories[0],
       status: statusArray[0],
       description: "",
-      user_id: user.id,
     },
   );
+  const [errors, setErrors] = React.useState<{ [key: string]: string }>({});
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      feedbackSchema.parse(formData);
       if (!oldFeedback) {
-        const result = await addFeedback(formData);
+        await addFeedback(formData as TypeFeedback);
         toast.success(`Feedback added successfully`);
       } else {
-        const result = await editFeedback(formData as TypeFeedback);
+        await editFeedback(formData as TypeFeedback);
         toast.success(`Feedback edited successfully`);
       }
       router.refresh();
     } catch (error) {
-      console.error("Error submitting feedback:", error);
-      toast.error("Ups, something whent wrong. Try again later");
+      if (error instanceof z.ZodError) {
+        const fieldErrors: { [key: string]: string } = {};
+        error.errors.forEach((err) => {
+          if (err.path.length > 0) {
+            fieldErrors[err.path[0] as string] = err.message;
+          }
+        });
+        setErrors(fieldErrors);
+      } else {
+        console.error("Error submitting feedback:", error);
+        toast.error("Ups, something went wrong. Try again later");
+      }
     }
   };
   const handleDelete = async () => {
     if (!oldFeedback) return toast.error("Feedback not found");
     try {
-      const result = await deleteFeedback(oldFeedback.id);
+      await deleteFeedback(oldFeedback.id);
       toast.success(`Feedback deleted successfully`);
       router.push("/");
     } catch (error) {
@@ -69,7 +82,6 @@ const FormFeedback = (props: FormFeedbackProps) => {
         category: categories[0],
         status: statusArray[0],
         description: "",
-        user_id: user?.id,
       },
     );
   };
@@ -92,10 +104,10 @@ const FormFeedback = (props: FormFeedbackProps) => {
           description="Add a short, descriptive headline"
           htmlFor="inputTitle"
         >
-          <input
+          <Input
             type="text"
             id="inputTitle"
-            className="custom-form-focus block w-full rounded-5 bg-dark-200 px-4 py-3.5 text-xs font-normal text-dark-700 placeholder:text-dark-700/60 sm:px-6 sm:text-md"
+            error={errors.title}
             value={formData.title}
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, title: e.target.value }))
@@ -140,9 +152,9 @@ const FormFeedback = (props: FormFeedbackProps) => {
           description="Include any specific comments on what should be improved, added, etc."
           htmlFor="inputDetails"
         >
-          <textarea
+          <TextArea
+            error={errors.description}
             id="inputDetails"
-            className="custom-form-focus block w-full rounded-5 bg-dark-200 p-4 text-xs font-normal text-dark-700 placeholder:text-dark-700/60 sm:px-6 sm:text-md"
             value={formData.description}
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, description: e.target.value }))
