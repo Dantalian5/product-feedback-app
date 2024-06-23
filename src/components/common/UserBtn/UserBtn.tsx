@@ -8,11 +8,27 @@ const UserBtn = () => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const { data } = useSession();
   const user = data?.user;
+  const componentRef = React.useRef<HTMLDivElement>(null);
   const logOut = async () => {
     await signOut();
   };
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      componentRef.current &&
+      !componentRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+  React.useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   return (
-    <div className="relative z-20 h-fit w-fit">
+    <div className="relative z-20 h-fit w-fit" ref={componentRef}>
       <button
         className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-dark-800 bg-dark-100 shadow-sm"
         onClick={() => setIsOpen((prev) => !prev)}
@@ -39,6 +55,7 @@ const UserBtn = () => {
               >
                 Settings
               </Link>
+              <span className="h-[1px] w-full bg-dark-600/50"></span>
               <button
                 onClick={() => logOut()}
                 className="text-md font-bold text-dark-700"

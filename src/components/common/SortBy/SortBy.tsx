@@ -12,13 +12,29 @@ const SortBy = (props: SortProps) => {
   const { options, selectedOption, handleChange } = props;
   const [isOpen, setIsOpen] = React.useState(false);
   const componentId = React.useId();
+  const componentRef = React.useRef<HTMLDivElement>(null);
 
   const handleOptionClick = (option: Option) => {
     handleChange(option);
     setIsOpen(false);
   };
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      componentRef.current &&
+      !componentRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+  React.useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   return (
-    <div className="relative z-10 w-fit">
+    <div className="relative z-10 w-fit" ref={componentRef}>
       <button
         id={componentId}
         type="button"
@@ -26,7 +42,7 @@ const SortBy = (props: SortProps) => {
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`bg-dark-800 flex items-center justify-center gap-x-2 rounded-10 py-2 text-xs sm:text-sm`}
+        className={`flex items-center justify-center gap-x-2 rounded-10 bg-dark-800 py-2 text-xs sm:text-sm`}
       >
         <span
           className={` text-sm font-normal text-dark-100 ${isOpen && "opacity-75"}`}
@@ -48,7 +64,7 @@ const SortBy = (props: SortProps) => {
               key={option.value}
               role="option"
               aria-selected={option.value === selectedOption.value}
-              className="hover:text-violet-200 text-dark-600 border-b-dark-700/15 flex w-full cursor-pointer items-center justify-between border-b px-6 py-3 text-base font-normal last:border-b-0"
+              className="flex w-full cursor-pointer items-center justify-between border-b border-b-dark-700/15 px-6 py-3 text-base font-normal text-dark-600 last:border-b-0 hover:text-violet-200"
               onClick={() => handleOptionClick(option)}
             >
               {option.label}

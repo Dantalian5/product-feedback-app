@@ -51,7 +51,7 @@ const Main = (props: MainProps) => {
         return b.comments_count - a.comments_count;
         break;
       case "4sblc":
-        return b.comments_count - a.comments_count;
+        return a.comments_count - a.comments_count;
         break;
       default:
         return 0;

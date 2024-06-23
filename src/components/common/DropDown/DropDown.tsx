@@ -12,6 +12,7 @@ const DropDown = (props: DropDownProps) => {
   const { id, options, value, onChange } = props;
   const [isOpen, setIsOpen] = React.useState(false);
   const componentId = React.useId();
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
 
   const handleOptionClick = (option: string) => {
     setIsOpen(false);
@@ -24,8 +25,24 @@ const DropDown = (props: DropDownProps) => {
     setIsOpen((prev) => !prev);
   };
 
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+  React.useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div id={id} className="relative w-full">
+    <div id={id} className="relative w-full" ref={dropdownRef}>
       <button
         id={componentId}
         type="button"
@@ -33,7 +50,7 @@ const DropDown = (props: DropDownProps) => {
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         onClick={handleButtonClick}
-        className={`${isOpen && "custom-form-focus outline outline-1 outline-blue-200"} custom-form-focus flex w-full items-center justify-between gap-x-4 rounded-5 bg-dark-200 px-4 py-3.5 sm:px-6`}
+        className={`${isOpen && "custom-form-focus outline outline-1 outline-blue-200"} custom-form-focus z-30 flex w-full items-center justify-between gap-x-4 rounded-5 bg-dark-200 px-4 py-3.5 sm:px-6`}
       >
         <span
           className={`text-xs font-normal capitalize text-dark-700 sm:text-md`}
@@ -48,7 +65,7 @@ const DropDown = (props: DropDownProps) => {
         <div
           role="listbox"
           aria-labelledby={componentId}
-          className="absolute top-[calc(100%+16px)] w-full min-w-64 overflow-hidden rounded-10 bg-white shadow-custom_1"
+          className="absolute top-[calc(100%+16px)] z-50 w-full min-w-64 overflow-hidden rounded-10 bg-white shadow-custom_1"
         >
           {options.map((option) => (
             <button

@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { signInSchema } from "@/types/signinSchema";
 import type { Provider } from "next-auth/providers";
 
 async function getUser(email: string): Promise<any> {
