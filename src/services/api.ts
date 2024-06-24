@@ -24,7 +24,7 @@ export async function getFeedbacks(id?: number) {
 
   try {
     const result = await client.query(query);
-    // await delay(50000);
+    await delay(50000);
     const data = id ? result.rows.find((row) => row.id === id) : result.rows;
     return data;
   } catch (error) {
