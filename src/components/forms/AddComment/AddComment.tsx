@@ -1,70 +1,57 @@
 "use client";
 import React from "react";
-import Button from "@/components/common/Button";
-import toast from "react-hot-toast";
+
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import Button from "@/components/common/Button";
 import { addComment } from "@/services/api";
-import TextArea from "@/components/common/TextArea";
-import { TypeComment, type TypeUser } from "@/types/dataTypes";
-import { z } from "zod";
+import { commentSchema, CommentSchema } from "@/schemas/commentSchema";
+import type { TypeUser } from "@/types/dataTypes";
 
 interface AddCommentProps {
   feedbackId: number;
   user: TypeUser | null;
 }
-const commentSchema = z.object({
-  content: z
-    .string()
-    .min(1, { message: "Can't be empty" })
-    .max(250, { message: "Content must be at most 250 characters long" }),
-});
-const AddComment = (props: AddCommentProps) => {
+const AddComment = ({ feedbackId, user }: AddCommentProps) => {
   const router = useRouter();
-  const { feedbackId, user } = props;
-  const formId = React.useId();
-  const inputId = React.useId();
-  const [content, setContent] = React.useState("");
-  const [errors, setErrors] = React.useState<{ [key: string]: string }>({});
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    watch,
+  } = useForm<CommentSchema>({
+    resolver: zodResolver(commentSchema),
+  });
 
+  const content = watch("content") || "";
   const remaining = 250 - content.length;
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit: SubmitHandler<CommentSchema> = async (data) => {
     try {
-      commentSchema.parse({ content });
-      const result = await addComment({
+      await addComment({
         id: 0,
         feedback_id: feedbackId,
-        content: content,
+        content: data.content,
         user: user?.id as number,
         replying_to: null,
       });
-      toast.success(`Comment added successfully`);
+      toast.success("Comment added successfully");
+      reset();
       router.refresh();
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        const fieldErrors: { [key: string]: string } = {};
-        error.errors.forEach((err) => {
-          if (err.path.length > 0) {
-            fieldErrors[err.path[0] as string] = err.message;
-          }
-        });
-        setErrors(fieldErrors);
-      } else {
-        console.error("Error adding comment:", error);
-        toast.error("Ups, something whent wrong. Try again later");
-      }
+      console.error("Error adding comment:", error);
+      toast.error("Oops, something went wrong. Try again later");
     }
-  };
-  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setContent(e.target.value);
-    errors.content && setErrors({});
   };
 
   return (
     <form
-      id={formId}
-      onSubmit={handleSubmit}
+      id={"addCommentForm"}
+      onSubmit={handleSubmit(onSubmit)}
       className={`w-full rounded-10 bg-white p-6 sm:px-8 sm:pb-8 ${!user && " *:opacity-70"}`}
     >
       {!user && (
@@ -73,22 +60,26 @@ const AddComment = (props: AddCommentProps) => {
         </span>
       )}
       <label
-        htmlFor={inputId}
+        htmlFor={"content"}
         className="mb-6 block text-lg font-bold tracking-tighter text-dark-700"
       >
         Add Comment
       </label>
       <div className="mb-4 w-full">
-        <TextArea
-          id={inputId}
-          value={content}
-          onChange={handleInput}
-          error={errors.content}
+        <textarea
+          className={`${errors.content && "border border-orange-200"} custom-form-focus block w-full rounded-5 bg-dark-200 p-4 text-xs font-normal text-dark-700 placeholder:text-dark-700/60 sm:px-6 sm:text-md`}
+          id={"content"}
+          {...register("content")}
           rows={2}
           maxLength={250}
           disabled={!user}
           placeholder="Type your comment here"
         />
+        {errors.content?.message && (
+          <p className="mt-1 text-sm text-orange-200">
+            {errors.content?.message}
+          </p>
+        )}
       </div>
       <div className="flex w-full items-center justify-between gap-4">
         <p className=" text-xs font-normal text-dark-600 sm:text-md">

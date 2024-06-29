@@ -1,11 +1,13 @@
 "use client";
 import React from "react";
-import toast from "react-hot-toast";
+
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
+import { SubmitHandler, useForm } from "react-hook-form";
+
 import Button from "@/components/common/Button";
 import CustomLabel from "@/components/common/CustomLabel";
-import { SubmitHandler, useForm } from "react-hook-form";
 
 type Inputs = {
   email: string;
@@ -49,7 +51,7 @@ const LoginForm = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="relative mx-auto flex w-full flex-col items-center justify-center gap-6 rounded-10 bg-white p-6 sm:p-10"
+      className="relative mx-auto flex w-full flex-col items-center justify-center gap-6 rounded-10 bg-white px-6 pb-6 pt-20 sm:px-10 sm:pb-10"
     >
       <CustomLabel label="Email" htmlFor={inputMailId}>
         <input

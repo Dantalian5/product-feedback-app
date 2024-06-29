@@ -1,26 +1,22 @@
 "use client";
 import React from "react";
+
+import { useRouter } from "next/navigation";
+import { ZodError } from "zod";
+import toast from "react-hot-toast";
+
 import Button from "@/components/common/Button";
 import TextArea from "@/components/common/TextArea";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
 import { addComment } from "@/services/api";
+import { commentSchema } from "@/schemas/commentSchema";
 import type { TypeUser } from "@/types/dataTypes";
-import { z } from "zod";
 interface AddReplyProps {
   feedbackId: number;
   user: TypeUser | null;
   commentId: number;
 }
-const commentSchema = z.object({
-  content: z
-    .string()
-    .min(1, { message: "Can't be empty" })
-    .max(250, { message: "Content must be at most 250 characters long" }),
-});
-const AddReply = (props: AddReplyProps) => {
+const AddReply = ({ feedbackId, user, commentId }: AddReplyProps) => {
   const router = useRouter();
-  const { feedbackId, user, commentId } = props;
   const formId = React.useId();
   const inputId = React.useId();
   const [content, setContent] = React.useState<string>("");
@@ -39,7 +35,7 @@ const AddReply = (props: AddReplyProps) => {
       toast.success(`Reply added successfully`);
       router.refresh();
     } catch (error) {
-      if (error instanceof z.ZodError) {
+      if (error instanceof ZodError) {
         const fieldErrors: { [key: string]: string } = {};
         error.errors.forEach((err) => {
           if (err.path.length > 0) {
@@ -72,7 +68,6 @@ const AddReply = (props: AddReplyProps) => {
           placeholder="Type your comment here"
           maxLength={250}
           aria-label="reply to comment"
-          error={errors.content}
         />
       </div>
       <div className="ml-auto w-fit">

@@ -1,6 +1,9 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import type { Provider } from "next-auth/providers";
+import { compare } from "bcryptjs";
+import PostgresAdapter from "@auth/pg-adapter";
+import client from "@/lib/db";
 
 async function getUser(email: string): Promise<any> {
   return {
@@ -21,10 +24,11 @@ const providers: Provider[] = [
       password: { label: "password", type: "password" },
     },
     authorize: async (credentials: any) => {
-      let user = null;
       const { email, password } = credentials;
-      user = await getUser(email);
-      if (!user || user.password !== password) {
+      const user = await getUser(email);
+      // const useru = await getUserByEmail(email);
+      // const isMatch = await compare(password, user.password);
+      if (!user || password !== user.password) {
         return null;
       }
       return {

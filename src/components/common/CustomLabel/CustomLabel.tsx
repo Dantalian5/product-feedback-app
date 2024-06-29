@@ -5,19 +5,30 @@ interface CustomLabelProps {
   label: string;
   description?: string;
   htmlFor: string;
+  error?: string;
 }
-const CustomLabel = (props: CustomLabelProps) => {
-  const { children, label, description, htmlFor } = props;
+const CustomLabel = ({
+  children,
+  label,
+  description,
+  htmlFor,
+  error,
+}: CustomLabelProps) => {
   return (
     <div className="w-full">
       <label
-        className="text-dark-700, mb-4 flex w-full flex-col text-sm font-bold"
+        className="mb-4 flex w-full flex-col text-sm font-bold text-dark-700"
         htmlFor={htmlFor}
       >
         {label}
         {description && <span className="font-normal">{description}</span>}
       </label>
-      <div className="w-full">{children}</div>
+      <div
+        className={`${error && "border border-orange-200"} w-full rounded-5`}
+      >
+        {children}
+      </div>
+      {error && <p className="mt-1 text-sm text-orange-200">{error}</p>}
     </div>
   );
 };

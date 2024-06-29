@@ -1,8 +1,10 @@
 "use client";
 import React from "react";
+
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { z } from "zod";
+import { ZodError } from "zod";
+
 import { addFeedback, editFeedback, deleteFeedback } from "@/services/api";
 import DropDown from "@/components/common/DropDown";
 import CustomLabel from "@/components/common/CustomLabel";
@@ -10,17 +12,12 @@ import Button from "@/components/common/Button";
 import TextArea from "@/components/common/TextArea";
 import Input from "@/components/common/Input";
 import { svgAddIcon, svgEditIcon } from "@/utils/svgIcons";
+import { feedbackSchema } from "@/schemas/feedbackSchema";
 import type { TypeFeedback } from "@/types/dataTypes";
 
 interface FormFeedbackProps {
   oldFeedback?: TypeFeedback;
 }
-const feedbackSchema = z.object({
-  title: z.string().min(1, { message: "Can't be empty" }),
-  category: z.enum(["Feature", "UI", "UX", "Enhancement", "Bug"]),
-  status: z.enum(["suggestion", "planned", "in-progress", "live"]).optional(),
-  description: z.string().min(1, { message: "Can't be empty" }),
-});
 const FormFeedback = (props: FormFeedbackProps) => {
   const router = useRouter();
   const { oldFeedback } = props;
@@ -50,7 +47,7 @@ const FormFeedback = (props: FormFeedbackProps) => {
       }
       router.refresh();
     } catch (error) {
-      if (error instanceof z.ZodError) {
+      if (error instanceof ZodError) {
         const fieldErrors: { [key: string]: string } = {};
         error.errors.forEach((err) => {
           if (err.path.length > 0) {
@@ -86,6 +83,17 @@ const FormFeedback = (props: FormFeedbackProps) => {
     );
   };
 
+  const handleTitleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({ ...prev, title: e.target.value }));
+    errors.title && setErrors((prev) => ({ ...prev, title: "" }));
+  };
+  const handleDescriptionOnChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    setFormData((prev) => ({ ...prev, description: e.target.value }));
+    errors.description && setErrors((prev) => ({ ...prev, description: "" }));
+  };
+
   return (
     <form
       id="newFeedback"
@@ -103,15 +111,13 @@ const FormFeedback = (props: FormFeedbackProps) => {
           label="Feedback Title"
           description="Add a short, descriptive headline"
           htmlFor="inputTitle"
+          error={errors.title}
         >
           <Input
             type="text"
             id="inputTitle"
-            error={errors.title}
             value={formData.title}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, title: e.target.value }))
-            }
+            onChange={handleTitleOnChange}
           />
         </CustomLabel>
         <CustomLabel
@@ -151,14 +157,12 @@ const FormFeedback = (props: FormFeedbackProps) => {
           label="Feedback Detail"
           description="Include any specific comments on what should be improved, added, etc."
           htmlFor="inputDetails"
+          error={errors.description}
         >
           <TextArea
-            error={errors.description}
             id="inputDetails"
             value={formData.description}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, description: e.target.value }))
-            }
+            onChange={handleDescriptionOnChange}
             rows={5}
           />
         </CustomLabel>

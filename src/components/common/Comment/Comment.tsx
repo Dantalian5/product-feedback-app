@@ -38,7 +38,7 @@ const Comment = (props: CommentProps) => {
       >
         Reply
       </button>
-      <p className="col-span-3 col-start-1 row-start-2 text-xs font-normal text-dark-600 sm:col-span-2 sm:col-start-2 sm:text-md">
+      <p className="col-span-3 col-start-1 row-start-2 overflow-hidden text-ellipsis text-xs font-normal text-dark-600 sm:col-span-2 sm:col-start-2 sm:text-md">
         {replying_to && (
           <span className="text-xs text-violet-200">
             @{replying_to?.username}{" "}

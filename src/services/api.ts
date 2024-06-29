@@ -1,11 +1,52 @@
 "use server";
 import client from "@/lib/db";
-import { auth } from "@/auth";
 import { getSessionUser, validateOwner } from "@/services/userAuth";
 import type { TypeComment, TypeFeedback } from "@/types/dataTypes";
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export async function addUser(user: {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+}) {
+  const query = `
+      INSERT INTO users (name, username, email, password)
+      VALUES ($1, $2, $3, $4)
+      RETURNING *;
+    `;
+  try {
+    const result = await client.query(query, [
+      user.name,
+      user.username,
+      user.email,
+      user.password,
+    ]);
+    return result.rows[0];
+  } catch (error: any) {
+    throw new Error("Error adding user to db", { cause: error.code });
+  }
+}
+export async function getUser(email: string) {
+  const query = `SELECT 
+    users.name, 
+    users.username, 
+    users.email, 
+    users.image
+    FROM users 
+    WHERE users.email = $1;`;
+
+  try {
+    await client.connect();
+    const result = await client.query(query, [email]);
+    await client.end();
+    return result.rows[0];
+  } catch (error) {
+    throw new Error("Error fetching user from db");
+  }
 }
 
 export async function getFeedbacks(id?: number) {
@@ -24,7 +65,7 @@ export async function getFeedbacks(id?: number) {
 
   try {
     const result = await client.query(query);
-    await delay(50000);
+    //await delay(50000);
     const data = id ? result.rows.find((row) => row.id === id) : result.rows;
     return data;
   } catch (error) {
