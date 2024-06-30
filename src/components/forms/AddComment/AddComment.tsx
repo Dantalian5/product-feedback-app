@@ -43,7 +43,6 @@ const AddComment = ({ feedbackId, user }: AddCommentProps) => {
       reset();
       router.refresh();
     } catch (error) {
-      console.error("Error adding comment:", error);
       toast.error("Oops, something went wrong. Try again later");
     }
   };
@@ -74,6 +73,7 @@ const AddComment = ({ feedbackId, user }: AddCommentProps) => {
           maxLength={250}
           disabled={!user}
           placeholder="Type your comment here"
+          aria-label="Type your comment here"
         />
         {errors.content?.message && (
           <p className="mt-1 text-sm text-orange-200">

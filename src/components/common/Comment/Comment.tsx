@@ -11,9 +11,35 @@ interface CommentProps {
   content: string;
   replying_to: TypeUser | null;
 }
-const Comment = (props: CommentProps) => {
-  const { id, feedbackId, user, content, replying_to } = props;
+const Comment = ({
+  id,
+  feedbackId,
+  user,
+  content,
+  replying_to,
+}: CommentProps) => {
   const [reply, setReply] = React.useState<boolean>(false);
+  const componentRef = React.useRef<HTMLDivElement>(null);
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
+
+  console.log(user);
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      componentRef.current &&
+      !componentRef.current.contains(event.target as Node) &&
+      buttonRef.current &&
+      !buttonRef.current.contains(event.target as Node)
+    ) {
+      setReply(false);
+    }
+  };
+
+  React.useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="grid w-full grid-cols-[auto_1fr_auto] items-center gap-4 sm:gap-x-8">
@@ -35,6 +61,7 @@ const Comment = (props: CommentProps) => {
       <button
         className="col-start-3 row-start-1 w-fit text-xs font-semibold text-blue-200"
         onClick={() => setReply((prev) => !prev)}
+        ref={buttonRef}
       >
         Reply
       </button>
@@ -46,8 +73,11 @@ const Comment = (props: CommentProps) => {
         )}
         {content}
       </p>
-      {reply && (
-        <div className="col-span-3 col-start-1 row-start-3 pt-2 sm:col-span-2 sm:col-start-2">
+      {reply && user && (
+        <div
+          className="col-span-3 col-start-1 row-start-3 pt-2 sm:col-span-2 sm:col-start-2"
+          ref={componentRef}
+        >
           <AddReply feedbackId={feedbackId} user={user} commentId={id} />
         </div>
       )}

@@ -1,7 +1,7 @@
 import React from "react";
+
 import Comment from "@/components/common/Comment";
 import type { TypeComment, TypeUser } from "@/types/dataTypes";
-import { Span } from "next/dist/trace";
 
 const recursiveCommentsOrderer = (list: TypeComment[]) => {
   const orderedList: TypeComment[] = [];
