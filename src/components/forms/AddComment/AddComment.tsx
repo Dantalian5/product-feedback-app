@@ -9,14 +9,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "@/components/common/Button";
 import { addComment } from "@/services/api";
 import { commentSchema, CommentSchema } from "@/schemas/commentSchema";
-import type { TypeUser } from "@/types/dataTypes";
+import { useUser } from "@/components/context/UserProvider";
 
 interface AddCommentProps {
   feedbackId: number;
-  user: TypeUser | null;
 }
-const AddComment = ({ feedbackId, user }: AddCommentProps) => {
+const AddComment = ({ feedbackId }: AddCommentProps) => {
   const router = useRouter();
+  const user = useUser();
   const {
     register,
     handleSubmit,
@@ -33,17 +33,15 @@ const AddComment = ({ feedbackId, user }: AddCommentProps) => {
   const onSubmit: SubmitHandler<CommentSchema> = async (data) => {
     try {
       await addComment({
-        id: 0,
-        feedback_id: feedbackId,
+        feedbackId: feedbackId,
+        parentId: null,
         content: data.content,
-        user: user?.id as number,
-        replying_to: null,
       });
       toast.success("Comment added successfully");
       reset();
       router.refresh();
-    } catch (error) {
-      toast.error("Oops, something went wrong. Try again later");
+    } catch (error: any) {
+      toast.error(error.message);
     }
   };
 

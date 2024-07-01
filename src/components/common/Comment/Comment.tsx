@@ -1,28 +1,31 @@
 "use client";
 import React from "react";
+
 import Image from "next/image";
+import toast from "react-hot-toast";
+
 import AddReply from "@/components/forms/AddReply";
-import type { TypeUser } from "@/types/dataTypes";
+import { useUser } from "@/components/context/UserProvider";
+import type { TypeUser, TypeCommentExtended } from "@/types/dataTypes";
 
 interface CommentProps {
-  id: number;
-  feedbackId: number;
-  user: TypeUser;
-  content: string;
-  replying_to: TypeUser | null;
+  comment: TypeCommentExtended;
 }
-const Comment = ({
-  id,
-  feedbackId,
-  user,
-  content,
-  replying_to,
-}: CommentProps) => {
+const Comment = ({ comment }: CommentProps) => {
   const [reply, setReply] = React.useState<boolean>(false);
+  const { id, user, feedbackId, parentUser, content } = comment;
   const componentRef = React.useRef<HTMLDivElement>(null);
   const buttonRef = React.useRef<HTMLButtonElement>(null);
+  const isLogged = !!useUser();
 
-  console.log(user);
+  const handleClickOnReply = () => {
+    if (!isLogged) {
+      toast.error("Please Login to Reply");
+      setReply(false);
+    } else {
+      setReply((prev) => !prev);
+    }
+  };
   const handleClickOutside = (event: MouseEvent) => {
     if (
       componentRef.current &&
@@ -59,16 +62,16 @@ const Comment = ({
         </p>
       </div>
       <button
-        className="col-start-3 row-start-1 w-fit text-xs font-semibold text-blue-200"
-        onClick={() => setReply((prev) => !prev)}
+        className={`${!isLogged && "opacity-50"} col-start-3 row-start-1 w-fit text-xs font-semibold text-blue-200`}
+        onClick={handleClickOnReply}
         ref={buttonRef}
       >
         Reply
       </button>
       <p className="col-span-3 col-start-1 row-start-2 overflow-hidden text-ellipsis text-xs font-normal text-dark-600 sm:col-span-2 sm:col-start-2 sm:text-md">
-        {replying_to && (
+        {parentUser && (
           <span className="text-xs text-violet-200">
-            @{replying_to?.username}{" "}
+            @{parentUser?.username}{" "}
           </span>
         )}
         {content}
@@ -78,7 +81,7 @@ const Comment = ({
           className="col-span-3 col-start-1 row-start-3 pt-2 sm:col-span-2 sm:col-start-2"
           ref={componentRef}
         >
-          <AddReply feedbackId={feedbackId} user={user} commentId={id} />
+          <AddReply feedbackId={feedbackId} commentId={id} />
         </div>
       )}
     </div>

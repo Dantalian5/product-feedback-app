@@ -9,13 +9,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "@/components/common/Button";
 import { addComment } from "@/services/api";
 import { commentSchema, CommentSchema } from "@/schemas/commentSchema";
-import type { TypeUser } from "@/types/dataTypes";
 interface AddReplyProps {
   feedbackId: number;
-  user: TypeUser | null;
   commentId: number;
 }
-const AddReply = ({ feedbackId, user, commentId, ...rest }: AddReplyProps) => {
+const AddReply = ({ feedbackId, commentId, ...rest }: AddReplyProps) => {
   const router = useRouter();
   const formId = React.useId();
   const inputId = React.useId();
@@ -33,17 +31,15 @@ const AddReply = ({ feedbackId, user, commentId, ...rest }: AddReplyProps) => {
   const onSubmit: SubmitHandler<CommentSchema> = async (data) => {
     try {
       await addComment({
-        id: 0,
-        feedback_id: feedbackId,
+        feedbackId: feedbackId,
         content: data.content,
-        user: user?.id as number,
-        replying_to: commentId,
+        parentId: commentId,
       });
       toast.success("Reply added successfully");
       reset();
       router.refresh();
-    } catch (error) {
-      toast.error("Oops, something went wrong. Try again later");
+    } catch (error: any) {
+      toast.error(error.message);
     }
   };
 
@@ -61,7 +57,6 @@ const AddReply = ({ feedbackId, user, commentId, ...rest }: AddReplyProps) => {
           {...register("content")}
           rows={2}
           maxLength={250}
-          disabled={!user}
           placeholder="Type your comment here"
           aria-label="Type your comment here"
         />

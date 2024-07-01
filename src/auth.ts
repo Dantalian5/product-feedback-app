@@ -36,6 +36,7 @@ const providers: Provider[] = [
         image: user.image,
         name: user.name,
         username: user.username,
+        email: user.email,
       };
     },
   }),
@@ -75,6 +76,7 @@ export const {
         token.name = user.name;
         token.username = user.username;
         token.image = user.image;
+        token.email = user.email;
       }
       return token;
     },
@@ -83,6 +85,7 @@ export const {
       session.user.name = token.name;
       session.user.username = token.username;
       session.user.image = token.image;
+      session.user.email = token.email;
       return session;
     },
   },

@@ -34,9 +34,7 @@ describe("AddReply Component", () => {
   });
 
   test("renders correctly when user is logged in", () => {
-    render(
-      <AddReply feedbackId={feedbackId} user={user} commentId={commentId} />,
-    );
+    render(<AddReply feedbackId={feedbackId} commentId={commentId} />);
 
     expect(
       screen.getByPlaceholderText(/Type your comment here/i),
@@ -46,35 +44,20 @@ describe("AddReply Component", () => {
     ).not.toBeDisabled();
   });
 
-  test("renders correctly when user is not logged in", () => {
-    render(
-      <AddReply feedbackId={feedbackId} user={null} commentId={commentId} />,
-    );
-
-    expect(
-      screen.getByPlaceholderText(/Type your comment here/i),
-    ).toBeDisabled();
-    expect(screen.getByRole("button", { name: /Post Reply/i })).toBeDisabled();
-  });
-
   test("displays error message when content is empty", async () => {
-    render(
-      <AddReply feedbackId={feedbackId} user={user} commentId={commentId} />,
-    );
+    render(<AddReply feedbackId={feedbackId} commentId={commentId} />);
 
     fireEvent.submit(screen.getByRole("button", { name: /Post Reply/i }));
 
     await waitFor(() => {
-      expect(screen.getByText(/Content is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/Can't be empty/i)).toBeInTheDocument();
     });
   });
 
   test("calls addComment API on successful submission", async () => {
     mockAddComment.mockResolvedValue({});
 
-    render(
-      <AddReply feedbackId={feedbackId} user={user} commentId={commentId} />,
-    );
+    render(<AddReply feedbackId={feedbackId} commentId={commentId} />);
 
     fireEvent.change(screen.getByPlaceholderText(/Type your comment here/i), {
       target: { value: "This is a test reply" },
@@ -84,11 +67,9 @@ describe("AddReply Component", () => {
 
     await waitFor(() => {
       expect(mockAddComment).toHaveBeenCalledWith({
-        id: 0,
-        feedback_id: feedbackId,
+        feedbackId: feedbackId,
         content: "This is a test reply",
-        user: user.id,
-        replying_to: commentId,
+        parentId: commentId,
       });
       expect(mockToast.success).toHaveBeenCalledWith(
         "Reply added successfully",
@@ -97,11 +78,9 @@ describe("AddReply Component", () => {
   });
 
   test("displays error toast on API failure", async () => {
-    mockAddComment.mockRejectedValue(new Error("API error"));
+    mockAddComment.mockRejectedValue(new Error("test error message"));
 
-    render(
-      <AddReply feedbackId={feedbackId} user={user} commentId={commentId} />,
-    );
+    render(<AddReply feedbackId={feedbackId} commentId={commentId} />);
 
     fireEvent.change(screen.getByPlaceholderText(/Type your comment here/i), {
       target: { value: "This is a test reply" },
@@ -110,9 +89,7 @@ describe("AddReply Component", () => {
     fireEvent.submit(screen.getByRole("button", { name: /Post Reply/i }));
 
     await waitFor(() => {
-      expect(mockToast.error).toHaveBeenCalledWith(
-        "Oops, something went wrong. Try again later",
-      );
+      expect(mockToast.error).toHaveBeenCalledWith("test error message");
     });
   });
 });

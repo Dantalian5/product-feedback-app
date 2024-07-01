@@ -17,12 +17,18 @@ export interface TypeFeedback {
 export interface TypeFeedbackWithCmtsCnt extends TypeFeedback {
   comments_count: number;
 }
-export interface TypeComment {
-  id: number;
-  user: number | TypeUser;
-  feedback_id: number;
-  replying_to: number | null;
+
+export interface TypeCommentBase {
+  feedbackId: number;
+  parentId: number | null;
   content: string;
+}
+export interface TypeComment extends TypeCommentBase {
+  id: number;
+  user: TypeUser;
+}
+export interface TypeCommentExtended extends TypeComment {
+  parentUser: TypeUser;
 }
 export interface TypeOption {
   label: string;

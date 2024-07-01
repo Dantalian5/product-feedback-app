@@ -1,9 +1,13 @@
 import React from "react";
+
 import { auth } from "@/auth";
 import Feedback from "@/components/common/Feedback";
 import LinkBtn from "@/components/common/LinkBtn";
 import AddComment from "@/components/forms/AddComment";
 import CommentsWrapper from "@/components/layout/CommentsWrapper";
+
+import UserProvider from "@/components/context/UserProvider";
+
 import type {
   TypeFeedbackWithCmtsCnt as TypeFeedback,
   TypeComment,
@@ -46,8 +50,10 @@ const Details = async ({ params }: DetailsProps) => {
           commentsNumber={feedback.comments_count}
         />
       }
-      <CommentsWrapper comments={comments} />
-      <AddComment feedbackId={id} user={user as TypeUser | null} />
+      <UserProvider user={user as TypeUser | null}>
+        <CommentsWrapper comments={comments} />
+        <AddComment feedbackId={id} />
+      </UserProvider>
     </div>
   );
 };

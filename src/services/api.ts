@@ -1,7 +1,11 @@
 "use server";
 import client from "@/lib/db";
 import { getSessionUser, validateOwner } from "@/services/userAuth";
-import type { TypeComment, TypeFeedback } from "@/types/dataTypes";
+import type {
+  TypeComment,
+  TypeCommentBase,
+  TypeFeedback,
+} from "@/types/dataTypes";
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -90,11 +94,11 @@ export async function getComments(id: number) {
 
   try {
     const result = await client.query(query, [id]);
-    const data = result.rows.map((row) => ({
+    const data: TypeComment[] = result.rows.map((row) => ({
       id: row.id,
       content: row.content,
-      feedback_id: row.feedback_id,
-      replying_to: row.replying_to,
+      feedbackId: row.feedback_id,
+      parentId: row.replying_to,
       user: {
         id: row.user_id,
         name: row.user_name,
@@ -192,25 +196,23 @@ export async function upVoteFeedback(feedbackId: number) {
   }
 }
 // Add comment (POST API FUNCTION)
-export async function addComment(comment: TypeComment) {
-  const user = await getSessionUser();
+export async function addComment(comment: TypeCommentBase) {
   const query = `
     INSERT INTO comments (user_id, feedback_id, replying_to, content)
     VALUES ($1, $2, $3, $4)
     RETURNING *;
   `;
-
+  const user = await getSessionUser();
   const values = [
     user.id,
-    comment.feedback_id,
-    comment.replying_to,
+    comment.feedbackId,
+    comment.parentId,
     comment.content,
   ];
-
   try {
     const result = await client.query(query, values);
     return result.rows[0];
   } catch (error) {
-    throw new Error("Error inserting comment");
+    throw new Error("Ups, something went wrong. Try again later");
   }
 }
