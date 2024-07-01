@@ -1,8 +1,9 @@
 "use client";
 import React from "react";
+
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
+
 import { svgUpArrow } from "@/utils/svgIcons";
 import { upVoteFeedback } from "@/services/api";
 
@@ -15,20 +16,14 @@ const UpVote = (prop: UpVoteProps) => {
   const { value = 0, feedbackId } = prop;
   const [upvoted, setUpvoted] = React.useState<boolean>(false);
 
-  const { data } = useSession();
-  const handleUpVote = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!data) {
-      e.preventDefault();
-      toast.error("Please Login to UpVote a feedback");
-    } else {
-      try {
-        upVoteFeedback(feedbackId);
-        toast.success(`Feedback UpVoted!`);
-        setUpvoted(true);
-        router.refresh();
-      } catch {
-        toast.error("Ups, something whent wrong. Try again later");
-      }
+  const handleUpVote = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    try {
+      await upVoteFeedback(feedbackId);
+      toast.success(`Feedback UpVoted!`);
+      setUpvoted(true);
+      router.refresh();
+    } catch (error: any) {
+      toast.error(error.message);
     }
   };
   return (

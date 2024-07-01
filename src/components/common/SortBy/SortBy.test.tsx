@@ -1,40 +1,97 @@
 import React from "react";
-import SortBy from "./SortBy";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import SortBy from "@/components/common/SortBy";
 
-describe("SortBy component", () => {
-  test("render correctly", () => {
-    render(<SortBy />);
+const options = [
+  { value: "upvotes", label: "Upvotes" },
+  { value: "comments", label: "Comments" },
+];
+
+const selectedOption = { value: "upvotes", label: "Upvotes" };
+const handleChange = jest.fn();
+
+describe("SortBy Component", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test("renders correctly with the selected option", () => {
+    render(
+      <SortBy
+        options={options}
+        selectedOption={selectedOption}
+        handleChange={handleChange}
+      />,
+    );
+
+    expect(screen.getByText(/Sort by :/i)).toBeInTheDocument();
+    expect(screen.getByText(selectedOption.label)).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Sort by upvotes or comments/i }),
+    ).toBeInTheDocument();
+  });
+
+  test("opens and closes the options list when the button is clicked", () => {
+    render(
+      <SortBy
+        options={options}
+        selectedOption={selectedOption}
+        handleChange={handleChange}
+      />,
+    );
+
     const button = screen.getByRole("button", {
       name: /Sort by upvotes or comments/i,
     });
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
 
-    expect(button).toBeInTheDocument();
+    fireEvent.click(button);
+    expect(screen.getByRole("listbox")).toBeInTheDocument();
+
+    fireEvent.click(button);
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
   });
-  test("opens menu on click", async () => {
-    render(<SortBy />);
+
+  test("calls handleChange with the correct option when an option is clicked", () => {
+    render(
+      <SortBy
+        options={options}
+        selectedOption={selectedOption}
+        handleChange={handleChange}
+      />,
+    );
+
     const button = screen.getByRole("button", {
       name: /Sort by upvotes or comments/i,
     });
     fireEvent.click(button);
-    const menu = await screen.getByRole("listbox");
-    expect(menu).toBeInTheDocument();
-    const menuItems = await screen.getAllByRole("option");
-    expect(menuItems).toHaveLength(4);
-  });
-  test("options behavior", async () => {
-    render(<SortBy />);
-    const button = screen.getByRole("button", {
-      name: /Sort by upvotes or comments/i,
-    });
-    fireEvent.click(button);
-    const menu = await screen.getByRole("listbox");
-    const option = await screen.getByRole("option", {
-      name: /Least Comments/i,
-    });
+
+    const option = screen.getByRole("option", { name: /Comments/i });
     fireEvent.click(option);
 
-    expect(menu).not.toBeInTheDocument();
-    expect(button).toHaveTextContent("Sort by : Least Comments");
+    expect(handleChange).toHaveBeenCalledWith({
+      value: "comments",
+      label: "Comments",
+    });
+  });
+
+  test("closes the options list when clicking outside of the component", () => {
+    render(
+      <SortBy
+        options={options}
+        selectedOption={selectedOption}
+        handleChange={handleChange}
+      />,
+    );
+
+    const button = screen.getByRole("button", {
+      name: /Sort by upvotes or comments/i,
+    });
+    fireEvent.click(button);
+
+    expect(screen.getByRole("listbox")).toBeInTheDocument();
+
+    fireEvent.mouseDown(document);
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
   });
 });

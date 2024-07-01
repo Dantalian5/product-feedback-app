@@ -70,7 +70,7 @@ describe("AddComment Component", () => {
     fireEvent.submit(screen.getByRole("button", { name: /Post Comment/i }));
 
     await waitFor(() => {
-      expect(screen.getByText(/Content is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/Can't be empty/i)).toBeInTheDocument();
     });
   });
 

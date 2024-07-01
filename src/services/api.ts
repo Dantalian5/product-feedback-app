@@ -192,7 +192,7 @@ export async function upVoteFeedback(feedbackId: number) {
     const result = await client.query(query, [feedbackId]);
     return result.rows[0];
   } catch (error) {
-    throw new Error("Error handling feedback");
+    throw new Error("Ups, something went wrong. Try again later");
   }
 }
 // Add comment (POST API FUNCTION)

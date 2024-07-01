@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+
 import { svgCheck, svgDownArrow as svgArrow } from "@/utils/svgIcons";
 
 interface DropDownProps {
@@ -8,8 +9,7 @@ interface DropDownProps {
   value: string;
   onChange: (event: { target: { value: string } }) => void;
 }
-const DropDown = (props: DropDownProps) => {
-  const { id, options, value, onChange } = props;
+const DropDown = ({ id, options, value, onChange }: DropDownProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const componentId = React.useId();
   const dropdownRef = React.useRef<HTMLDivElement>(null);

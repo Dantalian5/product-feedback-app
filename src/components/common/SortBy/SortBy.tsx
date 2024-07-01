@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+
 import type { TypeOption as Option } from "@/types/dataTypes";
 import { svgDownArrow, svgCheck } from "@/utils/svgIcons";
 
@@ -8,8 +9,7 @@ interface SortProps {
   selectedOption: Option;
   handleChange: (arg0: Option) => void;
 }
-const SortBy = (props: SortProps) => {
-  const { options, selectedOption, handleChange } = props;
+const SortBy = ({ options, selectedOption, handleChange }: SortProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const componentId = React.useId();
   const componentRef = React.useRef<HTMLDivElement>(null);

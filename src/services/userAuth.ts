@@ -8,7 +8,9 @@ export async function getSessionUser() {
   const user = session?.user;
   // if no session/user return authentication error
   if (!user) {
-    throw new Error("Ups! Error validating user", { cause: "auth" });
+    throw new Error("Ups! Error validating user. Please Login", {
+      cause: "auth",
+    });
   }
   return user;
 }
@@ -28,7 +30,9 @@ export async function validateOwner(tableName: string, objectId: number) {
     const ownerId = result.rows[0].user_id; // take the user_id
     // check if user is the owner
     if (Number(ownerId) !== Number(user.id)) {
-      throw new Error("Ups! Error validating user");
+      throw new Error(
+        "Ups! Error validating user. It seems you are not the owner",
+      );
     }
   } catch (error) {
     throw new Error("Ups! Error validating user");
