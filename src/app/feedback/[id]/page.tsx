@@ -27,6 +27,7 @@ const Details = async ({ params }: DetailsProps) => {
   const session = await auth();
   const user = session?.user || null;
   const isPropietaryUser = user && feedback.user_id === Number(user.id);
+  console.log(feedback);
 
   return (
     <div className="mx-auto flex w-full max-w-[730px] flex-col gap-y-6">

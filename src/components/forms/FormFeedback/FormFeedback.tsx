@@ -18,9 +18,8 @@ import type { TypeFeedback } from "@/types/dataTypes";
 interface FormFeedbackProps {
   oldFeedback?: TypeFeedback;
 }
-const FormFeedback = (props: FormFeedbackProps) => {
+const FormFeedback = ({ oldFeedback }: FormFeedbackProps) => {
   const router = useRouter();
-  const { oldFeedback } = props;
   const categories = ["Feature", "UI", "UX", "Enhancement", "Bug"];
   const statusArray = ["suggestion", "planned", "in-progress", "live"];
 
@@ -46,7 +45,7 @@ const FormFeedback = (props: FormFeedbackProps) => {
         toast.success(`Feedback edited successfully`);
       }
       router.refresh();
-    } catch (error) {
+    } catch (error: any) {
       if (error instanceof ZodError) {
         const fieldErrors: { [key: string]: string } = {};
         error.errors.forEach((err) => {
@@ -56,8 +55,7 @@ const FormFeedback = (props: FormFeedbackProps) => {
         });
         setErrors(fieldErrors);
       } else {
-        console.error("Error submitting feedback:", error);
-        toast.error("Ups, something went wrong. Try again later");
+        toast.error(error.message);
       }
     }
   };

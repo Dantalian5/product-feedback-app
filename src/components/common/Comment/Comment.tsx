@@ -13,7 +13,7 @@ interface CommentProps {
 }
 const Comment = ({ comment }: CommentProps) => {
   const [reply, setReply] = React.useState<boolean>(false);
-  const { id, user, feedbackId, parentUser, content } = comment;
+  const { id, user, feedback_id, parent_user, content } = comment;
   const componentRef = React.useRef<HTMLDivElement>(null);
   const buttonRef = React.useRef<HTMLButtonElement>(null);
   const isLogged = !!useUser();
@@ -69,9 +69,9 @@ const Comment = ({ comment }: CommentProps) => {
         Reply
       </button>
       <p className="col-span-3 col-start-1 row-start-2 overflow-hidden text-ellipsis text-xs font-normal text-dark-600 sm:col-span-2 sm:col-start-2 sm:text-md">
-        {parentUser && (
+        {parent_user && (
           <span className="text-xs text-violet-200">
-            @{parentUser?.username}{" "}
+            @{parent_user?.username}{" "}
           </span>
         )}
         {content}
@@ -81,7 +81,7 @@ const Comment = ({ comment }: CommentProps) => {
           className="col-span-3 col-start-1 row-start-3 pt-2 sm:col-span-2 sm:col-start-2"
           ref={componentRef}
         >
-          <AddReply feedbackId={feedbackId} commentId={id} />
+          <AddReply feedbackId={feedback_id} commentId={id} />
         </div>
       )}
     </div>

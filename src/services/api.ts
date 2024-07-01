@@ -5,6 +5,8 @@ import type {
   TypeComment,
   TypeCommentBase,
   TypeFeedback,
+  TypeFeedbackBase,
+  TypeFeedbackWithCmtsCnt,
 } from "@/types/dataTypes";
 
 function delay(ms: number) {
@@ -70,10 +72,11 @@ export async function getFeedbacks(id?: number) {
   try {
     const result = await client.query(query);
     //await delay(50000);
+
     const data = id ? result.rows.find((row) => row.id === id) : result.rows;
     return data;
   } catch (error) {
-    console.error(error);
+    throw new Error("Error fetching feedback from the database");
   }
 }
 export async function getComments(id: number) {
@@ -97,8 +100,8 @@ export async function getComments(id: number) {
     const data: TypeComment[] = result.rows.map((row) => ({
       id: row.id,
       content: row.content,
-      feedbackId: row.feedback_id,
-      parentId: row.replying_to,
+      feedback_id: row.feedback_id,
+      parent_id: row.replying_to,
       user: {
         id: row.user_id,
         name: row.user_name,
@@ -112,7 +115,7 @@ export async function getComments(id: number) {
   }
 }
 
-export async function addFeedback(feedback: TypeFeedback) {
+export async function addFeedback(feedback: TypeFeedbackBase) {
   const user = await getSessionUser();
   const query = `
     INSERT INTO feedbacks (title, category, upvotes, status, description, user_id)
@@ -123,8 +126,8 @@ export async function addFeedback(feedback: TypeFeedback) {
   const values = [
     feedback.title,
     feedback.category,
-    feedback.upvotes || 0,
-    feedback.status || "suggestion",
+    0,
+    "suggestion",
     feedback.description,
     user.id,
   ];
@@ -151,8 +154,8 @@ export async function editFeedback(feedback: TypeFeedback) {
   const values = [
     feedback.title,
     feedback.category,
-    feedback.upvotes || 0,
-    feedback.status || "pending",
+    feedback.upvotes,
+    feedback.status,
     feedback.description,
     feedback.id,
   ];
@@ -161,7 +164,7 @@ export async function editFeedback(feedback: TypeFeedback) {
     const result = await client.query(query, values);
     return result.rows[0];
   } catch (error) {
-    throw new Error("Error updating feedback");
+    throw new Error("Ups, something went wrong. Try again later");
   }
 }
 
@@ -177,7 +180,7 @@ export async function deleteFeedback(feedbackId: number) {
     const result = await client.query(query, [feedbackId]);
     return result.rows[0];
   } catch (error) {
-    throw new Error("Error deleting feedback");
+    throw new Error("Ups, something went wrong. Try again later");
   }
 }
 export async function upVoteFeedback(feedbackId: number) {
@@ -205,8 +208,8 @@ export async function addComment(comment: TypeCommentBase) {
   const user = await getSessionUser();
   const values = [
     user.id,
-    comment.feedbackId,
-    comment.parentId,
+    comment.feedback_id,
+    comment.parent_id,
     comment.content,
   ];
   try {

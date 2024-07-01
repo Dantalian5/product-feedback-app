@@ -5,13 +5,15 @@ export interface TypeUser {
   username: string;
 }
 
-export interface TypeFeedback {
-  id: number;
+export interface TypeFeedbackBase {
   title: string;
   category: string;
-  upvotes: number;
   status: string;
   description: string;
+}
+export interface TypeFeedback extends TypeFeedbackBase {
+  id: number;
+  upvotes: number;
   user_id: number;
 }
 export interface TypeFeedbackWithCmtsCnt extends TypeFeedback {
@@ -19,8 +21,8 @@ export interface TypeFeedbackWithCmtsCnt extends TypeFeedback {
 }
 
 export interface TypeCommentBase {
-  feedbackId: number;
-  parentId: number | null;
+  feedback_id: number;
+  parent_id: number | null;
   content: string;
 }
 export interface TypeComment extends TypeCommentBase {
@@ -28,7 +30,7 @@ export interface TypeComment extends TypeCommentBase {
   user: TypeUser;
 }
 export interface TypeCommentExtended extends TypeComment {
-  parentUser: TypeUser;
+  parent_user: TypeUser;
 }
 export interface TypeOption {
   label: string;
