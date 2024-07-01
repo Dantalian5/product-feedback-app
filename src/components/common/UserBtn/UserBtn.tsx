@@ -1,8 +1,11 @@
 "use client";
 import React from "react";
+
 import Image from "next/image";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
+
+import { svgUserIcon } from "@/utils/svgIcons";
 
 const UserBtn = () => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
@@ -42,7 +45,9 @@ const UserBtn = () => {
             className=" col-start-1 row-start-1 w-fit rounded-full"
           />
         ) : (
-          <p className="text-lg font-semibold text-dark-700">A</p>
+          <span className="text-2xl font-semibold text-dark-700">
+            {svgUserIcon}
+          </span>
         )}
       </button>
       {isOpen && (

@@ -5,6 +5,8 @@ import type { TypeFeedbackWithCmtsCnt as TypeFeedback } from "@/types/dataTypes"
 
 const RoadMap = ({ feedbacks }: { feedbacks: TypeFeedback[] }) => {
   const [isMobile, setIsMobile] = React.useState<boolean>(true);
+  feedbacks.sort((a, b) => b.upvotes - a.upvotes);
+  const groupedByStatus = Object.groupBy(feedbacks, ({ status }) => status);
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -16,45 +18,39 @@ const RoadMap = ({ feedbacks }: { feedbacks: TypeFeedback[] }) => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-  feedbacks.sort((a, b) => b.upvotes - a.upvotes);
+
   const roadmap = [
     {
       status: "planned",
-      feedbacks: feedbacks.filter(
-        (request: TypeFeedback) => request.status === "planned",
-      ),
+      feedbacks: groupedByStatus["planned"] || [],
       description: "Ideas prioritized for research",
       color: "orange-100",
     },
     {
       status: "in-progress",
-      feedbacks: feedbacks.filter(
-        (request: TypeFeedback) => request.status === "in-progress",
-      ),
+      feedbacks: groupedByStatus["in-progress"] || [],
       description: "Currently being developed",
       color: "violet-200",
     },
     {
       status: "live",
-      feedbacks: feedbacks.filter(
-        (request: TypeFeedback) => request.status === "live",
-      ),
+      feedbacks: groupedByStatus["live"] || [],
       description: "Released features",
       color: "blue-100",
     },
   ];
   const [activeTab, setActiveTab] = React.useState<string>(roadmap[0].status);
   const filteredRoadmap = isMobile
-    ? roadmap.filter((e) => e.status === activeTab.toLowerCase())
+    ? roadmap.filter(({ status }) => status === activeTab.toLowerCase())
     : roadmap;
 
   return (
     <>
-      <div className="align-center border-b-dark-600/20 flex border-b sm:hidden">
+      <div className="align-center flex border-b border-b-dark-600/20 sm:hidden">
         {roadmap.map(({ status, color }) => (
           <button
             key={status}
-            className={`text-dark-700 w-full px-2 py-5 text-xs font-bold ${
+            className={`w-full px-2 py-5 text-xs font-bold text-dark-700 ${
               status.toLowerCase() === activeTab.toLowerCase() &&
               `border-b-4 border-b-${color}`
             }`}
@@ -78,10 +74,10 @@ const RoadMap = ({ feedbacks }: { feedbacks: TypeFeedback[] }) => {
             <div
               className={`mb-2 col-start-${i + 1} col-span-1 row-span-1 row-start-1`}
             >
-              <h3 className="text-dark-700 mb-1 text-lg font-bold capitalize tracking-[-0.181px]">
+              <h3 className="mb-1 text-lg font-bold capitalize tracking-[-0.181px] text-dark-700">
                 {status} ({feedbacks.length})
               </h3>
-              <p className="text-dark-600 text-xs font-normal">{description}</p>
+              <p className="text-xs font-normal text-dark-600">{description}</p>
             </div>
             {feedbacks.map((feedback, j) => (
               <FeedbackRM

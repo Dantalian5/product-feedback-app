@@ -1,18 +1,20 @@
 "use client";
 import React from "react";
+
+import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
+
 import Header from "@/components/layout/Header";
 import Feedback from "@/components/common/Feedback";
 import Empty from "@/components/common/Empty";
 import LinkBtn from "@/components/common/LinkBtn";
 import SortBy from "@/components/common/SortBy";
+import { useFilter } from "@/components/context/FilterProvider";
 import { svgLightBulb } from "@/utils/svgIcons";
-import { useSession } from "next-auth/react";
-import toast from "react-hot-toast";
 import type {
   TypeFeedbackWithCmtsCnt as TypeFeedback,
   TypeOption as Option,
 } from "@/types/dataTypes";
-import { getSessionUser } from "@/services/userAuth";
 
 interface MainProps {
   feedbacks: TypeFeedback[];
@@ -23,21 +25,9 @@ const sortOptions: Option[] = [
   { label: "Most Comments", value: "3sbmc" },
   { label: "Least Comments", value: "4sblc" },
 ];
-const Main = (props: MainProps) => {
-  const { feedbacks } = props;
+const Main = ({ feedbacks }: MainProps) => {
   const [sortAlg, setSortAlg] = React.useState<Option>(sortOptions[0]);
-  const [filters, setFilters] = React.useState<string[]>(["All"]);
-
-  const roadmap = {
-    planned: feedbacks.filter(
-      (request: TypeFeedback) => request.status === "planned",
-    ).length,
-    in_progress: feedbacks.filter(
-      (request: TypeFeedback) => request.status === "in-progress",
-    ).length,
-    live: feedbacks.filter((request: TypeFeedback) => request.status === "live")
-      .length,
-  };
+  const { filters } = useFilter();
 
   const sortFn = (a: TypeFeedback, b: TypeFeedback) => {
     switch (sortAlg.value) {
@@ -80,9 +70,6 @@ const Main = (props: MainProps) => {
 
   return (
     <>
-      <div className=" w-full lg:max-w-[255px]">
-        <Header roadmap={roadmap} filters={filters} setFilters={setFilters} />
-      </div>
       <div className="w-full flex-auto">
         <div className="flex w-full items-center justify-between gap-x-4 bg-dark-800 px-6 py-2 sm:rounded-10 sm:py-[14px]">
           <div className="flex items-center gap-x-10">

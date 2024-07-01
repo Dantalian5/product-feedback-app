@@ -1,10 +1,13 @@
 "use client";
 import React from "react";
+
 import Link from "next/link";
+
 import Hamburguer from "@/components/common/Hamburguer";
 import CheckBox from "@/components/common/CheckBox";
 import { svgCircle } from "@/utils/svgIcons";
 import UserBtn from "@/components/common/UserBtn";
+import { useFilter } from "@/components/context/FilterProvider";
 
 interface Roadmap {
   planned: number;
@@ -13,17 +16,14 @@ interface Roadmap {
 }
 interface HeaderProps {
   roadmap: Roadmap;
-  filters: string[];
-  setFilters: (filters: (prev: string[]) => string[]) => void;
 }
-const Header = (props: HeaderProps) => {
-  const { roadmap, setFilters, filters } = props;
+const Header = ({ roadmap }: HeaderProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const categories = ["All", "UI", "UX", "Enhancement", "Bug", "Feature"];
+
+  const { filters, setFilters, categories } = useFilter();
 
   const handleClick = () => {
     document.body.style.overflowY = isOpen ? "auto" : "hidden";
-
     setIsOpen((prev) => !prev);
   };
 
