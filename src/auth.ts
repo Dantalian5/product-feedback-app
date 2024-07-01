@@ -4,6 +4,7 @@ import type { Provider } from "next-auth/providers";
 import { compare } from "bcryptjs";
 import PostgresAdapter from "@auth/pg-adapter";
 import client from "@/lib/db";
+import { TypeUser } from "./types/dataTypes";
 
 async function getUser(email: string): Promise<any> {
   return {

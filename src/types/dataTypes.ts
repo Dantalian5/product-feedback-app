@@ -3,6 +3,7 @@ export interface TypeUser {
   image: string;
   name: string;
   username: string;
+  email: string;
 }
 
 export interface TypeFeedbackBase {

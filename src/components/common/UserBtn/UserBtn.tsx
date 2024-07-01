@@ -55,7 +55,7 @@ const UserBtn = () => {
           {user ? (
             <>
               <Link
-                href={"/dashboard"}
+                href={"/user/settings"}
                 className="text-md font-bold text-dark-700"
               >
                 Settings

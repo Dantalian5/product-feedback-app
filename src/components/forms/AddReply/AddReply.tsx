@@ -31,9 +31,9 @@ const AddReply = ({ feedbackId, commentId, ...rest }: AddReplyProps) => {
   const onSubmit: SubmitHandler<CommentSchema> = async (data) => {
     try {
       await addComment({
-        feedbackId: feedbackId,
+        feedback_id: feedbackId,
         content: data.content,
-        parentId: commentId,
+        parent_id: commentId,
       });
       toast.success("Reply added successfully");
       reset();

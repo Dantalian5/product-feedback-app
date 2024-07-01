@@ -1,6 +1,7 @@
 "use server";
 import client from "@/lib/db";
 import { auth } from "@/auth";
+import { TypeUser } from "@/types/dataTypes";
 
 export async function getSessionUser() {
   // This function fetch the user from the session
