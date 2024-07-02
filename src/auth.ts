@@ -1,63 +1,16 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import type { Provider } from "next-auth/providers";
-import { compare } from "bcryptjs";
 import PostgresAdapter from "@auth/pg-adapter";
-import client from "@/lib/db";
-import { TypeUser } from "./types/dataTypes";
+import { pool } from "@/lib/db";
+import authConfig from "@/auth.config";
 
-async function getUser(email: string): Promise<any> {
-  return {
-    id: 1,
-    image: "/assets/user-images/image-zena.jpg",
-    name: "Zena Kelley",
-    username: "velvetround",
-    email: "test",
-    password: "test",
-  };
-}
-
-const providers: Provider[] = [
-  Credentials({
-    name: "credentials",
-    credentials: {
-      email: { label: "email", type: "text" },
-      password: { label: "password", type: "password" },
-    },
-    authorize: async (credentials: any) => {
-      const { email, password } = credentials;
-      const user = await getUser(email);
-      // const useru = await getUserByEmail(email);
-      // const isMatch = await compare(password, user.password);
-      if (!user || password !== user.password) {
-        return null;
-      }
-      return {
-        id: user.id,
-        image: user.image,
-        name: user.name,
-        username: user.username,
-        email: user.email,
-      };
-    },
-  }),
-];
-export const providerMap = providers.map((provider) => {
-  if (typeof provider === "function") {
-    const providerData = provider();
-    return { id: providerData.id, name: providerData.name };
-  } else {
-    return { id: provider.id, name: provider.name };
-  }
-});
 export const {
   handlers: { GET, POST },
   signIn,
   signOut,
   auth,
 } = NextAuth({
-  session: { strategy: "jwt" },
-  providers,
+  adapter: PostgresAdapter(pool),
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
@@ -90,4 +43,6 @@ export const {
       return session;
     },
   },
+  session: { strategy: "jwt" },
+  ...authConfig,
 });

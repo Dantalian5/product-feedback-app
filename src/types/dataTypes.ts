@@ -3,6 +3,8 @@ export interface TypeUser {
   image: string;
   name: string;
   username: string;
+}
+export interface TypeUserFull extends TypeUser {
   email: string;
 }
 

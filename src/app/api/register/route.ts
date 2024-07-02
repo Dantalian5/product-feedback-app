@@ -10,6 +10,7 @@ export async function POST(req: Request) {
       await req.json(),
     );
     const hashedPassword = await hash(password, 12);
+    console.log(hashedPassword);
     const user = await addUser({
       name,
       username,

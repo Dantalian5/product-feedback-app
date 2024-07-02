@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import Button from "@/components/common/Button";
 import CustomLabel from "@/components/common/CustomLabel";
 import { userSchema, UserSchema } from "@/schemas/userSchema";
-import type { TypeUser } from "@/types/dataTypes";
+import type { TypeUserFull as TypeUser } from "@/types/dataTypes";
 
 const UserSettings = ({ user }: { user: TypeUser }) => {
   const router = useRouter();

@@ -36,7 +36,7 @@ export async function addUser(user: {
     throw new Error("Error adding user to db", { cause: error.code });
   }
 }
-export async function getUser(email: string) {
+export async function getUserByEmail(email: string) {
   const query = `SELECT 
     users.name, 
     users.username, 
