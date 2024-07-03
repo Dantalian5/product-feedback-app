@@ -1,7 +1,4 @@
 import NextAuth from "next-auth";
-import Credentials from "next-auth/providers/credentials";
-import PostgresAdapter from "@auth/pg-adapter";
-import { pool } from "@/lib/db";
 import authConfig from "@/auth.config";
 
 export const {
@@ -10,7 +7,6 @@ export const {
   signOut,
   auth,
 } = NextAuth({
-  adapter: PostgresAdapter(pool),
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
