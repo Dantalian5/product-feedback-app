@@ -2,21 +2,20 @@ import React from "react";
 
 import Header from "@/components/layout/Header";
 import Main from "@/components/layout/Main";
-import { getFeedbacks } from "@/services/api";
+import { getAllFeedbacks } from "@/services/api";
 import FilterProvider from "@/components/context/FilterProvider/FilterProvider";
-import type { TypeFeedbackWithCmtsCnt as TypeFeedback } from "@/types/dataTypes";
+import type { Feedback } from "@/types/global";
 
 const Home = async () => {
-  const feedbacks = (await getFeedbacks()) || [];
+  // const feedbacks = await getFeedbacks();
+  const feedbacks: Feedback[] = await getAllFeedbacks();
   const roadmap = {
-    planned: feedbacks.filter(
-      (request: TypeFeedback) => request.status === "planned",
-    ).length,
-    in_progress: feedbacks.filter(
-      (request: TypeFeedback) => request.status === "in-progress",
-    ).length,
-    live: feedbacks.filter((request: TypeFeedback) => request.status === "live")
+    planned: feedbacks.filter((feedback) => feedback.status === "planned")
       .length,
+    inProgress: feedbacks.filter(
+      (feedback) => feedback.status === "in-progress",
+    ).length,
+    live: feedbacks.filter((feedback) => feedback.status === "live").length,
   };
 
   return (

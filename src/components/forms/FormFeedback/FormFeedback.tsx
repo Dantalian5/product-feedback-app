@@ -13,10 +13,24 @@ import TextArea from "@/components/common/TextArea";
 import Input from "@/components/common/Input";
 import { svgAddIcon, svgEditIcon } from "@/utils/svgIcons";
 import { feedbackSchema } from "@/schemas/feedbackSchema";
-import type { TypeFeedback } from "@/types/dataTypes";
 
+interface Feedback {
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  status: string;
+  upvotes: number;
+  userId: number;
+  commentsCount: number;
+}
+interface NewFeedback {
+  title: string;
+  description: string;
+  category: string;
+}
 interface FormFeedbackProps {
-  oldFeedback?: TypeFeedback;
+  oldFeedback?: Feedback;
 }
 const FormFeedback = ({ oldFeedback }: FormFeedbackProps) => {
   const router = useRouter();
@@ -27,7 +41,6 @@ const FormFeedback = ({ oldFeedback }: FormFeedbackProps) => {
     oldFeedback || {
       title: "",
       category: categories[0],
-      status: statusArray[0],
       description: "",
     },
   );
@@ -38,10 +51,10 @@ const FormFeedback = ({ oldFeedback }: FormFeedbackProps) => {
     try {
       feedbackSchema.parse(formData);
       if (!oldFeedback) {
-        await addFeedback(formData as TypeFeedback);
+        await addFeedback(formData as NewFeedback);
         toast.success(`Feedback added successfully`);
       } else {
-        await editFeedback(formData as TypeFeedback);
+        await editFeedback(formData as Feedback);
         toast.success(`Feedback edited successfully`);
       }
       router.refresh();

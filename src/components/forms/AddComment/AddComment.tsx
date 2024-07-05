@@ -2,6 +2,7 @@
 import React from "react";
 
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,14 +10,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "@/components/common/Button";
 import { addComment } from "@/services/api";
 import { commentSchema, CommentSchema } from "@/schemas/commentSchema";
-import { useUser } from "@/components/context/UserProvider";
 
 interface AddCommentProps {
   feedbackId: number;
 }
 const AddComment = ({ feedbackId }: AddCommentProps) => {
   const router = useRouter();
-  const user = useUser();
+  const session = !!useSession();
   const {
     register,
     handleSubmit,
@@ -33,8 +33,8 @@ const AddComment = ({ feedbackId }: AddCommentProps) => {
   const onSubmit: SubmitHandler<CommentSchema> = async (data) => {
     try {
       await addComment({
-        feedback_id: feedbackId,
-        parent_id: null,
+        feedbackId: feedbackId,
+        parentId: null,
         content: data.content,
       });
       toast.success("Comment added successfully");
@@ -49,9 +49,9 @@ const AddComment = ({ feedbackId }: AddCommentProps) => {
     <form
       id={"addCommentForm"}
       onSubmit={handleSubmit(onSubmit)}
-      className={`w-full rounded-10 bg-white p-6 sm:px-8 sm:pb-8 ${!user && " *:opacity-70"}`}
+      className={`w-full rounded-10 bg-white p-6 sm:px-8 sm:pb-8 ${!session && " *:opacity-70"}`}
     >
-      {!user && (
+      {!session && (
         <span className="mb-4 block text-sm font-normal text-orange-200">
           You must be logged in to comment
         </span>
@@ -69,7 +69,7 @@ const AddComment = ({ feedbackId }: AddCommentProps) => {
           {...register("content")}
           rows={2}
           maxLength={250}
-          disabled={!user}
+          disabled={!session}
           placeholder="Type your comment here"
           aria-label="Type your comment here"
         />
@@ -83,7 +83,7 @@ const AddComment = ({ feedbackId }: AddCommentProps) => {
         <p className=" text-xs font-normal text-dark-600 sm:text-md">
           {remaining} Characters left
         </p>
-        <Button type="submit" classe="violet" disabled={!user}>
+        <Button type="submit" classe="violet" disabled={!session}>
           Post Comment
         </Button>
       </div>

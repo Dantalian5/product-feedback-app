@@ -10,7 +10,7 @@ export const {
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      const paths = ["/protected", "/new", "/edit"];
+      const paths = ["/protected", "/new", "/edit", "/settings"];
       const isProtected = paths.some((path) => nextUrl.pathname.endsWith(path));
 
       if (isProtected && !isLoggedIn) {

@@ -3,23 +3,23 @@ import React from "react";
 
 import Image from "next/image";
 import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
 import AddReply from "@/components/forms/AddReply";
-import { useUser } from "@/components/context/UserProvider";
-import type { TypeUser, TypeCommentExtended } from "@/types/dataTypes";
+import type { Comment, User } from "@/types/global";
 
 interface CommentProps {
-  comment: TypeCommentExtended;
+  comment: Comment & { parentUser: User };
 }
 const Comment = ({ comment }: CommentProps) => {
   const [reply, setReply] = React.useState<boolean>(false);
-  const { id, user, feedback_id, parent_user, content } = comment;
+  const { id, user, feedbackId, parentUser, content } = comment;
   const componentRef = React.useRef<HTMLDivElement>(null);
   const buttonRef = React.useRef<HTMLButtonElement>(null);
-  const isLogged = !!useUser();
+  const session = !!useSession();
 
   const handleClickOnReply = () => {
-    if (!isLogged) {
+    if (!session) {
       toast.error("Please Login to Reply");
       setReply(false);
     } else {
@@ -62,16 +62,16 @@ const Comment = ({ comment }: CommentProps) => {
         </p>
       </div>
       <button
-        className={`${!isLogged && "opacity-50"} col-start-3 row-start-1 w-fit text-xs font-semibold text-blue-200`}
+        className={`${!session && "opacity-50"} col-start-3 row-start-1 w-fit text-xs font-semibold text-blue-200`}
         onClick={handleClickOnReply}
         ref={buttonRef}
       >
         Reply
       </button>
       <p className="col-span-3 col-start-1 row-start-2 overflow-hidden text-ellipsis text-xs font-normal text-dark-600 sm:col-span-2 sm:col-start-2 sm:text-md">
-        {parent_user && (
+        {parentUser && (
           <span className="text-xs text-violet-200">
-            @{parent_user?.username}{" "}
+            @{parentUser?.username}{" "}
           </span>
         )}
         {content}
@@ -81,7 +81,7 @@ const Comment = ({ comment }: CommentProps) => {
           className="col-span-3 col-start-1 row-start-3 pt-2 sm:col-span-2 sm:col-start-2"
           ref={componentRef}
         >
-          <AddReply feedbackId={feedback_id} commentId={id} />
+          <AddReply feedbackId={feedbackId} commentId={id} />
         </div>
       )}
     </div>

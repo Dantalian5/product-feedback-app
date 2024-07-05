@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import UpVote from "@/components/common/UpVote";
-import { svgMessage, svgCircle } from "@/utils/svgIcons";
+import { svgMessage } from "@/utils/svgIcons";
 
 interface FeedbackProps {
   id: number;

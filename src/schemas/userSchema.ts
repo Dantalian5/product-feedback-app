@@ -15,7 +15,7 @@ export const registerUserSchema = z
     password: z
       .string()
       .min(1, "Password is required")
-      .min(8, "Password must be more than 8 characters")
+      .min(4, "Password must be more than 4 characters")
       .max(32, "Password must be less than 32 characters"),
     confirmPassword: z.string().min(1, "Please confirm your password"),
   })
@@ -29,5 +29,8 @@ export const loginUserSchema = z.object({
     .string()
     .min(1, "Email is required")
     .email("Invalid email or password"),
-  password: z.string().min(1, "Password is required"),
+  password: z
+    .string()
+    .min(1, "Password is required")
+    .min(4, "Password must be more than 4 characters"),
 });

@@ -4,17 +4,14 @@ import React from "react";
 import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
 
-import Header from "@/components/layout/Header";
 import Feedback from "@/components/common/Feedback";
 import Empty from "@/components/common/Empty";
 import LinkBtn from "@/components/common/LinkBtn";
 import SortBy from "@/components/common/SortBy";
 import { useFilter } from "@/components/context/FilterProvider";
 import { svgLightBulb } from "@/utils/svgIcons";
-import type {
-  TypeFeedbackWithCmtsCnt as TypeFeedback,
-  TypeOption as Option,
-} from "@/types/dataTypes";
+import type { Feedback as TypeFeedback } from "@/types/global";
+import type { Option } from "@/types/filters";
 
 interface MainProps {
   feedbacks: TypeFeedback[];
@@ -38,10 +35,10 @@ const Main = ({ feedbacks }: MainProps) => {
         return a.upvotes - b.upvotes;
         break;
       case "3sbmc":
-        return b.comments_count - a.comments_count;
+        return b.commentsCount - a.commentsCount;
         break;
       case "4sblc":
-        return a.comments_count - a.comments_count;
+        return a.commentsCount - a.commentsCount;
         break;
       default:
         return 0;
@@ -101,7 +98,7 @@ const Main = ({ feedbacks }: MainProps) => {
                 description={feedback.description}
                 category={feedback.category}
                 upvotes={feedback.upvotes}
-                commentsNumber={feedback.comments_count}
+                commentsNumber={feedback.commentsCount}
               />
             ))
           )}

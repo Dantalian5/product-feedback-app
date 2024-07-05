@@ -3,7 +3,6 @@ import React from "react";
 import LinkBtn from "@/components/common/LinkBtn";
 import UserSettings from "@/components/forms/UserSettings";
 import { getSessionUser } from "@/services/userAuth";
-import type { TypeUser } from "@/types/dataTypes";
 
 const Settings = async () => {
   const user = await getSessionUser();

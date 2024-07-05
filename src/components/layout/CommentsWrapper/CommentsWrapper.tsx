@@ -1,17 +1,30 @@
 import React from "react";
 
 import Comment from "@/components/common/Comment";
-import type { TypeComment, TypeUser } from "@/types/dataTypes";
+
+interface User {
+  id: number;
+  name: string;
+  username: string;
+  image: string;
+}
+interface TypeComment {
+  id: number;
+  content: string;
+  feedbackId: number;
+  parentId: number | null;
+  user: User;
+}
 
 const recursiveCommentsOrderer = (list: TypeComment[]) => {
   const orderedList: TypeComment[] = [];
   const recursiveSort = (element: any) => {
     orderedList.push(element);
     list
-      .filter((e) => e.parent_id === element.id)
+      .filter((e) => e.parentId === element.id)
       .forEach((reply) => recursiveSort(reply));
   };
-  list.filter((e) => e.parent_id === null).forEach((e) => recursiveSort(e));
+  list.filter((e) => e.parentId === null).forEach((e) => recursiveSort(e));
   return orderedList;
 };
 
@@ -25,17 +38,17 @@ const CommentsWrapper = ({ comments }: { comments: TypeComment[] }) => {
       </h2>
       {orderedComments.map((comment, index) => (
         <React.Fragment key={comment.id}>
-          {!comment.parent_id && index !== 0 && (
+          {!comment.parentId && index !== 0 && (
             <span className="h-[1px] w-full bg-dark-600/20 first:hidden"></span>
           )}
           <div
-            className={`${comment.parent_id && "relative pl-6 after:absolute after:left-5 after:top-0 after:h-full after:w-0 after:border-l after:border-l-dark-600/10 after:content-[''] sm:pl-11"} w-full`}
+            className={`${comment.parentId && "relative pl-6 after:absolute after:left-5 after:top-0 after:h-full after:w-0 after:border-l after:border-l-dark-600/10 after:content-[''] sm:pl-11"} w-full`}
           >
             <Comment
               comment={{
                 ...comment,
-                parent_user: comments.find((e) => e.id === comment.parent_id)
-                  ?.user as TypeUser,
+                parentUser: comments.find((e) => e.id === comment.parentId)
+                  ?.user as User,
               }}
             />
           </div>

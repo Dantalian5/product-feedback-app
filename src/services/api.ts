@@ -1,220 +1,227 @@
 "use server";
-import client from "@/lib/db";
-import { getSessionUser, validateOwner } from "@/services/userAuth";
-import type {
-  TypeComment,
-  TypeCommentBase,
-  TypeFeedback,
-  TypeFeedbackBase,
-  TypeFeedbackWithCmtsCnt,
-} from "@/types/dataTypes";
+import prisma from "@/lib/prismaDB";
+import { getUser } from "@/services/auth";
+// import type { Feedback, Comment } from "@/types/global";
+import type { DBFeedback } from "@/types/prisma";
 
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-export async function addUser(user: {
+interface User {
+  id: number;
   name: string;
   username: string;
-  email: string;
-  password: string;
-}) {
-  const query = `
-      INSERT INTO users (name, username, email, password)
-      VALUES ($1, $2, $3, $4)
-      RETURNING *;
-    `;
-  try {
-    const result = await client.query(query, [
-      user.name,
-      user.username,
-      user.email,
-      user.password,
-    ]);
-    return result.rows[0];
-  } catch (error: any) {
-    throw new Error("Error adding user to db", { cause: error.code });
-  }
+  image: string;
 }
-export async function getUserByEmail(email: string) {
-  const query = `SELECT 
-    users.name, 
-    users.username, 
-    users.email, 
-    users.image
-    FROM users 
-    WHERE users.email = $1;`;
+interface Feedback {
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  status: string;
+  upvotes: number;
+  userId: number;
+  commentsCount: number;
+  isEditable?: boolean;
+  comments?: Comment[];
+}
+interface Comment {
+  id: number;
+  content: string;
+  feedbackId: number;
+  parentId: number | null;
+  user: User;
+}
 
+// API logic using server actions
+
+// Get User from db by email
+export async function getUserByEmail(email: string) {
   try {
-    await client.connect();
-    const result = await client.query(query, [email]);
-    await client.end();
-    return result.rows[0];
+    const user = await prisma.users.findUnique({
+      where: {
+        email: email,
+      },
+    });
+    return user;
   } catch (error) {
     throw new Error("Error fetching user from db");
   }
 }
 
-export async function getFeedbacks(id?: number) {
-  const query = `SELECT 
-  feedbacks.id,
-  feedbacks.title, 
-  feedbacks.category, 
-  feedbacks.upvotes, 
-  feedbacks.status, 
-  feedbacks.description,
-  feedbacks.user_id,
-  CAST(COUNT(comments.id) AS INTEGER) AS comments_count
-  FROM feedbacks 
-  LEFT JOIN comments ON feedbacks.id = comments.feedback_id
-  GROUP BY feedbacks.id`;
-
+//Get all feedback from db
+export async function getAllFeedbacks() {
   try {
-    const result = await client.query(query);
-    //await delay(50000);
+    const feedbacks = await prisma.feedbacks.findMany({
+      include: {
+        comments: true,
+      },
+    });
 
-    const data = id ? result.rows.find((row) => row.id === id) : result.rows;
+    if (!feedbacks) return [];
+
+    const data: Feedback[] = feedbacks.map((feedback: any) => ({
+      id: Number(feedback.id),
+      title: feedback.title,
+      description: feedback.description,
+      category: feedback.category,
+      status: feedback.status,
+      upvotes: Number(feedback.upvotes),
+      userId: Number(feedback.user_id),
+      commentsCount: feedback.comments.length,
+    }));
+
     return data;
   } catch (error) {
     throw new Error("Error fetching feedback from the database");
   }
 }
-export async function getComments(id: number) {
-  const query = `
-  SELECT 
-    comments.id,
-    comments.content,
-    comments.feedback_id,
-    comments.replying_to,
-    users.id AS user_id,
-    users.name AS user_name,
-    users.username AS user_username,
-    users.image AS user_image
-  FROM comments
-  JOIN users ON comments.user_id = users.id
-  WHERE comments.feedback_id = $1;
-  `;
 
+//Get feedback by id, populate with comments & users (validate is user can edit)
+export async function getFeedbackById(
+  id: number,
+  includeComments: boolean = false,
+) {
   try {
-    const result = await client.query(query, [id]);
-    const data: TypeComment[] = result.rows.map((row) => ({
-      id: row.id,
-      content: row.content,
-      feedback_id: row.feedback_id,
-      parent_id: row.replying_to,
-      user: {
-        id: row.user_id,
-        name: row.user_name,
-        username: row.user_username,
-        image: row.user_image,
+    const feedback: any = await prisma.feedbacks.findUnique({
+      where: { id },
+      include: {
+        comments: {
+          include: {
+            users: {
+              select: {
+                id: true,
+                name: true,
+                username: true,
+                image: true,
+              },
+            },
+          },
+        },
       },
-    }));
+    });
+
+    if (!feedback) throw new Error("Feedback not found");
+
+    const data: Feedback = {
+      id: Number(feedback.id),
+      title: feedback.title,
+      description: feedback.description,
+      category: feedback.category,
+      status: feedback.status,
+      upvotes: Number(feedback.upvotes),
+      userId: Number(feedback.user_id),
+      commentsCount: Number(feedback.comments?.length),
+      isEditable: Number(feedback.user_id) === Number((await getUser()).id),
+    };
+
+    if (includeComments) {
+      data.comments = feedback.comments.map((comment: any) => ({
+        id: comment.id,
+        content: comment.content,
+        feedbackId: comment.feedback_id,
+        parentId: comment.replying_to,
+        user: {
+          id: comment.users.id,
+          name: comment.users.name,
+          username: comment.users.username,
+          image: comment.users.image,
+        },
+      }));
+    }
+
     return data;
   } catch (error) {
-    console.error(error);
+    throw new Error("Error fetching feedback from the database");
   }
 }
-
-export async function addFeedback(feedback: TypeFeedbackBase) {
-  const user = await getSessionUser();
-  const query = `
-    INSERT INTO feedbacks (title, category, upvotes, status, description, user_id)
-    VALUES ($1, $2, $3, $4, $5, $6)
-    RETURNING *;
-  `;
-
-  const values = [
-    feedback.title,
-    feedback.category,
-    0,
-    "suggestion",
-    feedback.description,
-    user.id,
-  ];
-
+// Add feedback to db
+export async function addFeedback(feedback: {
+  title: string;
+  description: string;
+  category: string;
+}) {
+  const user = await getUser();
   try {
-    const result = await client.query(query, values);
-    return result.rows[0];
+    const result = await prisma.feedbacks.create({
+      data: {
+        title: feedback.title,
+        category: feedback.category,
+        upvotes: 0,
+        status: "suggestion",
+        description: feedback.description,
+        user_id: Number(user.id),
+      },
+    });
+
+    return result;
   } catch (error) {
-    throw new Error("Error inserting feedback");
+    throw new Error("Ups, something went wrong. Try again later");
   }
 }
+// Edit feedback from db
+export async function editFeedback(feedback: Feedback) {
+  const user = await getUser();
 
-export async function editFeedback(feedback: TypeFeedback) {
-  const user = await getSessionUser();
-  if (feedback.user_id !== Number(user.id)) {
+  if (Number(feedback.userId) !== Number(user.id)) {
     throw new Error("Error updating feedback");
   }
-  const query = `
-    UPDATE feedbacks
-    SET title = $1, category = $2, upvotes = $3, status = $4, description = $5
-    WHERE id = $6
-    RETURNING *;
-  `;
-  const values = [
-    feedback.title,
-    feedback.category,
-    feedback.upvotes,
-    feedback.status,
-    feedback.description,
-    feedback.id,
-  ];
-  try {
-    await validateOwner("feedbacks", feedback.id);
-    const result = await client.query(query, values);
-    return result.rows[0];
-  } catch (error) {
-    throw new Error("Ups, something went wrong. Try again later");
-  }
-}
 
-export async function deleteFeedback(feedbackId: number) {
-  const user = await getSessionUser();
-  const query = `
-    DELETE FROM feedbacks
-    WHERE id = $1
-    RETURNING *;
-  `;
   try {
-    await validateOwner("feedbacks", feedbackId);
-    const result = await client.query(query, [feedbackId]);
-    return result.rows[0];
+    const result = await prisma.feedbacks.update({
+      where: { id: feedback.id },
+      data: {
+        title: feedback.title,
+        category: feedback.category,
+        status: feedback.status,
+        description: feedback.description,
+      },
+    });
+
+    return result;
   } catch (error) {
     throw new Error("Ups, something went wrong. Try again later");
   }
 }
-export async function upVoteFeedback(feedbackId: number) {
-  const user = await getSessionUser();
-  const query = `
-    UPDATE feedbacks
-    SET upvotes = upvotes + 1
-    WHERE id = $1
-    RETURNING *;
-  `;
+// Delete feedback from db
+export async function deleteFeedback(id: number) {
+  const user = await getUser();
   try {
-    const result = await client.query(query, [feedbackId]);
-    return result.rows[0];
+    // Asegúrate de que el feedback pertenece al usuario antes de eliminarlo
+    const result = await prisma.feedbacks.deleteMany({
+      where: {
+        id: id,
+        user_id: Number(user.id),
+      },
+    });
+
+    if (result.count === 0) {
+      throw new Error(
+        "Ups! Error validating user. It seems you are not the owner",
+      );
+    }
+
+    return result;
   } catch (error) {
     throw new Error("Ups, something went wrong. Try again later");
   }
 }
-// Add comment (POST API FUNCTION)
-export async function addComment(comment: TypeCommentBase) {
-  const query = `
-    INSERT INTO comments (user_id, feedback_id, replying_to, content)
-    VALUES ($1, $2, $3, $4)
-    RETURNING *;
-  `;
-  const user = await getSessionUser();
-  const values = [
-    user.id,
-    comment.feedback_id,
-    comment.parent_id,
-    comment.content,
-  ];
+// Add comment to db
+export async function addComment(comment: {
+  feedbackId: number;
+  parentId: number | null;
+  content: string;
+}) {
+  const user = await getUser();
+
   try {
-    const result = await client.query(query, values);
-    return result.rows[0];
+    const result = await prisma.comments.create({
+      data: {
+        user_id: Number(user.id),
+        feedback_id: comment.feedbackId,
+        replying_to: comment.parentId,
+        content: comment.content,
+      },
+    });
+
+    return result;
   } catch (error) {
     throw new Error("Ups, something went wrong. Try again later");
   }

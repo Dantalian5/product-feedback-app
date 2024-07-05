@@ -11,7 +11,7 @@ import { useFilter } from "@/components/context/FilterProvider";
 
 interface Roadmap {
   planned: number;
-  in_progress: number;
+  inProgress: number;
   live: number;
 }
 interface HeaderProps {
@@ -27,7 +27,7 @@ const Header = ({ roadmap }: HeaderProps) => {
     setIsOpen((prev) => !prev);
   };
 
-  const total = roadmap.planned + roadmap.in_progress + roadmap.live;
+  const total = roadmap.planned + roadmap.inProgress + roadmap.live;
 
   return (
     <header
@@ -89,7 +89,7 @@ const Header = ({ roadmap }: HeaderProps) => {
               <span className=" text-8 text-violet-200">{svgCircle}</span>
               <p className="text-base font-normal text-dark-600">In-Progress</p>
               <p className="ml-auto text-base font-bold text-dark-600">
-                {roadmap.in_progress}
+                {roadmap.inProgress}
               </p>
             </div>
             <div className="flex w-full items-center justify-start gap-x-4">
