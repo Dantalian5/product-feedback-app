@@ -13,7 +13,7 @@ import { userSchema, UserSchema } from "@/schemas/userSchema";
 import { updateUserData } from "@/services/actions/userActions";
 import type { User } from "@/types/global";
 
-const UserSettings = ({ user }: { user: User & { email: string } }) => {
+const UserPassword = () => {
   const router = useRouter();
 
   const {
@@ -44,15 +44,6 @@ const UserSettings = ({ user }: { user: User & { email: string } }) => {
       className="relative rounded-10 bg-white px-6 pb-6 pt-11 sm:px-10 sm:pb-10 sm:pt-[52px]"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <span className=" absolute left-6 top-0 -translate-y-1/2 text-3xl sm:left-[42px] sm:text-4xl">
-        <Image
-          src={user.image}
-          alt={"user avatar"}
-          width={40}
-          height={40}
-          className="w-[50px] rounded-full"
-        />
-      </span>
       <div className="mb-8 flex flex-col gap-y-6">
         <CustomLabel
           label="Name"
@@ -108,4 +99,4 @@ const UserSettings = ({ user }: { user: User & { email: string } }) => {
   );
 };
 
-export default UserSettings;
+export default UserPassword;

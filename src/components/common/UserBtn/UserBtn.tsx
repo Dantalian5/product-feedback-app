@@ -5,7 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 
-import { svgUserIcon } from "@/utils/svgIcons";
+import {
+  svgUserIcon,
+  svgSettings,
+  svgLogout,
+  svgLogin,
+  svgSignin,
+} from "@/utils/svgIcons";
 
 const UserBtn = () => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
@@ -51,27 +57,39 @@ const UserBtn = () => {
         )}
       </button>
       {isOpen && (
-        <div className="absolute right-0 top-[calc(100%+0.5rem)] z-50 flex flex-col gap-y-2 rounded-10 bg-white p-6 shadow-lg">
+        <div className="absolute right-0 top-[calc(100%+0.5rem)] z-50 flex w-max flex-col gap-y-4 rounded-10 bg-white p-6 shadow-lg">
           {user ? (
             <>
               <Link
                 href={"/user/settings"}
-                className="text-md font-bold text-dark-700"
+                className="flex items-center gap-2 text-md font-bold text-dark-700"
               >
-                Settings
+                <span>{svgSettings}</span>Settings
               </Link>
               <span className="h-[1px] w-full bg-dark-600/50"></span>
               <button
                 onClick={() => logOut()}
-                className="text-md font-bold text-dark-700"
+                className="flex items-center gap-2 text-md font-bold text-dark-700"
               >
-                Logout
+                <span>{svgLogout}</span>Logout
               </button>
             </>
           ) : (
-            <Link href={"/login"} className="text-md font-bold text-dark-700">
-              Login
-            </Link>
+            <>
+              <Link
+                href={"/login"}
+                className="flex items-center gap-2 text-md font-bold text-dark-700"
+              >
+                <span>{svgLogin}</span>Login
+              </Link>
+              <span className="h-[1px] w-full bg-dark-600/50"></span>
+              <Link
+                href={"/user/register"}
+                className="flex items-center gap-2 text-md font-bold text-dark-700"
+              >
+                <span>{svgSignin}</span>Sign In
+              </Link>
+            </>
           )}
         </div>
       )}

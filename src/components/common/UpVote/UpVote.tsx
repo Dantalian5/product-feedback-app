@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 import { svgUpArrow } from "@/utils/svgIcons";
-import { upVoteFeedback } from "@/services/api";
+import { upVoteFeedback } from "@/services/actions/feedbackActions";
 
 interface UpVoteProps extends React.ComponentPropsWithRef<"button"> {
   value?: number;

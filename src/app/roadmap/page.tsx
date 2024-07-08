@@ -1,11 +1,10 @@
 import React from "react";
 import LinkBtn from "@/components/common/LinkBtn";
 import RoadMap from "@/components/layout/RoadMap";
-import type { TypeFeedbackWithCmtsCnt as TypeFeedback } from "@/types/dataTypes";
-import { getFeedbacks } from "@/services/api";
+import { getAllFeedbacks } from "@/services/actions/feedbackActions";
 
 const RoadmapPage = async () => {
-  const feedbacks: TypeFeedback[] = await getFeedbacks();
+  const feedbacks = await getAllFeedbacks();
   return (
     <div>
       <div className="flex w-full items-center justify-between gap-x-4 bg-dark-800 p-6 sm:mb-8 sm:rounded-10 sm:px-8 sm:py-7">

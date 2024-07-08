@@ -23,6 +23,7 @@ export const registerUserSchema = z
     path: ["confirmPassword"],
     message: "Passwords do not match",
   });
+export type RegisterUserSchema = z.infer<typeof registerUserSchema>;
 
 export const loginUserSchema = z.object({
   email: z
@@ -34,3 +35,4 @@ export const loginUserSchema = z.object({
     .min(1, "Password is required")
     .min(4, "Password must be more than 4 characters"),
 });
+export type LoginUserSchema = z.infer<typeof loginUserSchema>;

@@ -2,7 +2,7 @@ import React from "react";
 
 import Header from "@/components/layout/Header";
 import Main from "@/components/layout/Main";
-import { getAllFeedbacks } from "@/services/api";
+import { getAllFeedbacks } from "@/services/actions/feedbackActions";
 import FilterProvider from "@/components/context/FilterProvider/FilterProvider";
 import type { Feedback } from "@/types/global";
 

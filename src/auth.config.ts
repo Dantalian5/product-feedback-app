@@ -3,7 +3,7 @@ import type { NextAuthConfig } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
 import { loginSchema } from "@/schemas/loginSchema";
-import { getUserByEmail } from "@/services/api";
+import { getUserByEmail } from "@/services/actions/userActions";
 import prisma from "@/lib/prismaDB";
 
 export default {

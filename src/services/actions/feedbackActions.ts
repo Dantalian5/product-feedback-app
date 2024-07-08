@@ -1,52 +1,8 @@
 "use server";
 import prisma from "@/lib/prismaDB";
 import { getUser } from "@/services/auth";
-// import type { Feedback, Comment } from "@/types/global";
-import type { DBFeedback } from "@/types/prisma";
+import type { NewFeedback, Feedback, Comment } from "@/types/global";
 
-interface User {
-  id: number;
-  name: string;
-  username: string;
-  image: string;
-}
-interface Feedback {
-  id: number;
-  title: string;
-  description: string;
-  category: string;
-  status: string;
-  upvotes: number;
-  userId: number;
-  commentsCount: number;
-  isEditable?: boolean;
-  comments?: Comment[];
-}
-interface Comment {
-  id: number;
-  content: string;
-  feedbackId: number;
-  parentId: number | null;
-  user: User;
-}
-
-// API logic using server actions
-
-// Get User from db by email
-export async function getUserByEmail(email: string) {
-  try {
-    const user = await prisma.users.findUnique({
-      where: {
-        email: email,
-      },
-    });
-    return user;
-  } catch (error) {
-    throw new Error("Error fetching user from db");
-  }
-}
-
-//Get all feedback from db
 export async function getAllFeedbacks() {
   try {
     const feedbacks = await prisma.feedbacks.findMany({
@@ -80,7 +36,7 @@ export async function getFeedbackById(
   includeComments: boolean = false,
 ) {
   try {
-    const feedback: any = await prisma.feedbacks.findUnique({
+    const feedback = await prisma.feedbacks.findUnique({
       where: { id },
       include: {
         comments: {
@@ -102,10 +58,10 @@ export async function getFeedbackById(
 
     const data: Feedback = {
       id: Number(feedback.id),
-      title: feedback.title,
-      description: feedback.description,
-      category: feedback.category,
-      status: feedback.status,
+      title: feedback.title as string,
+      description: feedback.description as string,
+      category: feedback.category as string,
+      status: feedback.status as string,
       upvotes: Number(feedback.upvotes),
       userId: Number(feedback.user_id),
       commentsCount: Number(feedback.comments?.length),
@@ -133,13 +89,9 @@ export async function getFeedbackById(
   }
 }
 // Add feedback to db
-export async function addFeedback(feedback: {
-  title: string;
-  description: string;
-  category: string;
-}) {
-  const user = await getUser();
+export async function addFeedback(feedback: NewFeedback) {
   try {
+    const user = await getUser();
     const result = await prisma.feedbacks.create({
       data: {
         title: feedback.title,
@@ -158,13 +110,11 @@ export async function addFeedback(feedback: {
 }
 // Edit feedback from db
 export async function editFeedback(feedback: Feedback) {
-  const user = await getUser();
-
-  if (Number(feedback.userId) !== Number(user.id)) {
-    throw new Error("Error updating feedback");
-  }
-
   try {
+    const user = await getUser();
+    if (Number(feedback.userId) !== Number(user.id)) {
+      throw new Error("Error updating feedback");
+    }
     const result = await prisma.feedbacks.update({
       where: { id: feedback.id },
       data: {
@@ -182,9 +132,8 @@ export async function editFeedback(feedback: Feedback) {
 }
 // Delete feedback from db
 export async function deleteFeedback(id: number) {
-  const user = await getUser();
   try {
-    // Asegúrate de que el feedback pertenece al usuario antes de eliminarlo
+    const user = await getUser();
     const result = await prisma.feedbacks.deleteMany({
       where: {
         id: id,
@@ -197,27 +146,22 @@ export async function deleteFeedback(id: number) {
         "Ups! Error validating user. It seems you are not the owner",
       );
     }
-
     return result;
   } catch (error) {
     throw new Error("Ups, something went wrong. Try again later");
   }
 }
-// Add comment to db
-export async function addComment(comment: {
-  feedbackId: number;
-  parentId: number | null;
-  content: string;
-}) {
-  const user = await getUser();
 
+// Upvote feedback
+export async function upVoteFeedback(feedbackId: number) {
   try {
-    const result = await prisma.comments.create({
+    const user = await getUser();
+    const result = await prisma.feedbacks.update({
+      where: { id: feedbackId },
       data: {
-        user_id: Number(user.id),
-        feedback_id: comment.feedbackId,
-        replying_to: comment.parentId,
-        content: comment.content,
+        upvotes: {
+          increment: 1,
+        },
       },
     });
 

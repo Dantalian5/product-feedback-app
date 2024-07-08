@@ -1,35 +1,25 @@
 "use client";
 import React from "react";
+
 import toast from "react-hot-toast";
 import { useRouter, useSearchParams } from "next/navigation";
-import Button from "@/components/common/Button";
-import CustomLabel from "@/components/common/CustomLabel";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-type Inputs = {
-  name: string;
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
+import Button from "@/components/common/Button";
+import CustomLabel from "@/components/common/CustomLabel";
+import { addUserToDb } from "@/services/actions/userActions";
+import { type RegisterUserSchema } from "@/schemas/userSchema";
+
 const RegisterForm = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [errors, setErrors] = React.useState<{ [key: string]: string }>({});
 
-  const { register, handleSubmit, reset } = useForm<Inputs>();
+  const { register, handleSubmit, reset } = useForm<RegisterUserSchema>();
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<RegisterUserSchema> = async (data) => {
     try {
-      const res = await fetch("/api/register", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const errorData = await res.json();
+      const res = await addUserToDb(data);
       switch (res.status) {
         case 201:
           toast.success("User created successfully");
@@ -40,7 +30,7 @@ const RegisterForm = () => {
         case 400:
           toast.error("Please fill in all the fields correctly");
           const fieldErrors: { [key: string]: string } = {};
-          errorData.errors.forEach((err: any) => {
+          res.errorList?.forEach((err: any) => {
             if (err.path.length > 0) {
               fieldErrors[err.path[0] as string] = err.message;
             }
@@ -53,7 +43,6 @@ const RegisterForm = () => {
           break;
         case 500:
           toast.error("Internal server error. Please try again later");
-          console.log(errorData);
           break;
         default:
           toast.error("Something went wrong");

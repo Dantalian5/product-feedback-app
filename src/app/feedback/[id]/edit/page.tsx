@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 
 import LinkBtn from "@/components/common/LinkBtn";
 import FormFeedback from "@/components/forms/FormFeedback";
-import { getFeedbackById } from "@/services/api";
+import { getFeedbackById } from "@/services/actions/feedbackActions";
 interface EditFeedbackProps {
   params: {
     id: string;

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { getFeedbackById } from "@/services/api";
+import { getFeedbackById } from "@/services/actions/feedbackActions";
 import Feedback from "@/components/common/Feedback";
 import LinkBtn from "@/components/common/LinkBtn";
 import AddComment from "@/components/forms/AddComment";

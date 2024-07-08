@@ -8,7 +8,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import Button from "@/components/common/Button";
-import { addComment } from "@/services/api";
+import { addComment } from "@/services/actions/commentActions";
 import { commentSchema, CommentSchema } from "@/schemas/commentSchema";
 
 interface AddCommentProps {

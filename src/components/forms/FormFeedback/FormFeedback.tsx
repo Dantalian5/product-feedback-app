@@ -5,7 +5,11 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { ZodError } from "zod";
 
-import { addFeedback, editFeedback, deleteFeedback } from "@/services/api";
+import {
+  addFeedback,
+  editFeedback,
+  deleteFeedback,
+} from "@/services/actions/feedbackActions";
 import DropDown from "@/components/common/DropDown";
 import CustomLabel from "@/components/common/CustomLabel";
 import Button from "@/components/common/Button";
@@ -41,6 +45,7 @@ const FormFeedback = ({ oldFeedback }: FormFeedbackProps) => {
     oldFeedback || {
       title: "",
       category: categories[0],
+      status: statusArray[0],
       description: "",
     },
   );
@@ -50,14 +55,16 @@ const FormFeedback = ({ oldFeedback }: FormFeedbackProps) => {
     e.preventDefault();
     try {
       feedbackSchema.parse(formData);
+      console.log(formData);
       if (!oldFeedback) {
         await addFeedback(formData as NewFeedback);
         toast.success(`Feedback added successfully`);
+        router.push("/");
       } else {
         await editFeedback(formData as Feedback);
         toast.success(`Feedback edited successfully`);
+        router.refresh();
       }
-      router.refresh();
     } catch (error: any) {
       if (error instanceof ZodError) {
         const fieldErrors: { [key: string]: string } = {};
@@ -79,7 +86,6 @@ const FormFeedback = ({ oldFeedback }: FormFeedbackProps) => {
       toast.success(`Feedback deleted successfully`);
       router.push("/");
     } catch (error) {
-      console.error("Error deleting feedback:", error);
       toast.error("Ups, something whent wrong. Try again later");
     }
   };
