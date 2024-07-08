@@ -1,12 +1,12 @@
 "use server";
 import prisma from "@/lib/prismaDB";
 import { ZodError } from "zod";
-import { hash } from "bcryptjs";
+import { hash, compare } from "bcryptjs";
 import {
   registerUserSchema,
   type RegisterUserSchema,
-  userSchema,
   type UserSchema,
+  type UpdateUserPass,
 } from "@/schemas/userSchema";
 import { getUser } from "@/services/auth";
 
@@ -58,6 +58,31 @@ export async function updateUserData(data: UserSchema) {
     if (error.code === "P2002") {
       return { status: 409, message: "User with that email already exists" };
     }
+    return { status: 500, message: "Internal Server Error" };
+  }
+}
+export async function updateUserPassword(data: UpdateUserPass) {
+  try {
+    const user = await getUser();
+    const currentUser = await prisma.users.findUnique({
+      where: { id: Number(user.id) },
+    });
+    if (!currentUser) return { status: 404, message: "User not found" };
+    const isPasswordValid = await compare(
+      data.oldPassword,
+      currentUser.password as string,
+    );
+    if (!isPasswordValid) {
+      return { status: 401, message: "Old password is incorrect" };
+    }
+    const hashedPassword = await hash(data.newPassword, 12);
+    const updatedUser = await prisma.users.update({
+      where: { id: Number(user.id) },
+      data: { password: hashedPassword },
+    });
+
+    return { status: 200, message: "Change successful" };
+  } catch (error: any) {
     return { status: 500, message: "Internal Server Error" };
   }
 }

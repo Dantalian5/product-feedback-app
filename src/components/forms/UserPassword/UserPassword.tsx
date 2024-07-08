@@ -9,9 +9,8 @@ import { useRouter } from "next/navigation";
 
 import Button from "@/components/common/Button";
 import CustomLabel from "@/components/common/CustomLabel";
-import { userSchema, UserSchema } from "@/schemas/userSchema";
-import { updateUserData } from "@/services/actions/userActions";
-import type { User } from "@/types/global";
+import { updateUserPass, type UpdateUserPass } from "@/schemas/userSchema";
+import { updateUserPassword } from "@/services/actions/userActions";
 
 const UserPassword = () => {
   const router = useRouter();
@@ -20,20 +19,35 @@ const UserPassword = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<UserSchema>({
+  } = useForm<UpdateUserPass>({
     defaultValues: {
-      name: user.name,
-      username: user.username,
-      email: user.email,
+      oldPassword: "",
+      newPassword: "",
+      confirmNewPassword: "",
     },
-    resolver: zodResolver(userSchema),
+    resolver: zodResolver(updateUserPass),
   });
 
-  const onSubmit: SubmitHandler<UserSchema> = async (data) => {
+  const onSubmit: SubmitHandler<UpdateUserPass> = async (data) => {
     try {
-      const res = await updateUserData(data);
-      toast.success("Reply added successfully");
-      router.refresh();
+      const res = await updateUserPassword(data);
+      switch (res.status) {
+        case 201:
+          toast.success("Password Updated");
+          router.refresh();
+          break;
+        case 401:
+          toast.error("Incorrect password");
+          break;
+        case 404:
+          toast.error("User not found");
+          break;
+        case 500:
+          toast.error("Internal server error. Please try again later");
+          break;
+        default:
+          toast.error("Something went wrong");
+      }
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -46,38 +60,38 @@ const UserPassword = () => {
     >
       <div className="mb-8 flex flex-col gap-y-6">
         <CustomLabel
-          label="Name"
-          htmlFor="inputName"
-          error={errors.name?.message}
+          label="Old Password"
+          htmlFor="oldPassword"
+          error={errors.oldPassword?.message}
         >
           <input
-            id="inputName"
+            id="oldPassword"
             type="text"
-            {...register("name")}
+            {...register("oldPassword")}
             className="custom-form-focus block w-full rounded-5 bg-dark-200 px-4 py-3.5 text-xs font-normal text-dark-700 placeholder:text-dark-700/60 sm:px-6 sm:text-md"
           />
         </CustomLabel>
         <CustomLabel
-          label="Username"
-          htmlFor="inputUsername"
-          error={errors.username?.message}
+          label="New Password"
+          htmlFor="newPassword"
+          error={errors.newPassword?.message}
         >
           <input
-            id="inputUsername"
+            id="newPassword"
             type="text"
-            {...register("username")}
+            {...register("newPassword")}
             className="custom-form-focus block w-full rounded-5 bg-dark-200 px-4 py-3.5 text-xs font-normal text-dark-700 placeholder:text-dark-700/60 sm:px-6 sm:text-md"
           />
         </CustomLabel>
         <CustomLabel
-          label="Email"
-          htmlFor="inputEmail"
-          error={errors.email?.message}
+          label="Confirm New Password"
+          htmlFor="confirmNewPassword"
+          error={errors.confirmNewPassword?.message}
         >
           <input
-            id="inputEmail"
+            id="confirmNewPassword"
             type="text"
-            {...register("email")}
+            {...register("confirmNewPassword")}
             className="custom-form-focus block w-full rounded-5 bg-dark-200 px-4 py-3.5 text-xs font-normal text-dark-700 placeholder:text-dark-700/60 sm:px-6 sm:text-md"
           />
         </CustomLabel>
@@ -89,11 +103,6 @@ const UserPassword = () => {
         <Button classe="dark" type="button" isFlex>
           Cancel
         </Button>
-        <div className="w-full">
-          <Button classe="orange" type="button" isFlex>
-            Delete User
-          </Button>
-        </div>
       </div>
     </form>
   );

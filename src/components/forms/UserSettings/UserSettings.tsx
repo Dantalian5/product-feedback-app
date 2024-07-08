@@ -32,7 +32,7 @@ const UserSettings = ({ user }: { user: User & { email: string } }) => {
   const onSubmit: SubmitHandler<UserSchema> = async (data) => {
     try {
       const res = await updateUserData(data);
-      toast.success("Reply added successfully");
+      toast.success("User data updated successfully");
       router.refresh();
     } catch (error: any) {
       toast.error(error.message);

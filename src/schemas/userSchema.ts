@@ -36,3 +36,19 @@ export const loginUserSchema = z.object({
     .min(4, "Password must be more than 4 characters"),
 });
 export type LoginUserSchema = z.infer<typeof loginUserSchema>;
+
+export const updateUserPass = z
+  .object({
+    oldPassword: z.string().min(1, "Old password is required"),
+    newPassword: z
+      .string()
+      .min(1, "Password is required")
+      .min(4, "Password must be more than 4 characters")
+      .max(32, "Password must be less than 32 characters"),
+    confirmNewPassword: z.string().min(1, "Please confirm your password"),
+  })
+  .refine((data) => data.newPassword === data.confirmNewPassword, {
+    path: ["confirmPassword"],
+    message: "Passwords do not match",
+  });
+export type UpdateUserPass = z.infer<typeof updateUserPass>;

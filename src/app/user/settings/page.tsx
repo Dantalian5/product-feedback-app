@@ -14,11 +14,13 @@ const Settings = async () => {
           Go Backs
         </LinkBtn>
       </div>
-      <UserSettings user={user as any} />
-      <UserPassword />
-      <span className="mx-auto my-2 block text-center text-xs text-dark-600">
-        Please, logout and login again to see the changes
-      </span>
+      <div className="flex w-full flex-col gap-4">
+        <UserSettings user={user as any} />
+        <span className="mx-auto my-2 block text-center text-xs text-dark-600">
+          Please, logout and login again to see the changes
+        </span>
+        <UserPassword />
+      </div>
     </div>
   );
 };
