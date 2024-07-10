@@ -44,14 +44,20 @@ const UserSettings = ({ user }: { user: User & { email: string } }) => {
       className="relative rounded-10 bg-white px-6 pb-6 pt-11 sm:px-10 sm:pb-10 sm:pt-[52px]"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <span className=" absolute left-6 top-0 -translate-y-1/2 text-3xl sm:left-[42px] sm:text-4xl">
-        <Image
-          src={user.image}
-          alt={"user avatar"}
-          width={40}
-          height={40}
-          className="w-[50px] rounded-full"
-        />
+      <span className=" absolute left-6 top-0 flex h-10 w-10 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border-2 border-dark-800 bg-dark-100 text-sm shadow-sm sm:left-[42px] sm:text-xl">
+        {user?.image ? (
+          <Image
+            src={user.image}
+            alt={"user avatar"}
+            width={40}
+            height={40}
+            className="w-full"
+          />
+        ) : (
+          <span className="w-fit font-semibold text-dark-700">
+            {user.username[0].toUpperCase()}
+          </span>
+        )}
       </span>
       <div className="mb-8 flex flex-col gap-y-6">
         <CustomLabel

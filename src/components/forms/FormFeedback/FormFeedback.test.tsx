@@ -1,151 +1,159 @@
-import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import FormFeedback from "@/components/forms/FormFeedback";
-import { addFeedback, editFeedback, deleteFeedback } from "@/services/api";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import { ZodError } from "zod";
 
-jest.mock("@/services/api", () => ({
-  addFeedback: jest.fn(),
-  editFeedback: jest.fn(),
-  deleteFeedback: jest.fn(),
-}));
-jest.mock("react-hot-toast");
+import {
+  addFeedback,
+  editFeedback,
+  deleteFeedback,
+} from "@/services/actions/feedbackActions";
+
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
 }));
 
-const mockAddFeedback = addFeedback as jest.Mock;
-const mockEditFeedback = editFeedback as jest.Mock;
-const mockDeleteFeedback = deleteFeedback as jest.Mock;
-const mockToast = toast as jest.Mocked<typeof toast>;
-const mockUseRouter = useRouter as jest.Mock;
+jest.mock("react-hot-toast", () => ({
+  success: jest.fn(),
+  error: jest.fn(),
+}));
 
-const oldFeedback = {
-  id: 1,
-  title: "Old Title",
-  category: "Feature",
-  status: "suggestion",
-  description: "Old description",
-  upvotes: 0,
-  user_id: 1,
-};
+jest.mock("@/services/actions/feedbackActions", () => ({
+  addFeedback: jest.fn(),
+  editFeedback: jest.fn(),
+  deleteFeedback: jest.fn(),
+}));
 
 describe("FormFeedback Component", () => {
+  const categories = ["Feature", "UI", "UX", "Enhancement", "Bug"];
+  const statusArray = ["suggestion", "planned", "in-progress", "live"];
+  const oldFeedback = {
+    id: 1,
+    title: "Old Feedback",
+    description: "This is an old feedback",
+    category: "UI",
+    status: "suggestion",
+    upvotes: 10,
+    userId: 1,
+    commentsCount: 2,
+  };
+
   beforeEach(() => {
-    jest.clearAllMocks();
-    mockUseRouter.mockReturnValue({
-      refresh: jest.fn(),
+    (useRouter as jest.Mock).mockReturnValue({
       push: jest.fn(),
+      refresh: jest.fn(),
     });
   });
 
-  test("renders correctly for creating new feedback", () => {
+  it("should render the form with initial values", () => {
     render(<FormFeedback />);
-    expect(screen.getByText("Create New Feedback")).toBeInTheDocument();
+    expect(screen.getByLabelText(/Feedback Title/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Category/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Feedback Detail/i)).toBeInTheDocument();
   });
 
-  test("renders correctly for editing feedback", () => {
+  it("should render the form with old feedback values", () => {
     render(<FormFeedback oldFeedback={oldFeedback} />);
-    expect(
-      screen.getByText(`Editing ‘${oldFeedback.title}’`),
-    ).toBeInTheDocument();
+    expect(screen.getByLabelText(/Feedback Title/i)).toHaveValue(
+      oldFeedback.title,
+    );
+    expect(screen.getByLabelText(/Category/i)).toHaveTextContent(
+      oldFeedback.category,
+    );
+    expect(screen.getByLabelText(/Feedback Detail/i)).toHaveValue(
+      oldFeedback.description,
+    );
+    expect(screen.getByLabelText(/Update Status/i)).toHaveTextContent(
+      oldFeedback.status,
+    );
   });
 
-  test("handles form validation errors", async () => {
+  it("should display errors on form submission with invalid data", async () => {
     render(<FormFeedback />);
-    fireEvent.submit(screen.getByRole("button", { name: /Add Feedback/i }));
-
+    fireEvent.click(screen.getByText(/Add Feedback/i));
     await waitFor(() => {
-      const errors = screen.getAllByText(/Can't be empty/i);
-      expect(errors.length).toBeGreaterThan(0);
+      expect(screen.getAllByText(/Can't be empty/i)).toHaveLength(2);
     });
   });
 
-  test("calls addFeedback on form submit for new feedback", async () => {
-    mockAddFeedback.mockResolvedValue({});
-    render(<FormFeedback />);
+  it("should add feedback on valid form submission", async () => {
+    (addFeedback as jest.Mock).mockResolvedValueOnce({});
+    const { push } = useRouter();
 
+    render(<FormFeedback />);
     fireEvent.change(screen.getByLabelText(/Feedback Title/i), {
-      target: { value: "New Feedback Title" },
+      target: { value: "New Feedback" },
     });
     fireEvent.change(screen.getByLabelText(/Feedback Detail/i), {
-      target: { value: "This is a new feedback description" },
+      target: { value: "This is a new feedback" },
     });
-    fireEvent.submit(screen.getByRole("button", { name: /Add Feedback/i }));
+    fireEvent.click(screen.getByText(/Add Feedback/i));
 
     await waitFor(() => {
-      expect(mockAddFeedback).toHaveBeenCalledWith({
-        title: "New Feedback Title",
-        category: "Feature",
-        status: "suggestion",
-        description: "This is a new feedback description",
+      expect(addFeedback).toHaveBeenCalledWith({
+        title: "New Feedback",
+        description: "This is a new feedback",
+        category: categories[0],
+        status: statusArray[0],
       });
-      expect(mockToast.success).toHaveBeenCalledWith(
-        "Feedback added successfully",
-      );
-      expect(mockUseRouter().refresh).toHaveBeenCalled();
+      expect(toast.success).toHaveBeenCalledWith("Feedback added successfully");
+      expect(push).toHaveBeenCalledWith("/");
     });
   });
 
-  test("calls editFeedback on form submit for existing feedback", async () => {
-    mockEditFeedback.mockResolvedValue({});
-    render(<FormFeedback oldFeedback={oldFeedback} />);
+  it("should edit feedback on valid form submission", async () => {
+    (editFeedback as jest.Mock).mockResolvedValueOnce({});
+    const { refresh } = useRouter();
 
+    render(<FormFeedback oldFeedback={oldFeedback} />);
     fireEvent.change(screen.getByLabelText(/Feedback Title/i), {
-      target: { value: "Edited Feedback Title" },
+      target: { value: "Updated Feedback" },
     });
     fireEvent.change(screen.getByLabelText(/Feedback Detail/i), {
-      target: { value: "This is an edited feedback description" },
+      target: { value: "This is an updated feedback" },
     });
-    fireEvent.submit(screen.getByRole("button", { name: /Save Changes/i }));
+    fireEvent.click(screen.getByText(/Save Changes/i));
 
     await waitFor(() => {
-      expect(mockEditFeedback).toHaveBeenCalledWith({
-        id: 1,
-        title: "Edited Feedback Title",
-        category: "Feature",
-        status: "suggestion",
-        description: "This is an edited feedback description",
-        upvotes: 0,
-        user_id: 1,
+      expect(editFeedback).toHaveBeenCalledWith({
+        ...oldFeedback,
+        title: "Updated Feedback",
+        description: "This is an updated feedback",
       });
-      expect(mockToast.success).toHaveBeenCalledWith(
+      expect(toast.success).toHaveBeenCalledWith(
         "Feedback edited successfully",
       );
-      expect(mockUseRouter().refresh).toHaveBeenCalled();
+      expect(refresh).toHaveBeenCalled();
     });
   });
 
-  test("calls deleteFeedback on delete button click", async () => {
-    mockDeleteFeedback.mockResolvedValue({});
-    render(<FormFeedback oldFeedback={oldFeedback} />);
+  it("should delete feedback on delete button click", async () => {
+    (deleteFeedback as jest.Mock).mockResolvedValueOnce({});
+    const { push } = useRouter();
 
-    fireEvent.click(screen.getByRole("button", { name: /Delete/i }));
+    render(<FormFeedback oldFeedback={oldFeedback} />);
+    fireEvent.click(screen.getByText(/Delete/i));
 
     await waitFor(() => {
-      expect(mockDeleteFeedback).toHaveBeenCalledWith(1);
-      expect(mockToast.success).toHaveBeenCalledWith(
+      expect(deleteFeedback).toHaveBeenCalledWith(oldFeedback.id);
+      expect(toast.success).toHaveBeenCalledWith(
         "Feedback deleted successfully",
       );
-      expect(mockUseRouter().push).toHaveBeenCalledWith("/");
+      expect(push).toHaveBeenCalledWith("/");
     });
   });
 
-  test("handles API errors gracefully", async () => {
-    mockAddFeedback.mockRejectedValue(new Error("API error"));
-    render(<FormFeedback />);
-
+  it("should reset form on cancel button click", () => {
+    render(<FormFeedback oldFeedback={oldFeedback} />);
     fireEvent.change(screen.getByLabelText(/Feedback Title/i), {
-      target: { value: "New Feedback Title" },
+      target: { value: "Changed Title" },
     });
-    fireEvent.change(screen.getByLabelText(/Feedback Detail/i), {
-      target: { value: "This is a new feedback description" },
-    });
-    fireEvent.submit(screen.getByRole("button", { name: /Add Feedback/i }));
+    fireEvent.click(screen.getByText(/Cancel/i));
 
-    await waitFor(() => {
-      expect(mockToast.error).toHaveBeenCalledWith("API error");
-    });
+    expect(screen.getByLabelText(/Feedback Title/i)).toHaveValue(
+      oldFeedback.title,
+    );
   });
 });

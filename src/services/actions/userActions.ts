@@ -46,10 +46,11 @@ export async function addUserToDb(user: RegisterUserSchema) {
   }
 }
 export async function updateUserData(data: UserSchema) {
+  const user = await getUser();
+  if (!user) throw new Error("Error validating user");
   try {
-    const user = await getUser();
     const updatedUser = await prisma.users.update({
-      where: { id: Number(user.id) },
+      where: { id: Number(user?.id) },
       data: data,
     });
 
@@ -62,10 +63,11 @@ export async function updateUserData(data: UserSchema) {
   }
 }
 export async function updateUserPassword(data: UpdateUserPass) {
+  const user = await getUser();
+  if (!user) throw new Error("Error validating user");
   try {
-    const user = await getUser();
     const currentUser = await prisma.users.findUnique({
-      where: { id: Number(user.id) },
+      where: { id: Number(user?.id) },
     });
     if (!currentUser) return { status: 404, message: "User not found" };
     const isPasswordValid = await compare(

@@ -1,12 +1,16 @@
 "use client";
 import React from "react";
-import FeedbackRM from "@/components/common/FeedbackRM";
-import type { TypeFeedbackWithCmtsCnt as TypeFeedback } from "@/types/dataTypes";
 
-const RoadMap = ({ feedbacks }: { feedbacks: TypeFeedback[] }) => {
+import FeedbackRM from "@/components/common/FeedbackRM";
+import type { Feedback } from "@/types/global";
+
+const RoadMap = ({ feedbacks }: { feedbacks: Feedback[] }) => {
   const [isMobile, setIsMobile] = React.useState<boolean>(true);
   feedbacks.sort((a, b) => b.upvotes - a.upvotes);
-  const groupedByStatus = Object.groupBy(feedbacks, ({ status }) => status);
+  const filterByStatus = (status: string) => {
+    const newArray = feedbacks.filter((element) => element.status === status);
+    return newArray;
+  };
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -22,19 +26,19 @@ const RoadMap = ({ feedbacks }: { feedbacks: TypeFeedback[] }) => {
   const roadmap = [
     {
       status: "planned",
-      feedbacks: groupedByStatus["planned"] || [],
+      feedbacks: filterByStatus("planned"),
       description: "Ideas prioritized for research",
       color: "orange-100",
     },
     {
       status: "in-progress",
-      feedbacks: groupedByStatus["in-progress"] || [],
+      feedbacks: filterByStatus("in-progress"),
       description: "Currently being developed",
       color: "violet-200",
     },
     {
       status: "live",
-      feedbacks: groupedByStatus["live"] || [],
+      feedbacks: filterByStatus("live"),
       description: "Released features",
       color: "blue-100",
     },
@@ -60,7 +64,7 @@ const RoadMap = ({ feedbacks }: { feedbacks: TypeFeedback[] }) => {
             {" ("}
             {
               feedbacks.filter(
-                (feedback: TypeFeedback) =>
+                (feedback: Feedback) =>
                   feedback.status.toLowerCase() === status.toLowerCase(),
               ).length
             }
@@ -89,7 +93,7 @@ const RoadMap = ({ feedbacks }: { feedbacks: TypeFeedback[] }) => {
                 upvotes={feedback.upvotes}
                 roadmap={{ status: status, color: color }}
                 className={`col-start-${i + 1} row-start-${j + 2} col-span-1 row-span-1 w-full`}
-                commentsNumber={feedback.comments_count}
+                commentsNumber={feedback.commentsCount}
               />
             ))}
           </React.Fragment>

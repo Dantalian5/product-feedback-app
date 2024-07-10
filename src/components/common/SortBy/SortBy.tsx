@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-import type { TypeOption as Option } from "@/types/dataTypes";
+import type { Option } from "@/types/filters";
 import { svgDownArrow, svgCheck } from "@/utils/svgIcons";
 
 interface SortProps {

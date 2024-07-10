@@ -36,15 +36,14 @@ const LoginForm = () => {
         redirectTo: callbackUrl,
       });
       if (!res?.error) {
-        toast.success("successfully logged in");
+        toast.success("Successfully logged in");
         router.push(callbackUrl);
       } else {
-        toast.error("invalid email or password");
+        toast.error("Invalid email or password");
         reset({ password: "" });
       }
     } catch (error) {
-      toast.error("Ups, something whent wrong. Try again later");
-      console.error(error);
+      toast.error("Oops, something went wrong. Try again later");
     }
   };
 

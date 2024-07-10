@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
+import toast from "react-hot-toast";
 
 import {
   svgUserIcon,
@@ -12,6 +13,7 @@ import {
   svgLogin,
   svgSignin,
 } from "@/utils/svgIcons";
+import { User } from "@/types/global";
 
 const UserBtn = () => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
@@ -19,6 +21,7 @@ const UserBtn = () => {
   const user = data?.user;
   const componentRef = React.useRef<HTMLDivElement>(null);
   const logOut = async () => {
+    toast.success("See you next time");
     await signOut();
   };
   const handleClickOutside = (event: MouseEvent) => {
@@ -41,15 +44,22 @@ const UserBtn = () => {
       <button
         className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-dark-800 bg-dark-100 shadow-sm"
         onClick={() => setIsOpen((prev) => !prev)}
+        aria-label="user"
       >
-        {user?.image ? (
-          <Image
-            src={user.image}
-            alt={"user avatar"}
-            width={40}
-            height={40}
-            className=" col-start-1 row-start-1 w-fit rounded-full"
-          />
+        {user ? (
+          user.image ? (
+            <Image
+              src={user.image}
+              alt={"user avatar"}
+              width={40}
+              height={40}
+              className="w-fit rounded-full"
+            />
+          ) : (
+            <span className="w-fit font-semibold text-dark-700">
+              {(user as any).username[0].toUpperCase()}
+            </span>
+          )
         ) : (
           <span className="text-2xl font-semibold text-dark-700">
             {svgUserIcon}

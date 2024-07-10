@@ -11,7 +11,6 @@ interface DropDownProps {
 }
 const DropDown = ({ id, options, value, onChange }: DropDownProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const componentId = React.useId();
   const dropdownRef = React.useRef<HTMLDivElement>(null);
 
   const handleOptionClick = (option: string) => {
@@ -42,9 +41,9 @@ const DropDown = ({ id, options, value, onChange }: DropDownProps) => {
   }, []);
 
   return (
-    <div id={id} className="relative w-full" ref={dropdownRef}>
+    <div className="relative w-full" ref={dropdownRef}>
       <button
-        id={componentId}
+        id={id}
         type="button"
         aria-label="Select an option"
         aria-haspopup="listbox"
@@ -64,7 +63,7 @@ const DropDown = ({ id, options, value, onChange }: DropDownProps) => {
       {isOpen && (
         <div
           role="listbox"
-          aria-labelledby={componentId}
+          aria-labelledby={id}
           className="absolute top-[calc(100%+16px)] z-50 w-full min-w-64 overflow-hidden rounded-10 bg-white shadow-custom_1"
         >
           {options.map((option) => (

@@ -17,22 +17,8 @@ import TextArea from "@/components/common/TextArea";
 import Input from "@/components/common/Input";
 import { svgAddIcon, svgEditIcon } from "@/utils/svgIcons";
 import { feedbackSchema } from "@/schemas/feedbackSchema";
+import type { NewFeedback, Feedback } from "@/types/global";
 
-interface Feedback {
-  id: number;
-  title: string;
-  description: string;
-  category: string;
-  status: string;
-  upvotes: number;
-  userId: number;
-  commentsCount: number;
-}
-interface NewFeedback {
-  title: string;
-  description: string;
-  category: string;
-}
 interface FormFeedbackProps {
   oldFeedback?: Feedback;
 }
@@ -55,7 +41,6 @@ const FormFeedback = ({ oldFeedback }: FormFeedbackProps) => {
     e.preventDefault();
     try {
       feedbackSchema.parse(formData);
-      console.log(formData);
       if (!oldFeedback) {
         await addFeedback(formData as NewFeedback);
         toast.success(`Feedback added successfully`);

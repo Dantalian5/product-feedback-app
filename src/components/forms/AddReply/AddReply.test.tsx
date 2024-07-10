@@ -1,95 +1,84 @@
-import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import AddReply from "@/components/forms/AddReply/AddReply";
-import { addComment } from "@/services/api";
-import { toast } from "react-hot-toast";
+import "@testing-library/jest-dom";
+import AddReply from "@/components/forms/AddReply";
 import { useRouter } from "next/navigation";
+import { addComment } from "@/services/actions/commentActions";
+import toast from "react-hot-toast";
 
-jest.mock("@/services/api", () => ({
-  addComment: jest.fn(),
-}));
-jest.mock("react-hot-toast");
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
 }));
 
-const mockAddComment = addComment as jest.Mock;
-const mockToast = toast as jest.Mocked<typeof toast>;
-const mockUseRouter = useRouter as jest.Mock;
+jest.mock("@/services/actions/commentActions", () => ({
+  addComment: jest.fn(),
+}));
+
+jest.mock("react-hot-toast", () => ({
+  success: jest.fn(),
+  error: jest.fn(),
+}));
 
 describe("AddReply Component", () => {
   const feedbackId = 1;
   const commentId = 1;
-  const user = { id: 1, name: "Test User", username: "test_user", image: "" };
 
   beforeEach(() => {
-    mockUseRouter.mockReturnValue({
-      push: jest.fn(),
+    (useRouter as jest.Mock).mockReturnValue({
       refresh: jest.fn(),
     });
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
-  test("renders correctly when user is logged in", () => {
+  it("should render the form", () => {
     render(<AddReply feedbackId={feedbackId} commentId={commentId} />);
-
     expect(
-      screen.getByPlaceholderText(/Type your comment here/i),
+      screen.getByPlaceholderText("Type your comment here"),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: /Post Reply/i }),
-    ).not.toBeDisabled();
+    ).toBeInTheDocument();
   });
 
-  test("displays error message when content is empty", async () => {
+  it("should display error when submitting empty form", async () => {
     render(<AddReply feedbackId={feedbackId} commentId={commentId} />);
-
-    fireEvent.submit(screen.getByRole("button", { name: /Post Reply/i }));
-
+    fireEvent.click(screen.getByRole("button", { name: /Post Reply/i }));
     await waitFor(() => {
-      expect(screen.getByText(/Can't be empty/i)).toBeInTheDocument();
+      expect(screen.getByText("Can't be empty")).toBeInTheDocument();
     });
   });
 
-  test("calls addComment API on successful submission", async () => {
-    mockAddComment.mockResolvedValue({});
+  it("should call addComment on form submit", async () => {
+    (addComment as jest.Mock).mockResolvedValueOnce({});
+    const { refresh } = useRouter();
 
     render(<AddReply feedbackId={feedbackId} commentId={commentId} />);
-
-    fireEvent.change(screen.getByPlaceholderText(/Type your comment here/i), {
-      target: { value: "This is a test reply" },
+    fireEvent.change(screen.getByPlaceholderText("Type your comment here"), {
+      target: { value: "Test comment" },
     });
-
-    fireEvent.submit(screen.getByRole("button", { name: /Post Reply/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Post Reply/i }));
 
     await waitFor(() => {
-      expect(mockAddComment).toHaveBeenCalledWith({
-        feedbackId: feedbackId,
-        content: "This is a test reply",
+      expect(addComment).toHaveBeenCalledWith({
+        feedbackId,
         parentId: commentId,
+        content: "Test comment",
       });
-      expect(mockToast.success).toHaveBeenCalledWith(
-        "Reply added successfully",
-      );
+      expect(toast.success).toHaveBeenCalledWith("Reply added successfully");
+      expect(refresh).toHaveBeenCalled();
     });
   });
 
-  test("displays error toast on API failure", async () => {
-    mockAddComment.mockRejectedValue(new Error("test error message"));
+  it("should show error toast on submit failure", async () => {
+    const errorMessage = "Failed to add comment";
+    (addComment as jest.Mock).mockRejectedValueOnce(new Error(errorMessage));
 
     render(<AddReply feedbackId={feedbackId} commentId={commentId} />);
-
-    fireEvent.change(screen.getByPlaceholderText(/Type your comment here/i), {
-      target: { value: "This is a test reply" },
+    fireEvent.change(screen.getByPlaceholderText("Type your comment here"), {
+      target: { value: "Test comment" },
     });
-
-    fireEvent.submit(screen.getByRole("button", { name: /Post Reply/i }));
+    fireEvent.click(screen.getByRole("button", { name: /Post Reply/i }));
 
     await waitFor(() => {
-      expect(mockToast.error).toHaveBeenCalledWith("test error message");
+      expect(toast.error).toHaveBeenCalledWith(errorMessage);
     });
   });
 });

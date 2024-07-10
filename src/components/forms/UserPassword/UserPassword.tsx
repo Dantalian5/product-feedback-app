@@ -46,7 +46,7 @@ const UserPassword = () => {
           toast.error("Internal server error. Please try again later");
           break;
         default:
-          toast.error("Something went wrong");
+          toast.error("Oops, something went wrong. Please, try again later");
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -98,7 +98,7 @@ const UserPassword = () => {
       </div>
       <div className="flex flex-col gap-4 sm:flex-row-reverse">
         <Button classe="violet" type="submit" isFlex>
-          Save Changes
+          Change Password
         </Button>
         <Button classe="dark" type="button" isFlex>
           Cancel

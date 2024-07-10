@@ -45,7 +45,7 @@ const RegisterForm = () => {
           toast.error("Internal server error. Please try again later");
           break;
         default:
-          toast.error("Something went wrong");
+          toast.error("Oops, something went wrong. Try again later");
       }
     } catch (error) {
       console.error(error);

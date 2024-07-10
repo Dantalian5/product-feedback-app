@@ -3,10 +3,10 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import UpVote from "@/components/common/UpVote";
-import { upVoteFeedback } from "@/services/api";
+import { upVoteFeedback } from "@/services/actions/feedbackActions";
 
 jest.mock("react-hot-toast");
-jest.mock("@/services/api", () => ({
+jest.mock("@/services/actions/feedbackActions", () => ({
   upVoteFeedback: jest.fn(),
 }));
 jest.mock("next/navigation", () => ({

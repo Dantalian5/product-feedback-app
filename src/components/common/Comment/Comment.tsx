@@ -46,13 +46,20 @@ const Comment = ({ comment }: CommentProps) => {
 
   return (
     <div className="grid w-full grid-cols-[auto_1fr_auto] items-center gap-4 sm:gap-x-8">
-      <Image
-        src={user.image}
-        alt={user.name}
-        width={40}
-        height={40}
-        className=" col-start-1 row-start-1 w-fit rounded-full"
-      />
+      {user.image && user.image !== "" ? (
+        <Image
+          src={user.image}
+          alt={user.name}
+          width={40}
+          height={40}
+          className=" col-start-1 row-start-1 w-fit overflow-hidden rounded-full"
+        />
+      ) : (
+        <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 border-dark-800 bg-dark-100 font-semibold text-dark-700">
+          {user.username[0].toUpperCase()}
+        </span>
+      )}
+
       <div className="col-start-2 row-start-1 flex w-full flex-col">
         <p className="text-xs font-bold text-dark-700 sm:text-sm">
           {user.name}

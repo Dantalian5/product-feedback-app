@@ -33,8 +33,9 @@ const Header = ({ roadmap }: HeaderProps) => {
     <header
       className={`relative z-20 w-full gap-x-2.5 sm:flex sm:items-stretch lg:flex-col lg:gap-y-6`}
     >
-      <div className=" relative z-40 flex flex-[1_1_30%] items-center justify-between bg-topgrad px-6 py-4 sm:flex-grow sm:items-end sm:rounded-10 lg:min-h-36">
-        <div>
+      <div className="relative z-40 flex flex-[1_1_30%] items-center justify-between px-6 py-4 sm:flex-grow sm:items-end sm:rounded-10 sm:p-6 lg:min-h-36">
+        <div className="absolute inset-0 z-0 overflow-hidden bg-[url('/assets/background/mobile/background-header.png')] bg-[length:100%_100%] bg-no-repeat sm:rounded-10 sm:bg-[url('/assets/background/tablet/background-header.png')] lg:bg-[url('/assets/background/desktop/background-header.png')]"></div>
+        <div className="relative">
           <h1 className="text-base font-bold text-white sm:text-xl">
             Frontend Mentor
           </h1>

@@ -16,7 +16,8 @@ interface AddCommentProps {
 }
 const AddComment = ({ feedbackId }: AddCommentProps) => {
   const router = useRouter();
-  const session = !!useSession();
+  const { data } = useSession();
+  const session = !!data;
   const {
     register,
     handleSubmit,

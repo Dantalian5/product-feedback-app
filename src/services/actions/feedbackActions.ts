@@ -35,6 +35,7 @@ export async function getFeedbackById(
   id: number,
   includeComments: boolean = false,
 ) {
+  const user = await getUser();
   try {
     const feedback = await prisma.feedbacks.findUnique({
       where: { id },
@@ -65,7 +66,7 @@ export async function getFeedbackById(
       upvotes: Number(feedback.upvotes),
       userId: Number(feedback.user_id),
       commentsCount: Number(feedback.comments?.length),
-      isEditable: Number(feedback.user_id) === Number((await getUser()).id),
+      isEditable: Number(feedback.user_id) === Number(user?.id),
     };
 
     if (includeComments) {
@@ -90,6 +91,8 @@ export async function getFeedbackById(
 }
 // Add feedback to db
 export async function addFeedback(feedback: NewFeedback) {
+  const user = await getUser();
+  if (!user) throw new Error("Error validating user");
   try {
     const user = await getUser();
     const result = await prisma.feedbacks.create({
@@ -99,20 +102,22 @@ export async function addFeedback(feedback: NewFeedback) {
         upvotes: 0,
         status: "suggestion",
         description: feedback.description,
-        user_id: Number(user.id),
+        user_id: Number(user?.id),
       },
     });
 
     return result;
   } catch (error) {
-    throw new Error("Ups, something went wrong. Try again later");
+    throw new Error("Oops, something went wrong. Try again later");
   }
 }
 // Edit feedback from db
 export async function editFeedback(feedback: Feedback) {
+  const user = await getUser();
+  if (!user) throw new Error("Error validating user");
   try {
     const user = await getUser();
-    if (Number(feedback.userId) !== Number(user.id)) {
+    if (Number(feedback.userId) !== Number(user?.id)) {
       throw new Error("Error updating feedback");
     }
     const result = await prisma.feedbacks.update({
@@ -127,35 +132,39 @@ export async function editFeedback(feedback: Feedback) {
 
     return result;
   } catch (error) {
-    throw new Error("Ups, something went wrong. Try again later");
+    throw new Error("Oops, something went wrong. Try again later");
   }
 }
 // Delete feedback from db
 export async function deleteFeedback(id: number) {
+  const user = await getUser();
+  if (!user) throw new Error("Error validating user");
   try {
     const user = await getUser();
     const result = await prisma.feedbacks.deleteMany({
       where: {
         id: id,
-        user_id: Number(user.id),
+        user_id: Number(user?.id),
       },
     });
 
     if (result.count === 0) {
       throw new Error(
-        "Ups! Error validating user. It seems you are not the owner",
+        "Oops! Error validating user. It seems you are not the owner",
       );
     }
     return result;
   } catch (error) {
-    throw new Error("Ups, something went wrong. Try again later");
+    throw new Error("Oops, something went wrong. Try again later");
   }
 }
 
 // Upvote feedback
 export async function upVoteFeedback(feedbackId: number) {
+  const user = await getUser();
+  if (!user)
+    throw new Error("Oops, you must be logged in to upvote a feedback.");
   try {
-    const user = await getUser();
     const result = await prisma.feedbacks.update({
       where: { id: feedbackId },
       data: {
@@ -167,6 +176,6 @@ export async function upVoteFeedback(feedbackId: number) {
 
     return result;
   } catch (error) {
-    throw new Error("Ups, something went wrong. Try again later");
+    throw new Error("Oops, something went wrong. Try again later");
   }
 }

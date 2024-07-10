@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import type { NextAuthConfig } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
-import { loginSchema } from "@/schemas/loginSchema";
+import { loginUserSchema } from "@/schemas/userSchema";
 import { getUserByEmail } from "@/services/actions/userActions";
 import prisma from "@/lib/prismaDB";
 
@@ -16,7 +16,7 @@ export default {
         password: { label: "password", type: "password" },
       },
       async authorize(credentials) {
-        const { email, password } = loginSchema.parse(credentials);
+        const { email, password } = loginUserSchema.parse(credentials);
 
         const user = await getUserByEmail(email);
 
@@ -26,7 +26,7 @@ export default {
 
         if (passwordsMatch)
           return {
-            id: user.id,
+            id: user.id.toString(),
             image: user.image,
             name: user.name,
             username: user.username,

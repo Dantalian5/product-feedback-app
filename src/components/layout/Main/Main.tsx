@@ -30,16 +30,12 @@ const Main = ({ feedbacks }: MainProps) => {
     switch (sortAlg.value) {
       case "1sbmu":
         return b.upvotes - a.upvotes;
-        break;
       case "2sblu":
         return a.upvotes - b.upvotes;
-        break;
       case "3sbmc":
         return b.commentsCount - a.commentsCount;
-        break;
       case "4sblc":
-        return a.commentsCount - a.commentsCount;
-        break;
+        return a.commentsCount - b.commentsCount;
       default:
         return 0;
     }
