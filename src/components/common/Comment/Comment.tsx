@@ -6,10 +6,10 @@ import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
 
 import AddReply from "@/components/forms/AddReply";
-import type { Comment, User } from "@/types/global";
+import type { Comment as TypeComment, User } from "@/types/global";
 
 interface CommentProps {
-  comment: Comment & { parentUser: User };
+  comment: TypeComment & { parentUser: User };
 }
 const Comment = ({ comment }: CommentProps) => {
   const [reply, setReply] = React.useState<boolean>(false);
