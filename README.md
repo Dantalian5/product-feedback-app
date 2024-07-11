@@ -140,7 +140,7 @@ The users should be able to:
 Full-Stack project additions
 
 - [x] Use a database (PostgreSQL) to store product feedback requests & comments.
-- [ ] Use the Next-Auth library to authenticate users.
+- [x] Use the Next-Auth library to authenticate users.
 - [x] Use the `zod` library to validate user input.
 - [x] Implement unitary testing on critical components.
 - [ ] Implement e2e testing.
