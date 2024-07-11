@@ -7,8 +7,14 @@ import FilterProvider from "@/components/context/FilterProvider";
 import type { Feedback } from "@/types/global";
 
 const Home = async () => {
-  // const feedbacks = await getFeedbacks();
-  const feedbacks: Feedback[] = await getAllFeedbacks();
+  let feedbacks: Feedback[];
+  try {
+    feedbacks = await getAllFeedbacks();
+  } catch (e) {
+    console.error(e);
+    feedbacks = [];
+  }
+
   const roadmap = {
     planned: feedbacks.filter((feedback) => feedback.status === "planned")
       .length,
