@@ -10,7 +10,32 @@ const jost = Jost({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Product Feedback App | by MV",
-  description: "Full Stack project from FrontendMentor.io",
+  description:
+    "Product Feedback App. Full Stack project from FrontendMentor.io",
+  openGraph: {
+    title: "Product Feedback App | by MV",
+    description:
+      "Product Feedback App. Full Stack project from FrontendMentor.io",
+    url: "https://frontend-feedback.vercel.app/",
+    siteName: "frontend-feedback",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Product Feedback App | by MV",
+    description:
+      "Product Feedback App. Full Stack project from FrontendMentor.io",
+  },
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/shortcut-icon.png",
+    apple: "/apple-icon.png",
+    other: {
+      rel: "apple-touch-icon-precomposed",
+      url: "/assets/favicon/apple-touch-icon.png",
+    },
+  },
 };
 
 export default function RootLayout({

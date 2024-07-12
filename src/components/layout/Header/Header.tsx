@@ -23,7 +23,7 @@ const Header = ({ roadmap }: HeaderProps) => {
   const { filters, setFilters, categories } = useFilter();
 
   const handleClick = () => {
-    document.body.style.overflowY = isOpen ? "auto" : "hidden";
+    document.body.style.overflow = isOpen ? "auto" : "hidden";
     setIsOpen((prev) => !prev);
   };
 
