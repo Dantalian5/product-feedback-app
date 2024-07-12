@@ -1,6 +1,6 @@
 {
   "name": "product-feedback-app",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev -H 192.168.1.55",
@@ -8,7 +8,6 @@
     "postinstall": "prisma generate",
     "start": "next start",
     "lint": "next lint",
-    "linted": "eslint .",
     "test": "jest"
   },
   "dependencies": {
@@ -19,7 +18,6 @@
     "dotenv": "^16.4.5",
     "next": "14.2.3",
     "next-auth": "^5.0.0-beta.19",
-    "pg": "^8.12.0",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.52.0",
@@ -32,7 +30,6 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/jest": "^29.5.12",
     "@types/node": "^20",
-    "@types/pg": "^8.11.6",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "cypress": "^13.13.0",

@@ -41,7 +41,7 @@
     <a href="https://github.com/Dantalian5/product-feedback-app"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/Dantalian5/product-feedback-app">View Demo</a>
+    <a href="https://frontend-feedback.vercel.app/">View Demo</a>
     ·
     <a href="https://github.com/Dantalian5/product-feedback-app/issues">Report Bug</a>
     ·
@@ -78,7 +78,7 @@
 
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![Product Name Screen Shot][product-screenshot]](https://frontend-feedback.vercel.app/)
 
 This project (proposed by frontendmentor.io) is based on an application that allows users to interact with a feedback and proposal dashboard for a specific product. Users can create, edit, and delete feedback, as well as comment and reply to feedback from other users, and vote on proposals. The original idea was not designed for a multi-user system, so adjustments were made to accommodate this. However, it does not include moderation of interactions or role changes in feedback, which should be handled through an administration system. Given the project’s purely demonstrative and educational nature, certain aspects that would be considered in a real project of this type are not addressed. The project structures a full stack application but uses Next.js server functions, eliminating the need for a separate API for database interactions. Authentication is handled using credentials only for illustrative purposes, though it can be improved by implementing multiple authentication systems.
 
@@ -126,7 +126,7 @@ Use this space to show useful examples of how a project can be used. Additional 
 
 ## Roadmap
 
-The users should be able to:
+### The users should be able to:
 
 - [x] Create, read, update, and delete product feedback requests.
 - [x] Receive form validations when trying to create/edit feedback requests.
@@ -137,17 +137,26 @@ The users should be able to:
 - [x] View the optimal layout for the app depending on their device's screen size.
 - [x] See hover states for all interactive elements on the page.
 
-Full-Stack project additions
+### Full-Stack project additions
 
-- [x] Use a database (PostgreSQL) to store product feedback requests & comments.
+- [x] User Management.
+  - [x] Register New Users.
+  - [x] Update Users Info & Settings.
+  - [x] Set User authentication & role validation.
+  - [x] Delete User.
 - [x] Use the Next-Auth library to authenticate users.
-- [x] Use the `zod` library to validate user input.
-- [x] Implement unitary testing on critical components.
-- [ ] Implement e2e testing.
+- [x] Database Management
 
-Deployment & CI/CD:
+  - [x] Use a database (PostgreSQL) to store product feedback requests & comments.
+  - [x] Use Next Server Action to interact (CRUD style) with database info.
 
-- [ ] Deploy to Vercel
+- [ ] Implement Testing.
+  - [x] Implement unitary testing on critical components (Jest/Mock).
+  - [ ] Implement e2e testing.
+
+### Deployment & CI/CD:
+
+- [x] Deploy to Vercel
 - [ ] Create a GitHub Action to test and create a docker image of the project
 
 See the [open issues](https://github.com/Dantalian5/product-feedback-app/issues) for a full list of proposed features (and known issues).
