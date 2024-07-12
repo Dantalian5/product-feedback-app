@@ -192,7 +192,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Contact
 
-- Website - [Marcos Valenzuela](https://marcosvalenzuela.netlify.app)
+- Website - [Marcos Valenzuela](https://valenzuela.dev)
 - Frontend Mentor - [@Dantalian5](https://www.frontendmentor.io/profile/Dantalian5)
 - Github - [@Dantalian5](https://github.com/Dantalian5)
 - Linkedin - [Marcos Valenzuela](https://www.linkedin.com/in/marcos-valenzuela-coding)
