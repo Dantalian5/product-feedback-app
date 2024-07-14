@@ -49,7 +49,7 @@ const UserPassword = () => {
           toast.error("Oops, something went wrong. Please, try again later");
       }
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error("Oops, something went wrong. Try again later");
     }
   };
   return (

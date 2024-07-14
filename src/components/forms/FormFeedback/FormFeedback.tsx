@@ -60,7 +60,7 @@ const FormFeedback = ({ oldFeedback }: FormFeedbackProps) => {
         });
         setErrors(fieldErrors);
       } else {
-        toast.error(error.message);
+        toast.error("Oops, something went wrong. Try again later");
       }
     }
   };

@@ -35,7 +35,7 @@ const UserSettings = ({ user }: { user: User & { email: string } }) => {
       toast.success("User data updated successfully");
       router.refresh();
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error("Oops, something went wrong. Try again later");
     }
   };
   return (

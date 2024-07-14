@@ -39,7 +39,7 @@ const AddReply = ({ feedbackId, commentId, ...rest }: AddReplyProps) => {
       reset();
       router.refresh();
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error("Oops, something went wrong. Try again later");
     }
   };
 

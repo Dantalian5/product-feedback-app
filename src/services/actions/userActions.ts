@@ -64,7 +64,7 @@ export async function updateUserData(data: UserSchema) {
 }
 export async function updateUserPassword(data: UpdateUserPass) {
   const user = await getUser();
-  if (!user) throw new Error("Error validating user");
+  if (!user) return { status: 404, message: "User not found" };
   try {
     const currentUser = await prisma.users.findUnique({
       where: { id: Number(user?.id) },

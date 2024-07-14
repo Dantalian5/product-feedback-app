@@ -91,7 +91,9 @@ describe("AddComment Component", () => {
     fireEvent.click(screen.getByRole("button", { name: /Post Comment/i }));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(errorMessage);
+      expect(toast.error).toHaveBeenCalledWith(
+        "Oops, something went wrong. Try again later",
+      );
     });
   });
 });

@@ -18,12 +18,16 @@ const UpVote = (prop: UpVoteProps) => {
 
   const handleUpVote = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
-      await upVoteFeedback(feedbackId);
-      toast.success(`Feedback UpVoted!`);
-      setUpvoted(true);
-      router.refresh();
+      const res = await upVoteFeedback(feedbackId);
+      if (res) {
+        toast.success(`Feedback UpVoted!`);
+        setUpvoted(true);
+        router.refresh();
+      } else {
+        toast.error("You most be logged in to upvote");
+      }
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error("Oops, something went wrong. Try again later");
     }
   };
   return (

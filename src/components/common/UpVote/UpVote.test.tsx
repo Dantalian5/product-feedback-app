@@ -58,7 +58,9 @@ describe("UpVote Component", () => {
 
     await waitFor(() => {
       expect(mockUpVoteFeedback).toHaveBeenCalledWith(feedbackId);
-      expect(mockToast.error).toHaveBeenCalledWith("API error");
+      expect(mockToast.error).toHaveBeenCalledWith(
+        "Oops, something went wrong. Try again later",
+      );
     });
   });
 

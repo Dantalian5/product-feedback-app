@@ -26,7 +26,7 @@ export async function getAllFeedbacks() {
 
     return data;
   } catch (error) {
-    throw new Error("Error fetching feedback from the database");
+    throw new Error("Internal Server Error");
   }
 }
 
@@ -86,7 +86,7 @@ export async function getFeedbackById(
 
     return data;
   } catch (error) {
-    throw new Error("Error fetching feedback from the database");
+    throw new Error("Internal Server Error");
   }
 }
 // Add feedback to db
@@ -108,7 +108,7 @@ export async function addFeedback(feedback: NewFeedback) {
 
     return result;
   } catch (error) {
-    throw new Error("Oops, something went wrong. Try again later");
+    throw new Error("Internal Server Error");
   }
 }
 // Edit feedback from db
@@ -132,7 +132,7 @@ export async function editFeedback(feedback: Feedback) {
 
     return result;
   } catch (error) {
-    throw new Error("Oops, something went wrong. Try again later");
+    throw new Error("Internal Server Error");
   }
 }
 // Delete feedback from db
@@ -155,15 +155,14 @@ export async function deleteFeedback(id: number) {
     }
     return result;
   } catch (error) {
-    throw new Error("Oops, something went wrong. Try again later");
+    throw new Error("Internal Server Error");
   }
 }
 
 // Upvote feedback
 export async function upVoteFeedback(feedbackId: number) {
   const user = await getUser();
-  if (!user)
-    throw new Error("Oops, you must be logged in to upvote a feedback.");
+  if (!user) return null;
   try {
     const result = await prisma.feedbacks.update({
       where: { id: feedbackId },
@@ -176,6 +175,6 @@ export async function upVoteFeedback(feedbackId: number) {
 
     return result;
   } catch (error) {
-    throw new Error("Oops, something went wrong. Try again later");
+    throw new Error("Internal Server Error");
   }
 }

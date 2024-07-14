@@ -78,7 +78,9 @@ describe("AddReply Component", () => {
     fireEvent.click(screen.getByRole("button", { name: /Post Reply/i }));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(errorMessage);
+      expect(toast.error).toHaveBeenCalledWith(
+        "Oops, something went wrong. Try again later",
+      );
     });
   });
 });

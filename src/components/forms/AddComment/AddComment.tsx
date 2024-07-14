@@ -42,7 +42,7 @@ const AddComment = ({ feedbackId }: AddCommentProps) => {
       reset();
       router.refresh();
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error("Oops, something went wrong. Try again later");
     }
   };
 

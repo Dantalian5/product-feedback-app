@@ -90,7 +90,9 @@ describe("UserSettings Component", () => {
 
     await waitFor(() => {
       expect(updateUserData).toHaveBeenCalled();
-      expect(toast.error).toHaveBeenCalledWith("Update failed");
+      expect(toast.error).toHaveBeenCalledWith(
+        "Oops, something went wrong. Try again later",
+      );
     });
   });
 });
