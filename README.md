@@ -110,7 +110,22 @@ To get a local copy up and running follow these simple example steps.
    ```sh
    npm install
    ```
-3. Configure your own environment variables & databases
+3. Configure db url on .env
+
+   ```
+   DATABASE_URL=postgresql://user:password@host_ip/db_name
+   ```
+
+4. Configure auth secret on .env
+
+   run `npx auth secret`
+   or `openssl rand -base64 33` and addit to .env
+
+   ```
+   AUTH_SECRET=mlxIMVkGGd6REqFh8WrVd+SHUV9G7UV8VuvE6/QA0LSh
+   ```
+
+5. Run `npx prisma migrate dev --name init` to sync prisma with the database
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
